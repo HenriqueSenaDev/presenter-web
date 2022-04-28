@@ -1,0 +1,91 @@
+.join--event--main {
+    width: 100%;
+    height: 100%;
+    padding: 20px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.join--event--main button {
+    cursor: pointer;
+    font-size: 16px;
+    width: 80%;
+    height: 35px;
+    max-width: 230px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ADD3FA;
+    color: #FFF;
+    font-weight: 600;
+}
+
+.join--card--container {
+    width: 580px;
+    height: 400px;
+    max-width: 100%;
+    background-color: #92C7EF;
+    border-radius: 20px;
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.join--card--container h1 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.join--card--container input {
+    background-color: #ADD3FA;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 5px;
+    width: 175px;
+    font-size: 20px;
+    border: none;
+    border-style: none;
+    height: 30px;
+    color: #FFFFFF;
+}
+
+
+.join--card--container input:focus {
+    outline: none;
+}
+
+.form--container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media(min-width: 576px) {
+    .join--event--main {
+        padding: 20px 40px;
+    }
+
+    .join--card--container h1 {
+        font-size: 20px;
+    }
+
+    .join--card--container input {
+        font-size: 22px;
+    }
+}
+
+@media(min-width: 768px) {
+    .join--card--container {
+        height: 425px;
+        padding: 70px 30px;
+    }
+
+    .join--card--container h1 {
+        font-size: 21px;
+    }
+}
