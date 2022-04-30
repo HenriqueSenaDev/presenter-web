@@ -1,6 +1,7 @@
 import Navbar from "components/Navbar";
 import "./styles.css";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import RatePopUp from "./RatePopUp";
 
 const columns: GridColDef[] = [
     {
@@ -107,6 +108,7 @@ const rows = [
 const Event = () => {
     return (
         <div className="event--container">
+            <RatePopUp />
             <Navbar />
             <div className="event--info--container">
                 <h1>Clique na equipe para adicionar avaliação.</h1>
@@ -116,6 +118,7 @@ const Event = () => {
                             fontSize: "18px",
                             width: 700,
                             color: '#FFFFFF',
+                            cursor: 'pointer'
                         }}
                         hideFooter={true}
                         rows={rows}
@@ -123,7 +126,9 @@ const Event = () => {
                         pageSize={20}
                         rowsPerPageOptions={[20]}
                         onRowClick={(params) => {
-                            console.log("params: ", params)
+                            document.querySelector(".rate--popup--container")?.classList.remove('isHidden');
+                            document.querySelector(".rate--popup--container")?.classList.add('isShow');
+                            // console.log("params: ", params)
                         }}
                     />
                 </div>

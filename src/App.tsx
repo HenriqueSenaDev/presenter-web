@@ -1,9 +1,9 @@
 import './App.css';
-import JoinEvent from './pages/JoinEvent';
+import Event from './pages/Event';
 
 function App() {
   return (
-    <JoinEvent />
+    <Event />
   );
 }
 
