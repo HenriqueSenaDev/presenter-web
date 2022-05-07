@@ -26,6 +26,7 @@ public class Team {
     private Double ponctuation;
     private Integer avaliations;
     private Double average;
+    private Boolean presented;
 
     @JsonIgnore
     @OneToMany(mappedBy = "team")
@@ -93,6 +94,14 @@ public class Team {
 
     public List<Student> getStudents() {
         return this.students;
+    }
+
+    public Boolean getPresented() {
+        return this.presented;
+    }
+
+    public void setPresented(Boolean presented) {
+        this.presented = presented;
     }
 
 }
