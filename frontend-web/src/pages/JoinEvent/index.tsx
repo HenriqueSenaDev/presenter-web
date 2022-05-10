@@ -6,7 +6,9 @@ const JoinEvent = () => {
     return (
         <div className="join--event--container">
             <Navbar />
-            <JoinCard />
+            <h1>Biblioteca de Eventos</h1>
+
+            {/* <JoinCard /> */}
         </div>
     );
 }
