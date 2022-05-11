@@ -6,51 +6,54 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .join--event--main button {
     cursor: pointer;
     font-size: 16px;
-    width: 80%;
-    height: 35px;
-    max-width: 230px;
+    width: 145px;
+    height: 33px;
     border-radius: 10px;
     border: none;
     background-color: #ADD3FA;
     color: #FFF;
     font-weight: 600;
+    margin-top: 5px;
 }
 
 .join--card--container {
-    width: 580px;
-    height: 400px;
     max-width: 100%;
     background-color: #92C7EF;
     border-radius: 20px;
-    padding: 50px 30px;
+    padding: 40px 30px 32px 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
+    gap: 15px;
+    border: rgba(255, 255, 255, 0.5) solid 1px;
 }
 
 .join--card--container h1 {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 16px;
 }
 
 .join--card--container input {
     background-color: #ADD3FA;
     text-align: center;
     font-weight: 600;
-    letter-spacing: 5px;
+    letter-spacing: 4px;
     width: 175px;
-    font-size: 20px;
+    font-size: 16px;
     border: none;
     border-style: none;
     height: 30px;
     color: #FFFFFF;
+    border-radius: 5px;
 }
 
 
@@ -63,29 +66,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
 @media(min-width: 576px) {
-    .join--event--main {
-        padding: 20px 40px;
-    }
-
     .join--card--container h1 {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .join--card--container input {
-        font-size: 22px;
+        font-size: 18px;
     }
 }
 
-@media(min-width: 768px) {
-    .join--card--container {
-        height: 425px;
-        padding: 70px 30px;
-    }
-
+@media(min-width: 992px) {
     .join--card--container h1 {
-        font-size: 21px;
+        font-size: 20px;
     }
 }

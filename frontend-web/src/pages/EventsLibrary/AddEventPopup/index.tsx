@@ -1,8 +1,8 @@
 import "./styles.css";
 
-const JoinCard = () => {
+const AddEventPopup = () => {
     return (
-        <main className="join--event--main">
+        <div className="join--event--main">
             <div className="join--card--container">
                 <div className="form--container">
                     <h1>Digite o código do evento:</h1>
@@ -16,8 +16,8 @@ const JoinCard = () => {
                     Entrar
                 </button>
             </div>
-        </main>
+        </div>
     );
 }
 
-export default JoinCard;
+export default AddEventPopup;
