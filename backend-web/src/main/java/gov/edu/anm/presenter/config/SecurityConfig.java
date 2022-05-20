@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import gov.edu.anm.presenter.filters.CustomAuthenticationFilter;
+import gov.edu.anm.presenter.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -33,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login").permitAll();
         http.authorizeRequests().antMatchers("/api/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/teams").hasAnyAuthority("ROLE_STUDENT");
+        http.authorizeRequests().antMatchers("/teams").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/students").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
