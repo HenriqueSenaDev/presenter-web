@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import gov.edu.anm.presenter.filters.CustomAuthenticationFilter;
 import gov.edu.anm.presenter.filters.CustomAuthorizationFilter;
@@ -31,12 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
         http.csrf().disable();
+        http.headers().frameOptions().sameOrigin();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/login").permitAll();
+        http.authorizeRequests().antMatchers("/login", "/h2-console/**").permitAll();
         http.authorizeRequests().antMatchers("/api/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/teams").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN");
-        http.authorizeRequests().antMatchers("/students").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN");
+        http.authorizeRequests().antMatchers("/teams", "/students").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
