@@ -18,15 +18,18 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Role;
+import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -37,9 +40,15 @@ import lombok.RequiredArgsConstructor;
 public class AppUserResource {
     private final UserService userService;
 
+    // AppUser methods
+    @GetMapping(value = "/appusers/{id}")
+    public ResponseEntity<AppUser> findUserById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.findUserById(id));
+    }
+
     @GetMapping(value = "/appusers")
-    public ResponseEntity<List<AppUser>> findAll() {
-        return ResponseEntity.ok().body(userService.findAll());
+    public ResponseEntity<List<AppUser>> findAllUsers() {
+        return ResponseEntity.ok().body(userService.findAllUsers());
     }
 
     @PostMapping(value = "/appusers")
@@ -48,16 +57,15 @@ public class AppUserResource {
         return ResponseEntity.created(uri).body(userService.saveUser(appUser));
     }
 
-    @PostMapping(value = "/roles")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
+    @PutMapping(value = "/appusers/{id}")
+    public ResponseEntity<AppUser> updateUser(@RequestBody AppUser appUser, @PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.updateUser(appUser, id));
     }
 
-    @PostMapping(value = "roles/addtouser")
-    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
-        return ResponseEntity.ok().build();
+    @DeleteMapping(value = "/appusers/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.ok().body("The user has been deleted.");
     }
 
     @GetMapping(value = "/refreshtoken")
@@ -70,14 +78,14 @@ public class AppUserResource {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
-                AppUser appUser = userService.getUser(username);
+                AppUser appUser = userService.getUserByUsername(username);
                 String access_token = JWT.create()
                         .withSubject(appUser.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles",
                                 appUser.getRoles().stream()
-                                        .map(Role::getName)
+                                        .map(AppRole::getName)
                                         .collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
@@ -93,10 +101,49 @@ public class AppUserResource {
                 response.setContentType("application/json");
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
-
         } else {
-            throw new RuntimeException("Refresh token is missing.");
+            throw new RuntimeException("The refresh token is missing.");
         }
+    }
+
+    // AppRoles methods
+    @GetMapping(value = "/approles/{id}")
+    public ResponseEntity<AppRole> findRoleById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.findRoleById(id));
+    }
+
+    @GetMapping(value = "/approles")
+    public ResponseEntity<List<AppRole>> findAllAppRoles() {
+        return ResponseEntity.ok().body(userService.findAllAppRoles());
+    }
+
+    @PutMapping(value = "/approles/{id}")
+    public ResponseEntity<AppRole> updateAppRole(@PathVariable Long id, @RequestBody AppRole appRole) {
+        return ResponseEntity.ok().body(userService.updateAppRole(appRole, id));
+    }
+
+    @PostMapping(value = "/approles")
+    public ResponseEntity<AppRole> saveRole(@RequestBody AppRole role) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveRole(role));
+    }
+
+    @DeleteMapping(value = "/approles/{id}")
+    public ResponseEntity<?> deleteAppRole(@PathVariable Long id) {
+        userService.deleteAppRole(id);
+        return ResponseEntity.ok().body("The AppRole has been deleted.");
+    }
+
+    @PostMapping(value = "/approles/addtouser")
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
+        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "/approles/removeofuser")
+    public ResponseEntity<?> putMethodName(@RequestBody RoleToUserForm form) {
+        userService.removeRoleOfUser(form.getUsername(), form.getRoleName());
+        return ResponseEntity.ok().body("The AppRole has been removed of the AppUser.");
     }
 
 }

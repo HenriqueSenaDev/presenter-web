@@ -1,7 +1,7 @@
 package gov.edu.anm.presenter.entities;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,12 +20,12 @@ public class AppUser {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Collection<AppRole> roles = new ArrayList<>();
+    Set<AppRole> roles = new HashSet<>();
 
     AppUser() {
     }
 
-    public AppUser(Long id, String username, String password, Collection<AppRole> roles) {
+    public AppUser(Long id, String username, String password, Set<AppRole> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -56,11 +56,11 @@ public class AppUser {
         this.password = password;
     }
 
-    public Collection<AppRole> getRoles() {
+    public Set<AppRole> getRoles() {
         return this.roles;
     }
 
-    public void setRoles(Collection<AppRole> roles) {
+    public void setRoles(Set<AppRole> roles) {
         this.roles = roles;
     }
 

@@ -1,7 +1,7 @@
 package gov.edu.anm.presenter.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +30,7 @@ public class Team {
 
     @JsonIgnore
     @OneToMany(mappedBy = "team")
-    private List<Student> students = new ArrayList<>();
+    private Set<Student> students = new HashSet<>();
 
     public Team() {
 
@@ -92,7 +92,7 @@ public class Team {
         this.average = average;
     }
 
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
         return this.students;
     }
 

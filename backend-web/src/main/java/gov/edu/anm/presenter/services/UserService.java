@@ -3,18 +3,35 @@ package gov.edu.anm.presenter.services;
 import java.util.List;
 
 import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Role;
+import gov.edu.anm.presenter.entities.AppRole;
 
 public interface UserService {
+    // AppUser methods
+    public AppUser findUserById(Long id);
+
+    public AppUser getUserByUsername(String username);
+
+    public List<AppUser> findAllUsers();
 
     public AppUser saveUser(AppUser appUser);
 
-    public Role saveRole(Role role);
+    public AppUser updateUser(AppUser appUser, Long id);
 
-    public void addRoleToUser(String username, String role);
+    public void deleteUser(Long id);
 
-    public AppUser getUser(String username);
+    // AppRole methods
+    public AppRole findRoleById(Long id);
 
-    public List<AppUser> findAll();
+    public List<AppRole> findAllAppRoles();
+
+    public AppRole saveRole(AppRole role);
+
+    public AppRole updateAppRole(AppRole appRole, Long id);
+
+    public void deleteAppRole(Long id);
+
+    public void addRoleToUser(String username, String roleName);
+
+    public void removeRoleOfUser(String username, String roleName);
 
 }
