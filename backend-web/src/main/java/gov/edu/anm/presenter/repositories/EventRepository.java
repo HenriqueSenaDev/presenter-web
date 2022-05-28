@@ -6,4 +6,6 @@ import gov.edu.anm.presenter.entities.Event;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
+    public Event findByName(String name);
+
 }

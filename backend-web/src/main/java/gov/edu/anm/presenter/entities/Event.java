@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 
 @Entity
@@ -23,6 +25,7 @@ public class Event {
     private Integer jurorCode;
 
     @OneToMany(mappedBy = "id.event")
+    @JsonIgnore
     Set<Participation> participations = new HashSet<>();
 
     public Event() {

@@ -41,10 +41,12 @@ public class PresenterWebApplication {
 			// AppUsers
 			userService.saveUser(new AppUser(null, "luiz", "admin", new HashSet<>()));
 			userService.saveUser(new AppUser(null, "joyce", "student", new HashSet<>()));
+
 			// Event
 			eventService.saveEvent(new Event(null, "Meio do Ano", 3344, 565656, new HashSet<>()));
+			eventService.saveEvent(new Event(null, "Natal", 3377, 565653, new HashSet<>()));
 
-			// Roles to AppUsers
+			// AppRoles to AppUsers
 			userService.addRoleToUser("luiz", "ROLE_ADMIN");
 			userService.addRoleToUser("joyce", "ROLE_STUDENT");
 

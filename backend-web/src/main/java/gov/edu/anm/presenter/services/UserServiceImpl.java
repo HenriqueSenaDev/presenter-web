@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public List<AppRole> findUserAppRoles(String username) {
+        return List.copyOf(appUserRepository.findByUsername(username).getRoles());
+    }
+
+    @Override
     public AppUser saveUser(AppUser appUser) {
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);

@@ -13,6 +13,8 @@ public interface UserService {
 
     public List<AppUser> findAllUsers();
 
+    public List<AppRole> findUserAppRoles(String username);
+
     public AppUser saveUser(AppUser appUser);
 
     public AppUser updateUser(AppUser appUser, Long id);

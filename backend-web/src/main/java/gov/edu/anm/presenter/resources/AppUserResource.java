@@ -46,6 +46,11 @@ public class AppUserResource {
         return ResponseEntity.ok().body(userService.findUserById(id));
     }
 
+    @GetMapping(value = "/appusers/roles/{username}")
+    public ResponseEntity<List<AppRole>> findUserAppRoles(@PathVariable String username) {
+        return ResponseEntity.ok().body(userService.findUserAppRoles(username));
+    }
+
     @GetMapping(value = "/appusers")
     public ResponseEntity<List<AppUser>> findAllUsers() {
         return ResponseEntity.ok().body(userService.findAllUsers());
@@ -117,21 +122,10 @@ public class AppUserResource {
         return ResponseEntity.ok().body(userService.findAllAppRoles());
     }
 
-    @PutMapping(value = "/approles/{id}")
-    public ResponseEntity<AppRole> updateAppRole(@PathVariable Long id, @RequestBody AppRole appRole) {
-        return ResponseEntity.ok().body(userService.updateAppRole(appRole, id));
-    }
-
     @PostMapping(value = "/approles")
     public ResponseEntity<AppRole> saveRole(@RequestBody AppRole role) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/roles").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/approles").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
-    }
-
-    @DeleteMapping(value = "/approles/{id}")
-    public ResponseEntity<?> deleteAppRole(@PathVariable Long id) {
-        userService.deleteAppRole(id);
-        return ResponseEntity.ok().body("The AppRole has been deleted.");
     }
 
     @PostMapping(value = "/approles/addtouser")
@@ -140,10 +134,21 @@ public class AppUserResource {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping(value = "/approles/{id}")
+    public ResponseEntity<AppRole> updateAppRole(@PathVariable Long id, @RequestBody AppRole appRole) {
+        return ResponseEntity.ok().body(userService.updateAppRole(appRole, id));
+    }
+
     @PutMapping(value = "/approles/removeofuser")
-    public ResponseEntity<?> putMethodName(@RequestBody RoleToUserForm form) {
+    public ResponseEntity<?> removeRoleOfUser(@RequestBody RoleToUserForm form) {
         userService.removeRoleOfUser(form.getUsername(), form.getRoleName());
         return ResponseEntity.ok().body("The AppRole has been removed of the AppUser.");
+    }
+
+    @DeleteMapping(value = "/approles/{id}")
+    public ResponseEntity<?> deleteAppRole(@PathVariable Long id) {
+        userService.deleteAppRole(id);
+        return ResponseEntity.ok().body("The AppRole has been deleted.");
     }
 
 }
