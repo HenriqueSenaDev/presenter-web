@@ -1,11 +1,14 @@
-import EventsLibrary from 'pages/EventsLibrary';
 import Landing from 'pages/Landing';
 import './App.css';
-import Event from './pages/Event';
+
+import { AppContextProvider } from "context/AppContextProvider";
 
 function App() {
+
   return (
-    <Landing />
+    <AppContextProvider>
+      <Landing />
+    </AppContextProvider>
   );
 }
 

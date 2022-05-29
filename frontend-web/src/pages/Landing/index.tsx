@@ -1,15 +1,18 @@
 import Navbar from "components/Navbar";
 import "./styles.css";
+import { Context } from "context/AppContextProvider";
 
 import { ReactComponent as PeopleIcon } from "assets/images/people-Icon.svg";
 import { ReactComponent as TimerIcon } from "assets/images/timer-Icon.svg";
 import { ReactComponent as ComputerIcon } from "assets/images/computer-Icon.svg";
 import { ReactComponent as RankingIcon } from "assets/images/leaderboard-Icon.svg";
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 const Landing = () => {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    const { authenticated, JWT, handleLogin } = useContext(Context);
 
     return (
         <>
@@ -45,8 +48,19 @@ const Landing = () => {
                                 onChange={(event) => {
                                     setPassword(event.target.value);
                                 }}
+                                onKeyUp={(event) => {
+                                    if (event.key == "Enter") {
+                                        handleLogin(username, password);
+                                    }
+                                }}
                             ></input>
-                            <button>Login</button>
+                            <button
+                                onClick={() => {
+                                    handleLogin(username, password);
+                                }}
+                            >
+                                Login
+                            </button>
                         </div>
                     </div>
                 </div>
