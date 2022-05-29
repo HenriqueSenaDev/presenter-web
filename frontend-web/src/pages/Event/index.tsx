@@ -1,6 +1,8 @@
 import Navbar from "components/Navbar";
 import "./styles.css";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+
 import RatePopUp from "./RatePopUp";
 
 const columns: GridColDef[] = [

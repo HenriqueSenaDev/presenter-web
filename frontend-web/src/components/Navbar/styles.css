@@ -10,13 +10,21 @@
 }
 
 .nav--container h1 {
-    font-size: 21px;
+    font-size: 26px;
+    font-weight: 400;
+    font-family: "Oleo Script Swash Caps";
 }
 
 .nav--profile--container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.nav--profile--container h1 {
+    font-size: 21px;
+    font-family: "Open Sans";
+    font-weight: 600;
 }
 
 .profile--margin {
