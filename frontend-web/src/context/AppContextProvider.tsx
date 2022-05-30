@@ -29,7 +29,7 @@ const AppContextProvider = ({ children }: Props) => {
     const handleLogin = async (username: string, password: string) => {
         const { status, data } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`);
         console.log(data);
-        if (status == 200) {
+        if (status === 200) {
             setAuthenticated(true);
             setJWT(data);
         }

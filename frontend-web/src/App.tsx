@@ -1,13 +1,13 @@
-import Landing from 'pages/Landing';
 import './App.css';
 
 import { AppContextProvider } from "context/AppContextProvider";
+import AppRoutes from 'routes';
 
 function App() {
 
   return (
     <AppContextProvider>
-      <Landing />
+      <AppRoutes />
     </AppContextProvider>
   );
 }

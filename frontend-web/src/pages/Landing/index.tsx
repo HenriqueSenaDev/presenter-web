@@ -49,7 +49,7 @@ const Landing = () => {
                                     setPassword(event.target.value);
                                 }}
                                 onKeyUp={(event) => {
-                                    if (event.key == "Enter") {
+                                    if (event.key === "Enter") {
                                         handleLogin(username, password);
                                     }
                                 }}
