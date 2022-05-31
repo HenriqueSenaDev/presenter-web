@@ -3,42 +3,43 @@ import { api } from "services";
 
 interface IContext {
     authenticated: boolean,
-    JWT: {
+    userAndJWT: {
         access_token: string,
-        refresh_token: string
+        refresh_token: string,
+        user: String
     } | null,
     handleLogin: Function
 }
-
-const inicialValue = {
-    authenticated: false,
-    JWT: null,
-    handleLogin: () => { }
-}
-
-const Context = createContext<IContext>(inicialValue);
 
 interface Props {
     children: React.ReactNode
 }
 
+const inicialValue = {
+    authenticated: false,
+    userAndJWT: null,
+    handleLogin: () => { }
+}
+
+const Context = createContext<IContext>(inicialValue);
+
+
 const AppContextProvider = ({ children }: Props) => {
-    const [authenticated, setAuthenticated] = useState(false);
-    const [JWT, setJWT] = useState(null);
+    const [authenticated, setAuthenticated] = useState<boolean>(false);
+    const [userAndJWT, setUserAndJWT] = useState(null);
 
     const handleLogin = async (username: string, password: string) => {
         const { status, data } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`);
-        console.log(data);
         if (status === 200) {
             setAuthenticated(true);
-            setJWT(data);
+            setUserAndJWT(data);
         }
     }
 
     return (
         <Context.Provider value={{
             authenticated,
-            JWT,
+            userAndJWT,
             handleLogin
         }}>
             {children}

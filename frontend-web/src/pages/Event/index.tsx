@@ -1,9 +1,10 @@
 import Navbar from "components/Navbar";
 import "./styles.css";
-
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
 import RatePopUp from "./RatePopUp";
+import { Context } from "context/AppContextProvider";
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
 
 const columns: GridColDef[] = [
     {
@@ -107,7 +108,14 @@ const rows = [
     },
 ];
 
+
 const Event = () => {
+    const { authenticated } = useContext(Context);
+
+    if (!authenticated) {
+        return <Navigate replace to="/" />
+    }
+
     return (
         <div className="event--container">
             <RatePopUp />

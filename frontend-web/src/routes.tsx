@@ -1,11 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Landing from 'pages/Landing';
 import EventsLibrary from 'pages/EventsLibrary';
 import Event from 'pages/Event';
+import { useContext } from 'react';
+import { Context } from 'context/AppContextProvider';
 
 const AppRoutes = () => {
+
+  const { authenticated } = useContext(Context);
+
   return (
     <Router>
       <Routes>
