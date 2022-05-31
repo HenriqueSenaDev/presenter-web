@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.edu.anm.presenter.entities.AppUser;
+import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
+import gov.edu.anm.presenter.repositories.ParticipationRepository;
 import gov.edu.anm.presenter.repositories.AppRoleRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final AppUserRepository appUserRepository;
     private final AppRoleRepository appRoleRepository;
+    private final ParticipationRepository participationRepository;
     private final PasswordEncoder passwordEncoder;
 
     // UserDetailsService
@@ -53,6 +56,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<AppRole> findUserAppRoles(String username) {
         return List.copyOf(appUserRepository.findByUsername(username).getRoles());
+    }
+
+    @Override
+    public List<Participation> findUserParticipations(Long id) {
+        List<Participation> parts = participationRepository.findAll();
+        parts.removeIf(x -> x.getId().getUser().getId() != id);
+        return parts;
     }
 
     @Override

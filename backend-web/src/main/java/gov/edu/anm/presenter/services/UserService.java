@@ -3,6 +3,7 @@ package gov.edu.anm.presenter.services;
 import java.util.List;
 
 import gov.edu.anm.presenter.entities.AppUser;
+import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.AppRole;
 
 public interface UserService {
@@ -14,6 +15,8 @@ public interface UserService {
     public List<AppUser> findAllUsers();
 
     public List<AppRole> findUserAppRoles(String username);
+
+    public List<Participation> findUserParticipations(Long id);
 
     public AppUser saveUser(AppUser appUser);
 

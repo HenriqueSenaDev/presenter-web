@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import gov.edu.anm.presenter.entities.AppUser;
+import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.services.UserService;
 import lombok.Data;
@@ -41,6 +43,11 @@ public class AppUserResource {
     private final UserService userService;
 
     // AppUser methods
+    @GetMapping(value = "/appusers")
+    public ResponseEntity<AppUser> findUserByUsername(@RequestParam String username) {
+        return ResponseEntity.ok().body(userService.getUserByUsername(username));
+    }
+
     @GetMapping(value = "/appusers/{id}")
     public ResponseEntity<AppUser> findUserById(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.findUserById(id));
@@ -51,9 +58,14 @@ public class AppUserResource {
         return ResponseEntity.ok().body(userService.findUserAppRoles(username));
     }
 
-    @GetMapping(value = "/appusers")
+    @GetMapping(value = "/appusers/all")
     public ResponseEntity<List<AppUser>> findAllUsers() {
         return ResponseEntity.ok().body(userService.findAllUsers());
+    }
+
+    @GetMapping(value = "/appusers/participations/{id}")
+    public ResponseEntity<List<Participation>> findUserParticipations(@PathVariable Long id) {
+        return ResponseEntity.ok().body(userService.findUserParticipations(id));
     }
 
     @PostMapping(value = "/appusers")
