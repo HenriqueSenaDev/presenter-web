@@ -38,7 +38,7 @@ const EventsLibrary = () => {
    const [userData, setUserData] = useState<IUserData>();
    const [participations, setParticipations] = useState<IParticipation[]>([]);
 
-   const { authenticated, userAndJWT } = useContext(Context);
+   const { authenticated, userAndJWT, event, handleEvent } = useContext(Context);
 
    document.addEventListener('click', ({ target }) => {
       if (document.querySelector('.join--event--main') === target) {
@@ -76,6 +76,10 @@ const EventsLibrary = () => {
       return <Navigate replace to="/" />
    }
 
+   if (event) {
+      return <Navigate replace to="/event" />
+   }
+
    return (
       <>
          <div>
@@ -91,7 +95,13 @@ const EventsLibrary = () => {
                         {
                            participations && participations.map(part => {
                               return (
-                                 <EventCard appEvent={part} key={part.id.event.id} />
+                                 <EventCard
+                                    appEvent={part}
+                                    key={part.id.event.id}
+                                    onClick={async () => {
+                                       await handleEvent(part.id.event.id);
+                                    }}
+                                 />
                               );
                            })
                         }

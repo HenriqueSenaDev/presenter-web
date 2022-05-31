@@ -1,6 +1,12 @@
 import React, { createContext, useState } from 'react';
 import { api } from "services";
 
+interface IUserAndJWT {
+    access_token: string,
+    refresh_token: string,
+    user: String,
+}
+
 interface IContext {
     authenticated: boolean,
     userAndJWT: {
@@ -8,7 +14,9 @@ interface IContext {
         refresh_token: string,
         user: String
     } | null,
-    handleLogin: Function
+    event: object | null,
+    handleLogin: Function,
+    handleEvent: Function
 }
 
 interface Props {
@@ -18,7 +26,9 @@ interface Props {
 const inicialValue = {
     authenticated: false,
     userAndJWT: null,
-    handleLogin: () => { }
+    event: null,
+    handleLogin: () => { },
+    handleEvent: () => { }
 }
 
 const Context = createContext<IContext>(inicialValue);
@@ -26,7 +36,8 @@ const Context = createContext<IContext>(inicialValue);
 
 const AppContextProvider = ({ children }: Props) => {
     const [authenticated, setAuthenticated] = useState<boolean>(false);
-    const [userAndJWT, setUserAndJWT] = useState(null);
+    const [userAndJWT, setUserAndJWT] = useState<IUserAndJWT | null>(null);
+    const [event, setEvent] = useState(null);
 
     const handleLogin = async (username: string, password: string) => {
         const { status, data } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`);
@@ -36,11 +47,24 @@ const AppContextProvider = ({ children }: Props) => {
         }
     }
 
+    const handleEvent = async (eventIp: number) => {
+        const { status, data } = await api.get(`/api/events/${eventIp}`, {
+            headers: {
+                'Authorization': `Bearer ${userAndJWT?.access_token}`
+            }
+        });
+        if (status === 200) {
+            setEvent(data);
+        }
+    }
+
     return (
         <Context.Provider value={{
             authenticated,
             userAndJWT,
-            handleLogin
+            event,
+            handleLogin,
+            handleEvent,
         }}>
             {children}
         </Context.Provider>

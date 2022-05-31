@@ -20,12 +20,13 @@ interface Props {
             name: string
         },
         team: null
-    }
+    },
+    onClick: () => void
 }
 
-const EventCard = ({ appEvent }: Props) => {
+const EventCard = ({ appEvent, onClick }: Props,) => {
     return (
-        <div className="event--card--container">
+        <div className="event--card--container" onClick={onClick} >
             <div className="event--card--header">
                 <h1>{appEvent.id.event.name}</h1>
                 <hr></hr>

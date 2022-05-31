@@ -110,7 +110,7 @@ const rows = [
 
 
 const Event = () => {
-    const { authenticated } = useContext(Context);
+    const { authenticated, event } = useContext(Context);
 
     if (!authenticated) {
         return <Navigate replace to="/" />

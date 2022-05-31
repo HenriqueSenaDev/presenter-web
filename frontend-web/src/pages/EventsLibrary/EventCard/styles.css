@@ -1,5 +1,6 @@
 .event--card--container {
     background-color: #ADD3FA;
+    cursor: pointer;
     font-size: 14px;
     min-width: 230px;
     max-width: 230px;
