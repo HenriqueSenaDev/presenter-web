@@ -16,7 +16,8 @@ interface IContext {
     } | null,
     event: object | null,
     handleLogin: Function,
-    handleEvent: Function
+    handleEvent: Function,
+    handleLogout: Function,
 }
 
 interface Props {
@@ -28,7 +29,8 @@ const inicialValue = {
     userAndJWT: null,
     event: null,
     handleLogin: () => { },
-    handleEvent: () => { }
+    handleEvent: () => { },
+    handleLogout: () => { },
 }
 
 const Context = createContext<IContext>(inicialValue);
@@ -58,6 +60,12 @@ const AppContextProvider = ({ children }: Props) => {
         }
     }
 
+    const handleLogout = () => {
+        setAuthenticated(false);
+        setEvent(null);
+        setUserAndJWT(null);
+    }
+
     return (
         <Context.Provider value={{
             authenticated,
@@ -65,6 +73,7 @@ const AppContextProvider = ({ children }: Props) => {
             event,
             handleLogin,
             handleEvent,
+            handleLogout
         }}>
             {children}
         </Context.Provider>
