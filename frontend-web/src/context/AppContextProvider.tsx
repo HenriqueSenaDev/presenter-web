@@ -1,83 +1,127 @@
 import React, { createContext, useState } from 'react';
 import { api } from "services";
 
+interface Props {
+   children: React.ReactNode
+}
+
+interface IJWT {
+   access_token: string,
+   refresh_token: string,
+}
+
 interface IUserAndJWT {
-    access_token: string,
-    refresh_token: string,
-    user: String,
+   access_token: string,
+   refresh_token: string,
+   user: string,
+}
+
+interface ILoginResponse {
+   status: number,
+   data: IUserAndJWT
+}
+
+interface IUser {
+   id: number,
+   roles: string[],
+   username: string
+}
+
+interface IUserResponse {
+   data: IUser
+   status: number
+}
+
+interface IEvent {
+   id: number,
+   name: string
+}
+
+interface IEventResponse {
+   data: IEvent,
+   status: number
 }
 
 interface IContext {
-    authenticated: boolean,
-    userAndJWT: {
-        access_token: string,
-        refresh_token: string,
-        user: String
-    } | null,
-    event: object | null,
-    handleLogin: Function,
-    handleEvent: Function,
-    handleLogout: Function,
+   authenticated: boolean,
+   JWT: IJWT | null,
+   user: IUser | null,
+   event: IEvent | null,
+   handleLogin: Function,
+   handleEvent: Function,
+   handleLogout: Function,
 }
 
-interface Props {
-    children: React.ReactNode
-}
-
-const inicialValue = {
-    authenticated: false,
-    userAndJWT: null,
-    event: null,
-    handleLogin: () => { },
-    handleEvent: () => { },
-    handleLogout: () => { },
-}
-
-const Context = createContext<IContext>(inicialValue);
-
+const Context = createContext<IContext>({
+   authenticated: false,
+   JWT: null,
+   user: null,
+   event: null,
+   handleLogin: () => { },
+   handleEvent: () => { },
+   handleLogout: () => { },
+});
 
 const AppContextProvider = ({ children }: Props) => {
-    const [authenticated, setAuthenticated] = useState<boolean>(false);
-    const [userAndJWT, setUserAndJWT] = useState<IUserAndJWT | null>(null);
-    const [event, setEvent] = useState(null);
+   const [authenticated, setAuthenticated] = useState<boolean>(false);
+   const [JWT, setJWT] = useState<IJWT | null>(null);
+   const [user, setUser] = useState<IUser | null>(null);
+   const [event, setEvent] = useState<IEvent | null>(null);
 
-    const handleLogin = async (username: string, password: string) => {
-        const { status, data } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`);
-        if (status === 200) {
-            setAuthenticated(true);
-            setUserAndJWT(data);
-        }
-    }
-
-    const handleEvent = async (eventIp: number) => {
-        const { status, data } = await api.get(`/api/events/${eventIp}`, {
+   const handleLogin = async (username: string, password: string) => {
+      const { data: loginResponse, status } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
+      if (status === 200) {
+         setAuthenticated(true);
+         setJWT({
+            access_token: loginResponse.access_token,
+            refresh_token: loginResponse.refresh_token
+         });
+         const { data: userResponse, status: userStatus } = await api.get(`/api/appusers?username=${loginResponse.user}`, {
             headers: {
-                'Authorization': `Bearer ${userAndJWT?.access_token}`
+               'Authorization': `Bearer ${loginResponse.access_token}`
             }
-        });
-        if (status === 200) {
-            setEvent(data);
-        }
-    }
+         }) as IUserResponse;
+         if (userStatus === 200) {
+            setUser(userResponse);
+         }
+         // console.log(userResponse);
+         // console.log(loginResponse);
+      }
 
-    const handleLogout = () => {
-        setAuthenticated(false);
-        setEvent(null);
-        setUserAndJWT(null);
-    }
+   }
 
-    return (
-        <Context.Provider value={{
-            authenticated,
-            userAndJWT,
-            event,
-            handleLogin,
-            handleEvent,
-            handleLogout
-        }}>
-            {children}
-        </Context.Provider>
-    );
+   const handleEvent = async (eventIp: number) => {
+      const { status, data } = await api.get(`/api/events/${eventIp}`, {
+         headers: {
+            'Authorization': `Bearer ${JWT?.access_token}`
+         }
+      }) as IEventResponse;
+      if (status === 200) {
+         setEvent(data);
+         // console.log(data);
+      }
+   }
+
+   const handleLogout = () => {
+      setAuthenticated(false);
+      setEvent(null);
+      setJWT(null);
+      setUser(null);
+   }
+
+   return (
+      <Context.Provider value={{
+         authenticated,
+         JWT,
+         user,
+         event,
+         handleLogin,
+         handleEvent,
+         handleLogout
+      }}>
+         {children}
+      </Context.Provider>
+   );
 }
 
 export { Context, AppContextProvider };

@@ -5,12 +5,11 @@ import { Context } from "context/AppContextProvider";
 
 import { ReactComponent as LogOutIcon } from "assets/images/logOut-Icon.svg";
 import { ReactComponent as CloseIcon } from "assets/images/close-Icon.svg";
-import { Navigate } from "react-router-dom";
 
 const Navbar = () => {
     const [logOutPop, setLogoutPop] = useState<boolean>(false);
 
-    const { authenticated, userAndJWT, handleLogout } = useContext(Context);
+    const { authenticated, user, handleLogout } = useContext(Context);
 
     return (
         <>
@@ -40,7 +39,7 @@ const Navbar = () => {
                                 setLogoutPop(true);
                             }}
                         >
-                            <h1>{userAndJWT?.user}</h1>
+                            <h1>{user?.username}</h1>
                             <ProfileIcon className="profile--margin" />
                         </div>
                     </>

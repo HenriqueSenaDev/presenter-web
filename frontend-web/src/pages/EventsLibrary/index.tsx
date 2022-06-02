@@ -8,11 +8,6 @@ import { Context } from "context/AppContextProvider";
 import { api } from "services";
 import { Navigate } from "react-router-dom";
 
-interface IUserData {
-   id: number,
-   username: string
-}
-
 interface IParticipation {
    id: {
       event: {
@@ -35,10 +30,9 @@ interface IParticipation {
 
 const EventsLibrary = () => {
    const [addPopupOpen, setAddPopupOpen] = useState<boolean>(false);
-   const [userData, setUserData] = useState<IUserData>();
    const [participations, setParticipations] = useState<IParticipation[]>([]);
 
-   const { authenticated, userAndJWT, event, handleEvent } = useContext(Context);
+   const { authenticated, JWT, user, event, handleEvent } = useContext(Context);
 
    document.addEventListener('click', ({ target }) => {
       if (document.querySelector('.join--event--main') === target) {
@@ -48,29 +42,17 @@ const EventsLibrary = () => {
 
    useEffect(() => {
       (async () => {
-         if (userAndJWT) {
-            const { data } = await api.get(`/api/appusers?username=${userAndJWT?.user}`, {
+         if (user && JWT) {
+            const { data: eventsData } = await api.get(`/api/appusers/participations/${user.id}`, {
                headers: {
-                  'Authorization': `Bearer ${userAndJWT.access_token}`
+                  'Authorization': `Bearer ${JWT.access_token}`
                }
-            })
-            setUserData(data);
-         }
-      })()
-   }, [])
-
-   useEffect(() => {
-      (async () => {
-         if (userData) {
-            const { data: eventsData } = await api.get(`/api/appusers/participations/${userData.id}`, {
-               headers: {
-                  'Authorization': `Bearer ${userAndJWT?.access_token}`
-               }
-            })
+            });
             setParticipations(eventsData);
+            // console.log(eventsData);
          }
       })()
-   }, [userData])
+   }, [user])
 
    if (!authenticated) {
       return <Navigate replace to="/" />

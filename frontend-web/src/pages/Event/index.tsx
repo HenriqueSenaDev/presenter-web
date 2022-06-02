@@ -1,10 +1,15 @@
-import Navbar from "components/Navbar";
 import "./styles.css";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+
+import Navbar from "components/Navbar";
 import RatePopUp from "./RatePopUp";
+
 import { Context } from "context/AppContextProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+
 import { Navigate } from "react-router-dom";
+
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { api } from "services";
 
 const columns: GridColDef[] = [
     {
@@ -17,14 +22,14 @@ const columns: GridColDef[] = [
         field: 'equipe',
         headerName: 'Equipe',
         type: 'string',
-        width: 200
+        width: 220
     },
     {
         field: 'projeto',
         headerName: 'Projeto',
         type: 'string',
         sortable: false,
-        width: 240
+        width: 220
     },
     {
         field: 'turma',
@@ -44,73 +49,70 @@ const columns: GridColDef[] = [
         field: 'media',
         headerName: 'Média Geral',
         type: "number",
-        sortable: false,
-        width: 135,
+        width: 160,
     },
 ];
 
-const rows = [
-    {
-        id: 1,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 2,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 3,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 4,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 5,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 6,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-    {
-        id: 7,
-        equipe: 'Procariontes',
-        projeto: 'Presenter',
-        turma: '2º Informática',
-        avaliacoes: 3,
-        media: 10.00
-    },
-];
+interface ITeam {
+    id: number,
+    name: string,
+    avaliations: number,
+    average: number,
+    classRoom: string,
+    ponctuation: number,
+    presented: boolean,
+    project: string
+}
 
+interface ITeamsResponse {
+    data: ITeam[]
+}
+
+interface IRow {
+    id: number,
+    equipe: string,
+    projeto: string,
+    turma: string,
+    avaliacoes: number,
+    media: number
+}
 
 const Event = () => {
-    const { authenticated, event } = useContext(Context);
+    const [teams, setTeams] = useState<ITeam[] | null>(null);
+    const [rows, setRows] = useState<IRow[] | []>([]);
+
+    const { authenticated, event, JWT } = useContext(Context);
+
+    useEffect(() => {
+        (async () => {
+            if (event && JWT) {
+                const { data } = await api.get(`/api/events/teams/${event.id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${JWT.access_token}`
+                    }
+                }) as ITeamsResponse;
+                setTeams(data);
+                // console.log(data);
+            }
+        })()
+    }, [event]);
+
+    useEffect(() => {
+        if (teams) {
+            const newRows: IRow[] = [];
+            teams.forEach(team => {
+                newRows.push({
+                    id: team.id,
+                    avaliacoes: team.avaliations,
+                    equipe: team.name,
+                    media: team.average,
+                    projeto: team.project,
+                    turma: team.classRoom
+                } as IRow);
+            });
+            setRows(newRows);
+        }
+    }, [teams])
 
     if (!authenticated) {
         return <Navigate replace to="/" />
@@ -129,6 +131,11 @@ const Event = () => {
                             width: 700,
                             color: '#FFFFFF',
                             cursor: 'pointer'
+                        }}
+                        initialState={{
+                            sorting: {
+                                sortModel: [{ field: 'media', sort: 'desc' }],
+                            },
                         }}
                         hideFooter={true}
                         rows={rows}
