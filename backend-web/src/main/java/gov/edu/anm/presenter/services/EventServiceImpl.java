@@ -1,22 +1,22 @@
 package gov.edu.anm.presenter.services;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.edu.anm.presenter.dto.ParticipationDTO;
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Event;
 import gov.edu.anm.presenter.entities.EventRole;
 import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.ParticipationPK;
+import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
 import gov.edu.anm.presenter.repositories.EventRepository;
 import gov.edu.anm.presenter.repositories.EventRoleRepository;
 import gov.edu.anm.presenter.repositories.ParticipationRepository;
+import gov.edu.anm.presenter.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -26,6 +26,7 @@ public class EventServiceImpl implements EventService {
     private final AppUserRepository appUserRepository;
     private final EventRepository eventRepository;
     private final EventRoleRepository eventRoleRepository;
+    private final TeamRepository teamRepository;
     private final ParticipationRepository participationRepository;
 
     // Event methods
@@ -45,14 +46,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationDTO> findEventParticipations(Long id) {
+    public List<Participation> findEventParticipations(Long id) {
         Event evt = eventRepository.findById(id).get();
-        Set<ParticipationDTO> parts = new HashSet<>();
-        evt.getParticipations().forEach(part -> {
-            parts.add(new ParticipationDTO(part.getId().getEvent().getName(), part.getId().getUser().getUsername(),
-                    part.getEventRole().getName(), null));
+        return List.copyOf(evt.getParticipations());
+    }
+
+    @Override
+    public List<Team> findEventTeams(Long id) {
+        List<Participation> parts = findEventParticipations(id);
+        List<Team> teams = new ArrayList<>();
+        parts.forEach(part -> {
+            teams.add(part.getTeam());
         });
-        return List.copyOf(parts);
+        return teams;
     }
 
     @Override
@@ -67,7 +73,8 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId).get();
         ParticipationPK participationPK = new ParticipationPK(event, user);
         EventRole eventRole = eventRoleRepository.findById(eventRoleId).get();
-        Participation participation = new Participation(participationPK, eventRole, null);
+        Team team = teamRepository.findById(teamId).get();
+        Participation participation = new Participation(participationPK, eventRole, team);
         participationRepository.save(participation);
         return participation;
     }

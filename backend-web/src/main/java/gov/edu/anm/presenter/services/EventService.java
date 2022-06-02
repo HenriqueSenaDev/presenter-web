@@ -2,10 +2,10 @@ package gov.edu.anm.presenter.services;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.dto.ParticipationDTO;
 import gov.edu.anm.presenter.entities.Event;
 import gov.edu.anm.presenter.entities.EventRole;
 import gov.edu.anm.presenter.entities.Participation;
+import gov.edu.anm.presenter.entities.Team;
 
 public interface EventService {
     // Event methods
@@ -15,7 +15,9 @@ public interface EventService {
 
     public List<Event> findAllEvents();
 
-    public List<ParticipationDTO> findEventParticipations(Long id);
+    public List<Participation> findEventParticipations(Long id);
+
+    public List<Team> findEventTeams(Long id);
 
     public Event saveEvent(Event event);
 

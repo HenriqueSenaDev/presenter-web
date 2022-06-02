@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import gov.edu.anm.presenter.dto.ParticipationDTO;
 import gov.edu.anm.presenter.entities.Event;
 import gov.edu.anm.presenter.entities.EventRole;
 import gov.edu.anm.presenter.entities.Participation;
+import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.services.EventService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,8 +40,13 @@ public class EventResource {
     }
 
     @GetMapping(value = "/participations/{id}")
-    public ResponseEntity<List<ParticipationDTO>> findEventParticipations(@PathVariable Long id) {
+    public ResponseEntity<List<Participation>> findEventParticipations(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventParticipations(id));
+    }
+
+    @GetMapping(value = "/teams/{id}")
+    public ResponseEntity<List<Team>> findEventTeams(@PathVariable Long id) {
+        return ResponseEntity.ok().body(eventService.findEventTeams(id));
     }
 
     @PostMapping(value = "/participations")
