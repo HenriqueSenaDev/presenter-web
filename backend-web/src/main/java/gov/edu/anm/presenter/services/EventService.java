@@ -2,6 +2,7 @@ package gov.edu.anm.presenter.services;
 
 import java.util.List;
 
+import gov.edu.anm.presenter.entities.Avaliation;
 import gov.edu.anm.presenter.entities.Event;
 import gov.edu.anm.presenter.entities.EventRole;
 import gov.edu.anm.presenter.entities.Participation;
@@ -20,6 +21,8 @@ public interface EventService {
     public List<Team> findEventTeams(Long id);
 
     public Event saveEvent(Event event);
+
+    public Avaliation addAvaliation(Long teamId, Long userId, Double value);
 
     public Participation addParticipation(Long appUserId, Long eventId, Long eventRoleId, Long teamId);
 

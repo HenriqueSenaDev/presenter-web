@@ -56,7 +56,7 @@ const columns: GridColDef[] = [
 interface ITeam {
     id: number,
     name: string,
-    avaliations: number,
+    avaliationsQuantity: number,
     average: number,
     classRoom: string,
     ponctuation: number,
@@ -74,7 +74,7 @@ interface IRow {
     projeto: string,
     turma: string,
     avaliacoes: number,
-    media: number
+    media: string
 }
 
 const Event = () => {
@@ -103,9 +103,9 @@ const Event = () => {
             teams.forEach(team => {
                 newRows.push({
                     id: team.id,
-                    avaliacoes: team.avaliations,
+                    avaliacoes: team.avaliationsQuantity,
                     equipe: team.name,
-                    media: team.average,
+                    media: team.average.toFixed(1),
                     projeto: team.project,
                     turma: team.classRoom
                 } as IRow);

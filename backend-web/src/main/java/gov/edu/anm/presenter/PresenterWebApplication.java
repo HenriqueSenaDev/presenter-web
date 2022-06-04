@@ -53,13 +53,17 @@ public class PresenterWebApplication {
 			userService.addRoleToUser("joyce", "ROLE_STUDENT");
 
 			// Teams
-			teamService.saveTeam(new Team(null, "Procariontes", "Semáforo", "2º INF", 30.0, 3, null, false, null));
-			teamService.saveTeam(new Team(null, "Elemento X", "Diassis Poupas", "2º INF", 10.0, 2, null, false, null));
+			teamService.saveTeam(new Team("Procationtes", "Semáforo", "2º INF", false));
+			teamService.saveTeam(new Team("Elemento X", "Diassis Poupas", "2º INF", false));
 
 			// Event participations
 			eventService.addParticipation(1L, 1L, 1L, 1L);
 			eventService.addParticipation(2L, 1L, 2L, 2L);
 
+			// Teams Avaliations
+			eventService.addAvaliation(1L, 1L, 10.0);
+			eventService.addAvaliation(1L, 2L, 5.0);
+			eventService.addAvaliation(2L, 1L, 10.0);
 		};
 	}
 

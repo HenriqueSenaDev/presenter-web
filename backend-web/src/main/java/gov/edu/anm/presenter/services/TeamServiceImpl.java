@@ -1,11 +1,13 @@
 package gov.edu.anm.presenter.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import gov.edu.anm.presenter.entities.Avaliation;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.EventRepository;
 import gov.edu.anm.presenter.repositories.TeamRepository;
@@ -20,12 +22,33 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team findById(Long id) {
-        return teamRepository.findById(id).get();
+        Team team = teamRepository.findById(id).get();
+        List<Avaliation> avaliations = findTeamAvaliations(team.getId());
+        Optional<Double> ponctuation = avaliations.stream()
+                .map(Avaliation::getValue)
+                .reduce((n1, n2) -> n1 + n2);
+        team.setAverage(ponctuation.get() / avaliations.size());
+        team.setAvaliationsQuantity(avaliations.size());
+        return team;
     }
 
     @Override
     public List<Team> findAll() {
-        return teamRepository.findAll();
+        List<Team> teams = teamRepository.findAll();
+        teams.forEach(team -> {
+            List<Avaliation> avaliations = findTeamAvaliations(team.getId());
+            Double ponctuation = avaliations.stream()
+                    .map(Avaliation::getValue)
+                    .reduce((n1, n2) -> n1 + n2).get();
+            team.setAverage(ponctuation / avaliations.size());
+            team.setAvaliationsQuantity(avaliations.size());
+        });
+        return teams;
+    }
+
+    @Override
+    public List<Avaliation> findTeamAvaliations(Long id) {
+        return List.copyOf(teamRepository.findById(id).get().getAvaliations());
     }
 
     @Override
@@ -45,15 +68,12 @@ public class TeamServiceImpl implements TeamService {
         if (team.getClassRoom() != null) {
             userTeam.setClassRoom(team.getClassRoom());
         }
-        if (team.getPonctuation() != null) {
-            userTeam.setPonctuation(team.getPonctuation());
-        }
         if (team.getAvaliations() != null) {
             userTeam.setAvaliations(team.getAvaliations());
         }
-        if (team.getAverage() != null) {
-            userTeam.setAverage(team.getAverage());
-        }
+        // if (team.getAverage() != null) {
+        // userTeam.setAverage(team.getAverage());
+        // }
         if (team.getPresented() != null) {
             userTeam.setPresented(team.getPresented());
         }

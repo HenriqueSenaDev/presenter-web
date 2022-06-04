@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import gov.edu.anm.presenter.entities.Avaliation;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.services.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class TeamResource {
     @GetMapping
     public ResponseEntity<List<Team>> findAll() {
         return ResponseEntity.ok().body(teamService.findAll());
+    }
+
+    @GetMapping(value = "/avaliations/{id}")
+    public ResponseEntity<List<Avaliation>> findTeamAvaliations(@PathVariable Long id) {
+        return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
     }
 
     @PostMapping
