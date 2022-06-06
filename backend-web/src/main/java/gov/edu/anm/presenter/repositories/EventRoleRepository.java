@@ -6,4 +6,6 @@ import gov.edu.anm.presenter.entities.EventRole;
 
 public interface EventRoleRepository extends JpaRepository<EventRole, Long> {
 
+    public EventRole findByName(String name);
+
 }

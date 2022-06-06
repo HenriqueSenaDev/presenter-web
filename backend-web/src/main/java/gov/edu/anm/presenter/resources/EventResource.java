@@ -34,6 +34,11 @@ public class EventResource {
         return ResponseEntity.ok().body(eventService.findEventById(id));
     }
 
+    @GetMapping(value = "/code/{code}")
+    public ResponseEntity<Event> findByCode(@PathVariable Integer code) {
+        return ResponseEntity.ok().body(eventService.findEventByCode(code));
+    }
+
     @GetMapping
     public ResponseEntity<List<Event>> findAllEvents() {
         return ResponseEntity.ok().body(eventService.findAllEvents());
@@ -57,13 +62,14 @@ public class EventResource {
 
     @PostMapping(value = "/participations/add")
     public ResponseEntity<Participation> addEventParticipation(
+            @RequestParam Integer eventCode,
+            @RequestParam Integer jurorCode,
             @RequestParam Long userId,
-            @RequestParam Long eventId,
-            @RequestParam Long eventRoleId,
             @RequestParam Long teamId) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
-        return ResponseEntity.created(uri).body(eventService.addParticipation(userId, eventId, eventRoleId, teamId));
+        return ResponseEntity.created(uri)
+                .body(eventService.addParticipation(eventCode, jurorCode, userId, teamId));
     }
 
     @PutMapping(value = "/{id}")

@@ -14,6 +14,8 @@ public interface EventService {
 
     public Event findEventByName(String username);
 
+    public Event findEventByCode(Integer code);
+
     public List<Event> findAllEvents();
 
     public List<Participation> findEventParticipations(Long id);
@@ -22,9 +24,9 @@ public interface EventService {
 
     public Event saveEvent(Event event);
 
-    public Avaliation addAvaliation(Long teamId, Long userId, Double value);
+    public Participation addParticipation(Integer eventCode, Integer jurorCode, Long appUserId, Long teamId);
 
-    public Participation addParticipation(Long appUserId, Long eventId, Long eventRoleId, Long teamId);
+    public Avaliation addAvaliation(Long teamId, Long userId, Double value);
 
     public Event updateEvent(Event event, Long id);
 

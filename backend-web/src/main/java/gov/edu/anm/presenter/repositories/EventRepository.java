@@ -8,4 +8,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     public Event findByName(String name);
 
+    public Event findByCode(Integer code);
+
 }

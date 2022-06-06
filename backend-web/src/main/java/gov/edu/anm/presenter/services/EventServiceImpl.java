@@ -45,6 +45,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event findEventByCode(Integer code) {
+        return eventRepository.findByCode(code);
+    }
+
+    @Override
     public List<Event> findAllEvents() {
         return eventRepository.findAll();
     }
@@ -80,15 +85,20 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Participation addParticipation(Long appUserId, Long eventId, Long eventRoleId, Long teamId) {
-        AppUser user = appUserRepository.findById(appUserId).get();
-        Event event = eventRepository.findById(eventId).get();
+    public Participation addParticipation(Integer eventCode, Integer jurorCode, Long appUserId, Long teamId) {
+        Event event = eventRepository.findByCode(eventCode);
+        AppUser user = appUserRepository.findById(appUserId).orElseGet(null);
         ParticipationPK participationPK = new ParticipationPK(event, user);
-        EventRole eventRole = eventRoleRepository.findById(eventRoleId).get();
-        Team team = teamRepository.findById(teamId).get();
-        Participation participation = new Participation(participationPK, eventRole, team);
-        participationRepository.save(participation);
-        return participation;
+        Participation participation = null;
+        if (jurorCode.equals(event.getJurorCode())) {
+            EventRole eventRole = eventRoleRepository.findByName("JUROR");
+            participation = new Participation(participationPK, eventRole, null);
+        } else {
+            EventRole eventRole = eventRoleRepository.findByName("MEMBER");
+            Team team = teamRepository.findById(teamId).orElseGet(null);
+            participation = new Participation(participationPK, eventRole, team);
+        }
+        return participationRepository.save(participation);
     }
 
     @Override

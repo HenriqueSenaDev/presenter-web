@@ -57,8 +57,8 @@ public class PresenterWebApplication {
 			teamService.saveTeam(new Team("Elemento X", "Diassis Poupas", "2º INF", false));
 
 			// Event participations
-			eventService.addParticipation(1L, 1L, 1L, 1L);
-			eventService.addParticipation(2L, 1L, 2L, 2L);
+			// eventService.addParticipation(1L, 1L, 1L, 1L);
+			// eventService.addParticipation(2L, 1L, 2L, 2L);
 
 			// Teams Avaliations
 			eventService.addAvaliation(1L, 1L, 10.0);

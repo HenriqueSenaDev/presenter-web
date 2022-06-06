@@ -37,10 +37,10 @@ public class TeamServiceImpl implements TeamService {
         List<Team> teams = teamRepository.findAll();
         teams.forEach(team -> {
             List<Avaliation> avaliations = findTeamAvaliations(team.getId());
-            Double ponctuation = avaliations.stream()
+            Optional<Double> ponctuation = avaliations.stream()
                     .map(Avaliation::getValue)
-                    .reduce((n1, n2) -> n1 + n2).get();
-            team.setAverage(ponctuation / avaliations.size());
+                    .reduce((n1, n2) -> n1 + n2);
+            team.setAverage(ponctuation.get() / avaliations.size());
             team.setAvaliationsQuantity(avaliations.size());
         });
         return teams;
