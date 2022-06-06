@@ -30,9 +30,8 @@ interface IParticipation {
 
 const EventsLibrary = () => {
    const [addPopupOpen, setAddPopupOpen] = useState<boolean>(false);
-   const [participations, setParticipations] = useState<IParticipation[]>([]);
 
-   const { authenticated, JWT, user, event, handleEvent } = useContext(Context);
+   const { authenticated, user, event, participations, handleEvent, handleParticipations } = useContext(Context);
 
    document.addEventListener('click', ({ target }) => {
       if (document.querySelector('.join--event--main') === target) {
@@ -42,17 +41,9 @@ const EventsLibrary = () => {
 
    useEffect(() => {
       (async () => {
-         if (user && JWT) {
-            const { data: eventsData } = await api.get(`/api/appusers/participations/${user.id}`, {
-               headers: {
-                  'Authorization': `Bearer ${JWT.access_token}`
-               }
-            });
-            setParticipations(eventsData);
-            // console.log(eventsData);
-         }
-      })()
-   }, [user])
+         await handleParticipations();
+      })();
+   }, [user]);
 
    if (!authenticated) {
       return <Navigate replace to="/" />
@@ -66,7 +57,10 @@ const EventsLibrary = () => {
       <>
          <div>
             {
-               addPopupOpen && <AddEventPopup />
+               addPopupOpen &&
+               <AddEventPopup
+                  setAddPopupOpen={setAddPopupOpen}
+               />
             }
             <Navbar />
             <div className="join--event--wrapper">
@@ -86,6 +80,9 @@ const EventsLibrary = () => {
                                  />
                               );
                            })
+                        }
+                        {
+                           !participations.length && <span>Adicione um evento para participar.</span>
                         }
                      </div>
                      <div

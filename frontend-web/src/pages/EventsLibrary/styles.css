@@ -65,6 +65,10 @@
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
 }
 
+.events--container span {
+    font-size: 16px;
+}
+
 @media (min-width: 768px) {
     .join--event--container {
         font-size: 12px;

@@ -28,13 +28,13 @@
     max-width: 100%;
     background-color: #92C7EF;
     border-radius: 20px;
-    padding: 40px 30px 32px 30px;
+    padding: 30px 30px 32px 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    gap: 15px;
+    gap: 20px;
     border: rgba(255, 255, 255, 0.5) solid 1px;
 }
 
@@ -56,9 +56,26 @@
     border-radius: 5px;
 }
 
-
 .join--card--container input:focus {
     outline: none;
+}
+
+.loading--add {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.loading--add h1 {
+    font-family: 'Oleo Script Swash Caps', 'Open Sans', sans-serif;
+    font-size: 42px;
+}
+
+.loading--add img {
+    width: 40px;
+    height: 40px;
 }
 
 .form--container {
@@ -66,14 +83,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
 }
 
 @media(min-width: 576px) {
-    .join--card--container h1 {
-        font-size: 18px;
-    }
-
     .join--card--container input {
         font-size: 18px;
     }
@@ -81,6 +94,6 @@
 
 @media(min-width: 992px) {
     .join--card--container h1 {
-        font-size: 20px;
+        font-size: 18px;
     }
 }

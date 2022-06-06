@@ -42,14 +42,37 @@ interface IEventResponse {
    status: number
 }
 
+interface IParticipation {
+   id: {
+      event: {
+         id: number,
+         name: string,
+         code: number,
+         jurorCorde: number
+      },
+      user: {
+         id: number,
+         username: string
+      }
+   },
+   eventRole: {
+      id: number,
+      name: string
+   },
+   team: null
+}
+
 interface IContext {
    authenticated: boolean,
    JWT: IJWT | null,
    user: IUser | null,
    event: IEvent | null,
+   participations: IParticipation[] | [],
    handleLogin: Function,
    handleEvent: Function,
    handleLogout: Function,
+   handleParticipations: Function,
+   handleAddParticipation: Function
 }
 
 const Context = createContext<IContext>({
@@ -57,9 +80,12 @@ const Context = createContext<IContext>({
    JWT: null,
    user: null,
    event: null,
+   participations: [],
    handleLogin: () => { },
    handleEvent: () => { },
    handleLogout: () => { },
+   handleParticipations: () => { },
+   handleAddParticipation: () => { }
 });
 
 const AppContextProvider = ({ children }: Props) => {
@@ -67,6 +93,7 @@ const AppContextProvider = ({ children }: Props) => {
    const [JWT, setJWT] = useState<IJWT | null>(null);
    const [user, setUser] = useState<IUser | null>(null);
    const [event, setEvent] = useState<IEvent | null>(null);
+   const [participations, setParticipations] = useState<IParticipation[]>([]);
 
    const handleLogin = async (username: string, password: string) => {
       const { data: loginResponse, status } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
@@ -102,6 +129,29 @@ const AppContextProvider = ({ children }: Props) => {
       }
    }
 
+   const handleParticipations = async () => {
+      if (user && JWT) {
+         const { data: eventsData } = await api.get(`/api/appusers/participations/${user.id}`, {
+            headers: {
+               'Authorization': `Bearer ${JWT.access_token}`
+            }
+         });
+         setParticipations(eventsData);
+         // console.log(eventsData);
+      }
+   }
+
+   const handleAddParticipation = async (eventCode: string, jurorCode: string) => {
+      const { data, status } = await api.post(`/api/events/participations/add?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}&teamId=1`, {}, {
+         headers: {
+            'Authorization': `Bearer ${JWT?.access_token}`
+         }
+      });
+      console.log(data);
+      console.log(status);
+      await handleParticipations();
+   }
+
    const handleLogout = () => {
       setAuthenticated(false);
       setEvent(null);
@@ -115,9 +165,12 @@ const AppContextProvider = ({ children }: Props) => {
          JWT,
          user,
          event,
+         participations,
          handleLogin,
          handleEvent,
-         handleLogout
+         handleLogout,
+         handleParticipations,
+         handleAddParticipation
       }}>
          {children}
       </Context.Provider>
