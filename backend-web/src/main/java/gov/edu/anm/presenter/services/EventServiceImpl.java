@@ -2,20 +2,19 @@ package gov.edu.anm.presenter.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Avaliation;
-import gov.edu.anm.presenter.entities.AvaliationPK;
 import gov.edu.anm.presenter.entities.Event;
 import gov.edu.anm.presenter.entities.EventRole;
 import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.ParticipationPK;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
-import gov.edu.anm.presenter.repositories.AvaliationRepository;
 import gov.edu.anm.presenter.repositories.EventRepository;
 import gov.edu.anm.presenter.repositories.EventRoleRepository;
 import gov.edu.anm.presenter.repositories.ParticipationRepository;
@@ -31,7 +30,7 @@ public class EventServiceImpl implements EventService {
     private final EventRoleRepository eventRoleRepository;
     private final TeamRepository teamRepository;
     private final ParticipationRepository participationRepository;
-    private final AvaliationRepository avaliationRepository;
+    private final TeamService teamService;
 
     // Event methods
     @Override
@@ -65,7 +64,17 @@ public class EventServiceImpl implements EventService {
         List<Participation> parts = findEventParticipations(id);
         List<Team> teams = new ArrayList<>();
         parts.forEach(part -> {
-            teams.add(part.getTeam());
+            if (part.getTeam() != null) {
+                teams.add(part.getTeam());
+            }
+        });
+        teams.forEach(team -> {
+            List<Avaliation> avaliations = teamService.findTeamAvaliations(team.getId());
+            Optional<Double> ponctuation = avaliations.stream()
+                    .map(Avaliation::getValue)
+                    .reduce((n1, n2) -> n1 + n2);
+            team.setAverage(ponctuation.get() / avaliations.size());
+            team.setAvaliationsQuantity(avaliations.size());
         });
         return teams;
     }
@@ -74,14 +83,6 @@ public class EventServiceImpl implements EventService {
     public Event saveEvent(Event event) {
         eventRepository.save(event);
         return event;
-    }
-
-    @Override
-    public Avaliation addAvaliation(Long teamId, Long userId, Double value) {
-        AppUser user = appUserRepository.findById(userId).get();
-        Team team = teamRepository.findById(teamId).get();
-        AvaliationPK pk = new AvaliationPK(user, team);
-        return avaliationRepository.save(new Avaliation(pk, value));
     }
 
     @Override

@@ -14,6 +14,8 @@ public interface TeamService {
 
     public Team saveTeam(Team team);
 
+    public Avaliation addAvaliation(Long teamId, Long userId, Double value);
+
     public Team updateTeam(Team team, Long id);
 
     public void deleteTeam(Long id);

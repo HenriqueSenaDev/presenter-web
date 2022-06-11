@@ -7,8 +7,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Avaliation;
+import gov.edu.anm.presenter.entities.AvaliationPK;
 import gov.edu.anm.presenter.entities.Team;
+import gov.edu.anm.presenter.repositories.AppUserRepository;
+import gov.edu.anm.presenter.repositories.AvaliationRepository;
 import gov.edu.anm.presenter.repositories.EventRepository;
 import gov.edu.anm.presenter.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +21,10 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService {
+    private final AppUserRepository appUserRepository;
     private final TeamRepository teamRepository;
     private final EventRepository eventRepository;
+    private final AvaliationRepository avaliationRepository;
 
     @Override
     public Team findById(Long id) {
@@ -54,6 +60,14 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team saveTeam(Team team) {
         return teamRepository.save(team);
+    }
+
+    @Override
+    public Avaliation addAvaliation(Long teamId, Long userId, Double value) {
+        AppUser user = appUserRepository.findById(userId).get();
+        Team team = teamRepository.findById(teamId).get();
+        AvaliationPK pk = new AvaliationPK(user, team);
+        return avaliationRepository.save(new Avaliation(pk, value));
     }
 
     @Override

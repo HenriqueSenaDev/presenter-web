@@ -42,7 +42,10 @@ public class PresenterWebApplication {
 
 			// AppUsers
 			userService.saveUser(new AppUser(null, "luiz", "admin", new HashSet<>()));
+			userService.saveUser(new AppUser(null, "daniel", "admin", new HashSet<>()));
+			userService.saveUser(new AppUser(null, "kim", "admin", new HashSet<>()));
 			userService.saveUser(new AppUser(null, "joyce", "student", new HashSet<>()));
+			userService.saveUser(new AppUser(null, "silvio", "student", new HashSet<>()));
 
 			// Event
 			eventService.saveEvent(new Event(null, "Meio do Ano", 3344, 565656, new HashSet<>(), new HashSet<>()));
@@ -50,20 +53,23 @@ public class PresenterWebApplication {
 
 			// AppRoles to AppUsers
 			userService.addRoleToUser("luiz", "ROLE_ADMIN");
+			userService.addRoleToUser("daniel", "ROLE_ADMIN");
+			userService.addRoleToUser("kim", "ROLE_ADMIN");
 			userService.addRoleToUser("joyce", "ROLE_STUDENT");
+			userService.addRoleToUser("silvio", "ROLE_STUDENT");
 
 			// Teams
 			teamService.saveTeam(new Team("Procationtes", "Semáforo", "2º INF", false));
-			teamService.saveTeam(new Team("Elemento X", "Diassis Poupas", "2º INF", false));
+			teamService.saveTeam(new Team("Liro Joseph", "Diassis Poupas", "2º INF", false));
 
 			// Event participations
-			// eventService.addParticipation(1L, 1L, 1L, 1L);
-			// eventService.addParticipation(2L, 1L, 2L, 2L);
+			eventService.addParticipation(3344, 565656, 1L, 1L);
+			eventService.addParticipation(3344, 1, 4L, 2L);
+			eventService.addParticipation(3344, 1, 5L, 2L);
 
 			// Teams Avaliations
-			eventService.addAvaliation(1L, 1L, 10.0);
-			eventService.addAvaliation(1L, 2L, 5.0);
-			eventService.addAvaliation(2L, 1L, 10.0);
+			// teamService.addAvaliation(1L, 1L, 10.0);
+			teamService.addAvaliation(2L, 1L, 10.0);
 		};
 	}
 

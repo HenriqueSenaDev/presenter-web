@@ -54,7 +54,7 @@ public class EventResource {
         return ResponseEntity.ok().body(eventService.findEventTeams(id));
     }
 
-    @PostMapping(value = "/participations")
+    @PostMapping
     public ResponseEntity<Event> saveEvent(@RequestBody Event event) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));

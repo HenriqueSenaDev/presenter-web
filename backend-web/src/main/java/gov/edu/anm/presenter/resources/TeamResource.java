@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,6 +50,14 @@ public class TeamResource {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team team) {
         return ResponseEntity.ok().body(teamService.updateTeam(team, id));
+    }
+
+    @PutMapping(value = "/avaliations/add")
+    public ResponseEntity<Avaliation> addAvaliation(
+            @RequestParam Long teamId,
+            @RequestParam Long userId,
+            @RequestParam Double value) {
+        return ResponseEntity.ok().body(teamService.addAvaliation(teamId, userId, value));
     }
 
     @DeleteMapping(value = "/{id}")
