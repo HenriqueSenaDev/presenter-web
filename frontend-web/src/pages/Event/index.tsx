@@ -9,7 +9,6 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { api } from "services";
 
 const columns: GridColDef[] = [
     {
@@ -53,21 +52,6 @@ const columns: GridColDef[] = [
     },
 ];
 
-interface ITeam {
-    id: number,
-    name: string,
-    avaliationsQuantity: number,
-    average: number,
-    classRoom: string,
-    ponctuation: number,
-    presented: boolean,
-    project: string
-}
-
-interface ITeamsResponse {
-    data: ITeam[]
-}
-
 interface IRow {
     id: number,
     equipe: string,
@@ -77,23 +61,21 @@ interface IRow {
     media: string
 }
 
-const Event = () => {
-    const [teams, setTeams] = useState<ITeam[] | null>(null);
-    const [rows, setRows] = useState<IRow[] | []>([]);
+interface ITeamInfo {
+    id: number,
+    name: string
+}
 
-    const { authenticated, event, JWT } = useContext(Context);
+const Event = () => {
+    const [rows, setRows] = useState<IRow[] | []>([]);
+    const [team, setTeam] = useState<ITeamInfo | null>(null);
+    const [ratePopUp, setRatePopUp] = useState<boolean>(false);
+
+    const { authenticated, event, teams, handleTeams } = useContext(Context);
 
     useEffect(() => {
         (async () => {
-            if (event && JWT) {
-                const { data } = await api.get(`/api/events/teams/${event.id}`, {
-                    headers: {
-                        'Authorization': `Bearer ${JWT.access_token}`
-                    }
-                }) as ITeamsResponse;
-                setTeams(data);
-                // console.log(data);
-            }
+            await handleTeams();
         })()
     }, [event]);
 
@@ -120,7 +102,7 @@ const Event = () => {
 
     return (
         <div className="event--container">
-            <RatePopUp />
+            {ratePopUp && <RatePopUp team={team} setPopUp={setRatePopUp} />}
             <Navbar />
             <div className="event--info--container">
                 <h1>Clique na equipe para adicionar avaliação.</h1>
@@ -142,10 +124,13 @@ const Event = () => {
                         columns={columns}
                         pageSize={20}
                         rowsPerPageOptions={[20]}
-                        onRowClick={(params) => {
-                            document.querySelector(".rate--popup--container")?.classList.remove('isHidden');
-                            document.querySelector(".rate--popup--container")?.classList.add('isShow');
-                            // console.log("params: ", params)
+                        onRowClick={(props) => {
+                            setRatePopUp(true);
+                            setTeam({
+                                id: Number(props.id),
+                                name: props.row.equipe
+                            });
+                            // console.log(props);
                         }}
                     />
                 </div>

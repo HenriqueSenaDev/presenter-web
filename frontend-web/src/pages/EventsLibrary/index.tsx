@@ -5,28 +5,7 @@ import "./styles.css";
 import AddEventPopup from "./AddEventPopup";
 import { useState, useContext, useEffect } from "react";
 import { Context } from "context/AppContextProvider";
-import { api } from "services";
 import { Navigate } from "react-router-dom";
-
-interface IParticipation {
-   id: {
-      event: {
-         id: number,
-         name: string,
-         code: number,
-         jurorCorde: number
-      },
-      user: {
-         id: number,
-         username: string
-      }
-   },
-   eventRole: {
-      id: number,
-      name: string
-   },
-   team: null
-}
 
 const EventsLibrary = () => {
    const [addPopupOpen, setAddPopupOpen] = useState<boolean>(false);

@@ -62,17 +62,40 @@ interface IParticipation {
    team: null
 }
 
+interface IParticipationResponse {
+   data: IParticipation,
+   status: number
+}
+
+interface ITeam {
+   id: number,
+   name: string,
+   avaliationsQuantity: number,
+   average: number,
+   classRoom: string,
+   ponctuation: number,
+   presented: boolean,
+   project: string
+}
+
+interface ITeamsResponse {
+   data: ITeam[]
+}
+
 interface IContext {
    authenticated: boolean,
    JWT: IJWT | null,
    user: IUser | null,
    event: IEvent | null,
    participations: IParticipation[] | [],
+   teams: ITeam[] | null,
    handleLogin: Function,
    handleEvent: Function,
    handleLogout: Function,
+   handleTeams: Function,
    handleParticipations: Function,
-   handleAddParticipation: Function
+   handleAddParticipation: Function,
+   handleAddAvaliation: Function
 }
 
 const Context = createContext<IContext>({
@@ -81,11 +104,14 @@ const Context = createContext<IContext>({
    user: null,
    event: null,
    participations: [],
+   teams: [],
    handleLogin: () => { },
    handleEvent: () => { },
    handleLogout: () => { },
+   handleTeams: () => { },
    handleParticipations: () => { },
-   handleAddParticipation: () => { }
+   handleAddParticipation: () => { },
+   handleAddAvaliation: () => { }
 });
 
 const AppContextProvider = ({ children }: Props) => {
@@ -94,6 +120,7 @@ const AppContextProvider = ({ children }: Props) => {
    const [user, setUser] = useState<IUser | null>(null);
    const [event, setEvent] = useState<IEvent | null>(null);
    const [participations, setParticipations] = useState<IParticipation[]>([]);
+   const [teams, setTeams] = useState<ITeam[] | null>(null);
 
    const handleLogin = async (username: string, password: string) => {
       const { data: loginResponse, status } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
@@ -146,10 +173,33 @@ const AppContextProvider = ({ children }: Props) => {
          headers: {
             'Authorization': `Bearer ${JWT?.access_token}`
          }
-      });
-      console.log(data);
-      console.log(status);
+      }) as IParticipationResponse;
+      // console.log(data);
+      // console.log(status);
       await handleParticipations();
+   }
+
+   const handleTeams = async () => {
+      if (event && JWT) {
+         const { data } = await api.get(`/api/events/teams/${event.id}`, {
+            headers: {
+               'Authorization': `Bearer ${JWT.access_token}`
+            }
+         }) as ITeamsResponse;
+         setTeams(data);
+         console.log(data);
+      }
+   }
+
+   const handleAddAvaliation = async (teamId: number, userId: number, value: number) => {
+      const { data, status } = await api.put(`/api/teams/avaliations/add?teamId=${teamId}&userId=${userId}&value=${value}`, {}, {
+         headers: {
+            'Authorization': `Bearer ${JWT?.access_token}`
+         }
+      });
+      await handleTeams();
+      console.log(data);
+      // console.log(status);
    }
 
    const handleLogout = () => {
@@ -166,11 +216,14 @@ const AppContextProvider = ({ children }: Props) => {
          user,
          event,
          participations,
+         teams,
          handleLogin,
          handleEvent,
          handleLogout,
+         handleTeams,
          handleParticipations,
-         handleAddParticipation
+         handleAddParticipation,
+         handleAddAvaliation
       }}>
          {children}
       </Context.Provider>

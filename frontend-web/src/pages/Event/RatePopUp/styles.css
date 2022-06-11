@@ -12,7 +12,6 @@
 .rate--popup--card {
     text-align: center;
     width: 240px;
-    height: 340px;
     background-color: #ADD3FA;
     border-radius: 20px;
     padding: 25px 20px;
@@ -20,6 +19,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    gap: 25px;
 }
 
 .rate--popup--card h1 {
@@ -36,11 +36,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
 }
 
 .rate--popup-user-container h1 {
     font-size: 16px;
-    margin-right: 10px;
 }
 
 .rate--popup-user-container svg {
@@ -52,6 +52,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
 }
 
 .equipe--area input {
@@ -60,7 +61,6 @@
     background-color: #92C7EF;
     border-radius: 5px;
     padding: 5px 8px;
-    margin-top: 10px;
     height: 30px;
     border: none;
     color: #FFF;
@@ -68,6 +68,7 @@
     font-weight: 600;
     outline: none;
 }
+
 
 .rate--popup--card button {
     width: 150px;
@@ -79,27 +80,6 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
-}
-
-/* Animations */
-.isShow {
-    display: flex;
-    animation: isShow 0.3s;
-}
-
-.isHidden {
-    display: none;
-}
-
-@keyframes isShow {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-        display: none;
-    }
 }
 
 /* Media */
@@ -116,24 +96,22 @@
         font-size: 18px;
     }
 
-    .equipe--area input {
-        font-size: 20px;
-        margin-top: 15px;
-    }
-
     .rate--popup--card button {
         font-size: 18px;
     }
 }
 
+
 @media (min-width: 768px) {
     .rate--popup--card {
-        width: 300px;
+        width: 260px;
     }
 }
 
 @media (min-width: 992px) {
-    .rate--popup--card {
-        width: 320px;
+    .equipe--area h1 {
+        font-size: 22px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
     }
 }

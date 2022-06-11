@@ -1,29 +1,53 @@
 import "./styles.css";
 import { ReactComponent as ProfileIcon } from "assets/images/profile-Icon.svg";
+import { useContext, useState } from "react";
+import { Context } from "context/AppContextProvider";
 
-const RatePopUp = () => {
+interface ITeamInfo {
+    id: number,
+    name: string
+}
+
+interface IProps {
+    team: ITeamInfo | null,
+    setPopUp: Function
+}
+
+const RatePopUp = ({ team, setPopUp }: IProps) => {
+    const [avaliationValue, setAvaliationValue] = useState<string>("");
+
+    const { user, handleAddAvaliation } = useContext(Context);
+
     return (
-        <div className="rate--popup--container isHidden"
+        <div className="rate--popup--container"
             id="ratePopupContainer"
             onClick={({ target }) => {
-                console.log(target)
+                // console.log(target)
                 if (document.getElementById('ratePopupContainer') === target) {
-                    document.querySelector('.rate--popup--container')?.classList.remove('isShow');
-                    document.querySelector('.rate--popup--container')?.classList.add('isHidden');
+                    setPopUp(false);
                 }
             }}
         >
             <div className="rate--popup--card">
                 <div className="rate--popup-user-container">
-                    <h1>Kim</h1>
                     <ProfileIcon />
+                    <h1>{user?.username}</h1>
                 </div>
                 <h1>Digite a nota da equipe</h1>
                 <div className="equipe--area">
-                    <h1>Nome da Equipe</h1>
-                    <input type='text' />
+                    <h1>{team?.name}</h1>
+                    <input type='text'
+                        onChange={(event) => {
+                            setAvaliationValue(event.target.value);
+                        }}
+                    />
                 </div>
-                <button>Avaliar</button>
+                <button
+                    onClick={async () => {
+                        handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
+                        setPopUp(false);
+                    }}
+                >Avaliar</button>
             </div>
         </div>
     );
