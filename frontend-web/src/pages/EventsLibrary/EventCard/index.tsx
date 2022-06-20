@@ -8,7 +8,8 @@ interface Props {
                 id: number,
                 name: string,
                 code: number,
-                jurorCorde: number
+                jurorCorde: number,
+                description: string
             },
             user: {
                 id: number,
@@ -31,7 +32,11 @@ const EventCard = ({ appEvent, onClick }: Props,) => {
                 <h1>{appEvent.id.event.name}</h1>
                 <hr></hr>
             </div>
-            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi nulla deserunt!</span>
+            <span>{
+                appEvent.id.event.description.length < 65
+                    ? appEvent.id.event.description
+                    : appEvent.id.event.description.substring(0, 60) + '...'
+            }</span>
         </div>
     )
 }

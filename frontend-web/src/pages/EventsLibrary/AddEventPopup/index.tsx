@@ -1,5 +1,4 @@
 import "./styles.css";
-import { api } from "services";
 import { useContext, useState } from 'react';
 import { Context } from "context/AppContextProvider";
 import WhiteGif from "assets/images/white-Gif.gif";
@@ -13,11 +12,11 @@ const AddEventPopup = ({ setAddPopupOpen }: IProps) => {
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { handleAddParticipation } = useContext(Context);
+   const { handleAddJurorParticipation } = useContext(Context);
 
    const addParticipation = async () => {
       setLoading(true);
-      await handleAddParticipation(eventCode, jurorCode);
+      await handleAddJurorParticipation(eventCode, jurorCode);
       setLoading(false);
       setAddPopupOpen(false);
    }

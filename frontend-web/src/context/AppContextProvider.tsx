@@ -23,7 +23,10 @@ interface ILoginResponse {
 
 interface IUser {
    id: number,
-   roles: string[],
+   roles: [{
+      id: number,
+      name: string
+   }],
    username: string
 }
 
@@ -48,7 +51,8 @@ interface IParticipation {
          id: number,
          name: string,
          code: number,
-         jurorCorde: number
+         jurorCorde: number,
+         description: string
       },
       user: {
          id: number,
@@ -62,7 +66,12 @@ interface IParticipation {
    team: null
 }
 
-interface IParticipationResponse {
+interface IParticipationsResponse {
+   data: IParticipation[],
+   status: number
+}
+
+interface IAddParticipationResponse {
    data: IParticipation,
    status: number
 }
@@ -79,12 +88,31 @@ interface ITeam {
 }
 
 interface ITeamsResponse {
-   data: ITeam[]
+   data: ITeam[],
+   status: number
+}
+
+interface IAvaliation {
+   id: {
+      user: {
+         id: number,
+         username: string
+      },
+      team: {
+         id: number,
+         name: string
+      }
+   },
+   value: number
+}
+
+interface IAddAvaliationResponse {
+   data: IAvaliation,
+   status: number
 }
 
 interface IContext {
    authenticated: boolean,
-   JWT: IJWT | null,
    user: IUser | null,
    event: IEvent | null,
    participations: IParticipation[] | [],
@@ -94,25 +122,11 @@ interface IContext {
    handleLogout: Function,
    handleTeams: Function,
    handleParticipations: Function,
-   handleAddParticipation: Function,
+   handleAddJurorParticipation: Function,
    handleAddAvaliation: Function
 }
 
-const Context = createContext<IContext>({
-   authenticated: false,
-   JWT: null,
-   user: null,
-   event: null,
-   participations: [],
-   teams: [],
-   handleLogin: () => { },
-   handleEvent: () => { },
-   handleLogout: () => { },
-   handleTeams: () => { },
-   handleParticipations: () => { },
-   handleAddParticipation: () => { },
-   handleAddAvaliation: () => { }
-});
+const Context = createContext({} as IContext);
 
 const AppContextProvider = ({ children }: Props) => {
    const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -123,57 +137,68 @@ const AppContextProvider = ({ children }: Props) => {
    const [teams, setTeams] = useState<ITeam[] | null>(null);
 
    const handleLogin = async (username: string, password: string) => {
-      const { data: loginResponse, status } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
-      if (status === 200) {
+      try {
+         // Getting JWT
+         const { data: JWTData } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
          setAuthenticated(true);
          setJWT({
-            access_token: loginResponse.access_token,
-            refresh_token: loginResponse.refresh_token
+            access_token: JWTData.access_token,
+            refresh_token: JWTData.refresh_token
          });
-         const { data: userResponse, status: userStatus } = await api.get(`/api/appusers?username=${loginResponse.user}`, {
-            headers: {
-               'Authorization': `Bearer ${loginResponse.access_token}`
-            }
-         }) as IUserResponse;
-         if (userStatus === 200) {
-            setUser(userResponse);
-         }
-         // console.log(userResponse);
-         // console.log(loginResponse);
+         // Setting global JWT in axios config
+         api.defaults.headers.common['Authorization'] = `Bearer ${JWTData.access_token}`;
+         // Getting User info
+         const { data: user } = await api.get(`/api/appusers?username=${JWTData.user}`) as IUserResponse;
+         setUser(user);
+      } catch (error) {
+         console.log('handleLogin:', error);
       }
-
    }
 
+   // const handleRefreshToken = async () => {
+   //    try {
+   //       const { data } = await api.get('/api/refreshtoken', {
+   //          headers: {
+   //             'Authorization': `Bearer ${JWT?.refresh_token}`
+   //          }
+   //       }) as IRefreshTokenResponse;
+   //       setJWT(data);
+   //       api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
+   //    } catch (error) {
+   //       console.log('Refresh Error:', error);
+   //    }
+   // }
+
    const handleEvent = async (eventIp: number) => {
-      const { status, data } = await api.get(`/api/events/${eventIp}`, {
-         headers: {
-            'Authorization': `Bearer ${JWT?.access_token}`
+      try {
+         if (user?.roles[0].name === 'ROLE_ADMIN') {
+            const { data } = await api.get(`/api/events/${eventIp}`) as IEventResponse;
+            setEvent(data);
+            // console.log(data);
          }
-      }) as IEventResponse;
-      if (status === 200) {
-         setEvent(data);
-         // console.log(data);
+         else {
+            alert("You don't have access to this page.");
+         }
+      } catch (error) {
+         console.log('handleEvent:', error);
       }
+
    }
 
    const handleParticipations = async () => {
-      if (user && JWT) {
-         const { data: eventsData } = await api.get(`/api/appusers/participations/${user.id}`, {
-            headers: {
-               'Authorization': `Bearer ${JWT.access_token}`
-            }
-         });
-         setParticipations(eventsData);
-         // console.log(eventsData);
+      try {
+         if (user && JWT) {
+            const { data } = await api.get(`/api/appusers/participations/${user?.id}`) as IParticipationsResponse;
+            setParticipations(data);
+            // console.log(data);
+         }
+      } catch (error) {
+         console.log('handleParticipations:', error);
       }
    }
 
-   const handleAddParticipation = async (eventCode: string, jurorCode: string) => {
-      const { data, status } = await api.post(`/api/events/participations/add?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}&teamId=1`, {}, {
-         headers: {
-            'Authorization': `Bearer ${JWT?.access_token}`
-         }
-      }) as IParticipationResponse;
+   const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
+      await api.post(`/api/events/participations/add?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
       // console.log(data);
       // console.log(status);
       await handleParticipations();
@@ -181,38 +206,29 @@ const AppContextProvider = ({ children }: Props) => {
 
    const handleTeams = async () => {
       if (event && JWT) {
-         const { data } = await api.get(`/api/events/teams/${event.id}`, {
-            headers: {
-               'Authorization': `Bearer ${JWT.access_token}`
-            }
-         }) as ITeamsResponse;
+         const { data } = await api.get(`/api/events/teams/${event.id}`) as ITeamsResponse;
          setTeams(data);
-         console.log(data);
+         // console.log(data);
       }
    }
 
    const handleAddAvaliation = async (teamId: number, userId: number, value: number) => {
-      const { data, status } = await api.put(`/api/teams/avaliations/add?teamId=${teamId}&userId=${userId}&value=${value}`, {}, {
-         headers: {
-            'Authorization': `Bearer ${JWT?.access_token}`
-         }
-      });
-      await handleTeams();
-      console.log(data);
+      await api.put(`/api/teams/avaliations/add?teamId=${teamId}&userId=${userId}&value=${value}`) as IAddAvaliationResponse;
+      handleTeams();
+      // console.log(data);
       // console.log(status);
    }
 
    const handleLogout = () => {
       setAuthenticated(false);
       setEvent(null);
-      setJWT(null);
       setUser(null);
+      setJWT(null);
    }
 
    return (
       <Context.Provider value={{
          authenticated,
-         JWT,
          user,
          event,
          participations,
@@ -222,7 +238,7 @@ const AppContextProvider = ({ children }: Props) => {
          handleLogout,
          handleTeams,
          handleParticipations,
-         handleAddParticipation,
+         handleAddJurorParticipation,
          handleAddAvaliation
       }}>
          {children}

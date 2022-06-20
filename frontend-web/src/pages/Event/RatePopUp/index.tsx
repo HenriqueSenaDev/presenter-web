@@ -40,6 +40,12 @@ const RatePopUp = ({ team, setPopUp }: IProps) => {
                         onChange={(event) => {
                             setAvaliationValue(event.target.value);
                         }}
+                        onKeyUp={async (event) => {
+                            if (event.key === 'Enter') {
+                                handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
+                                setPopUp(false);
+                            }
+                        }}
                     />
                 </div>
                 <button
