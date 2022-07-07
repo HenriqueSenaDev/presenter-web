@@ -60,16 +60,25 @@ public class EventResource {
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
 
-    @PostMapping(value = "/participations/add")
-    public ResponseEntity<Participation> addEventParticipation(
+    @PostMapping(value = "/participations/add/juror")
+    public ResponseEntity<Participation> addJurorParticipation(
             @RequestParam Integer eventCode,
             @RequestParam Integer jurorCode,
-            @RequestParam Long userId,
-            @RequestParam Long teamId) {
+            @RequestParam Long userId) {
         URI uri = URI
                 .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
         return ResponseEntity.created(uri)
-                .body(eventService.addParticipation(eventCode, jurorCode, userId, teamId));
+                .body(eventService.addJurorParticipation(eventCode, jurorCode, userId));
+    }
+
+    @PostMapping(value = "/participations/add/member")
+    public ResponseEntity<Participation> addMemberParticipation(
+            @RequestParam Integer eventCode,
+            @RequestParam Long appUserId,
+            @RequestParam Long teamId) {
+        URI uri = URI
+                .create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
+        return ResponseEntity.created(uri).body(eventService.addMemberParticipation(eventCode, appUserId, teamId));
     }
 
     @PutMapping(value = "/{id}")

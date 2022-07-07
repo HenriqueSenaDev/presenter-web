@@ -15,6 +15,7 @@ import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.ParticipationPK;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
+import gov.edu.anm.presenter.repositories.AvaliationRepository;
 import gov.edu.anm.presenter.repositories.EventRepository;
 import gov.edu.anm.presenter.repositories.EventRoleRepository;
 import gov.edu.anm.presenter.repositories.ParticipationRepository;
@@ -28,8 +29,9 @@ public class EventServiceImpl implements EventService {
     private final AppUserRepository appUserRepository;
     private final EventRepository eventRepository;
     private final EventRoleRepository eventRoleRepository;
-    private final TeamRepository teamRepository;
     private final ParticipationRepository participationRepository;
+    private final AvaliationRepository avaliationRepository;
+    private final TeamRepository teamRepository;
     private final TeamService teamService;
 
     // Event methods
@@ -73,7 +75,10 @@ public class EventServiceImpl implements EventService {
             Optional<Double> ponctuation = avaliations.stream()
                     .map(Avaliation::getValue)
                     .reduce((n1, n2) -> n1 + n2);
-            team.setAverage(ponctuation.get() / avaliations.size());
+            if (avaliations.size() == 0)
+                team.setAverage(0.0);
+            else
+                team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
             team.setAvaliationsQuantity(avaliations.size());
         });
         return teams;
@@ -86,7 +91,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Participation addParticipation(Integer eventCode, Integer jurorCode, Long appUserId, Long teamId) {
+    public Participation addMemberParticipation(Integer eventCode, Long appUserId, Long teamId) {
+        Event event = findEventByCode(eventCode);
+        AppUser user = appUserRepository.findById(appUserId).get();
+        Team team = teamService.findById(teamId);
+        ParticipationPK pk = new ParticipationPK(event, user);
+        EventRole eventRole = eventRoleRepository.findByName("MEMBER");
+        return participationRepository.save(new Participation(pk, eventRole, team));
+    }
+
+    @Override
+    public Participation addJurorParticipation(Integer eventCode, Integer jurorCode, Long appUserId) {
         Event event = eventRepository.findByCode(eventCode);
         AppUser user = appUserRepository.findById(appUserId).orElseGet(null);
         ParticipationPK participationPK = new ParticipationPK(event, user);
@@ -94,10 +109,6 @@ public class EventServiceImpl implements EventService {
         if (jurorCode.equals(event.getJurorCode())) {
             EventRole eventRole = eventRoleRepository.findByName("JUROR");
             participation = new Participation(participationPK, eventRole, null);
-        } else {
-            EventRole eventRole = eventRoleRepository.findByName("MEMBER");
-            Team team = teamRepository.findById(teamId).orElseGet(null);
-            participation = new Participation(participationPK, eventRole, team);
         }
         return participationRepository.save(participation);
     }
@@ -117,11 +128,21 @@ public class EventServiceImpl implements EventService {
         if (!event.getParticipations().isEmpty()) {
             evt.setParticipations(event.getParticipations());
         }
+        if (event.getDescription() != null) {
+            evt.setDescription(event.getDescription());
+        }
         return eventRepository.saveAndFlush(evt);
     }
 
     @Override
     public void deleteEvent(Long id) {
+        Event event = findEventById(id);
+        List<Team> teams = findEventTeams(id);
+        participationRepository.deleteAll(event.getParticipations());
+        teams.forEach(team -> {
+            avaliationRepository.deleteAll(team.getAvaliations());
+        });
+        teamRepository.deleteAll(teams);
         eventRepository.deleteById(id);
     }
 

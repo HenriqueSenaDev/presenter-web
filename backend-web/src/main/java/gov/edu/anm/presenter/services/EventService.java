@@ -23,7 +23,9 @@ public interface EventService {
 
     public Event saveEvent(Event event);
 
-    public Participation addParticipation(Integer eventCode, Integer jurorCode, Long appUserId, Long teamId);
+    public Participation addMemberParticipation(Integer eventCode, Long appUserId, Long teamId);
+
+    public Participation addJurorParticipation(Integer eventCode, Integer jurorCode, Long appUserId);
 
     public Event updateEvent(Event event, Long id);
 
