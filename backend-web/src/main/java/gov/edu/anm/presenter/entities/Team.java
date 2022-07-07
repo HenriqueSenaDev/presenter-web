@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "TEAMS")
 @Data
 @NoArgsConstructor
 public class Team {
@@ -34,9 +35,6 @@ public class Team {
     @OneToMany(mappedBy = "id.team")
     @JsonIgnore
     Set<Avaliation> avaliations = new HashSet<>();
-
-    @ManyToOne
-    private Event event;
 
     public Team(String name, String project, String classRoom, Boolean presented) {
         this.name = name;

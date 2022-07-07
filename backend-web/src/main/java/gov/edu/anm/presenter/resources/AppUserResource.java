@@ -33,6 +33,7 @@ import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.services.UserService;
+import gov.edu.anm.presenter.utils.AuthUtils;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -91,7 +92,7 @@ public class AppUserResource {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getTokenSecret().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();

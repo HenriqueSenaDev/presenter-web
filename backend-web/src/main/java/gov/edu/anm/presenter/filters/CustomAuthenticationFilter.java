@@ -23,6 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import gov.edu.anm.presenter.services.CustomUserDetails;
+import gov.edu.anm.presenter.utils.AuthUtils;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
@@ -49,11 +50,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 			Authentication authResult)
 			throws IOException, ServletException {
 		CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
-		Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+		Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getTokenSecret().getBytes());
 
 		String access_token = JWT.create()
 				.withSubject(customUserDetails.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
 				.withIssuer(request.getRequestURL().toString())
 				.withClaim("roles",
 						customUserDetails.getAuthorities().stream()
