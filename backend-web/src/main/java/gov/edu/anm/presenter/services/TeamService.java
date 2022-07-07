@@ -10,6 +10,8 @@ public interface TeamService {
 
     public List<Team> findAll();
 
+    public List<String> findTeamMembersUsernames(Long id);
+
     public List<Avaliation> findTeamAvaliations(Long id);
 
     public Team saveTeam(Team team);
@@ -19,4 +21,6 @@ public interface TeamService {
     public Team updateTeam(Team team, Long id);
 
     public void deleteTeam(Long id);
+
+    public void deleteAvaliation(Long teamId, Long userId);
 }

@@ -1,7 +1,9 @@
 package gov.edu.anm.presenter.services;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -10,10 +12,11 @@ import org.springframework.stereotype.Service;
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Avaliation;
 import gov.edu.anm.presenter.entities.AvaliationPK;
+import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
 import gov.edu.anm.presenter.repositories.AvaliationRepository;
-import gov.edu.anm.presenter.repositories.EventRepository;
+import gov.edu.anm.presenter.repositories.ParticipationRepository;
 import gov.edu.anm.presenter.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class TeamServiceImpl implements TeamService {
     private final AppUserRepository appUserRepository;
     private final TeamRepository teamRepository;
-    private final EventRepository eventRepository;
     private final AvaliationRepository avaliationRepository;
+    private final ParticipationRepository participationRepository;
 
     @Override
     public Team findById(Long id) {
@@ -33,7 +36,11 @@ public class TeamServiceImpl implements TeamService {
         Optional<Double> ponctuation = avaliations.stream()
                 .map(Avaliation::getValue)
                 .reduce((n1, n2) -> n1 + n2);
-        team.setAverage(ponctuation.get() / avaliations.size());
+        if (ponctuation.isEmpty()) {
+            team.setAverage(0.0);
+        } else {
+            team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
+        }
         team.setAvaliationsQuantity(avaliations.size());
         return team;
     }
@@ -46,10 +53,26 @@ public class TeamServiceImpl implements TeamService {
             Optional<Double> ponctuation = avaliations.stream()
                     .map(Avaliation::getValue)
                     .reduce((n1, n2) -> n1 + n2);
-            team.setAverage(ponctuation.get() / avaliations.size());
+            if (avaliations.size() == 0)
+                team.setAverage(0.0);
+            else
+                team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
             team.setAvaliationsQuantity(avaliations.size());
         });
         return teams;
+    }
+
+    @Override
+    public List<String> findTeamMembersUsernames(Long id) {
+        Team team = teamRepository.findById(id).get();
+        List<Participation> parts = participationRepository.findAll();
+        Set<String> membersUsernames = new HashSet<>();
+        parts.removeIf(part -> part.getTeam() != team);
+        parts.forEach(part -> {
+            membersUsernames.add(part.getId().getUser().getUsername());
+        });
+
+        return List.copyOf(membersUsernames);
     }
 
     @Override
@@ -85,20 +108,26 @@ public class TeamServiceImpl implements TeamService {
         if (team.getAvaliations() != null) {
             userTeam.setAvaliations(team.getAvaliations());
         }
-        // if (team.getAverage() != null) {
-        // userTeam.setAverage(team.getAverage());
-        // }
         if (team.getPresented() != null) {
             userTeam.setPresented(team.getPresented());
-        }
-        if (team.getEvent() != null) {
-            userTeam.setEvent(eventRepository.getById(team.getEvent().getId()));
         }
         return teamRepository.saveAndFlush(userTeam);
     }
 
     @Override
     public void deleteTeam(Long id) {
+        Team team = teamRepository.getById(id);
+        avaliationRepository.deleteAll(team.getAvaliations());
         teamRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAvaliation(Long teamId, Long userId) {
+        Team team = teamRepository.getById(teamId);
+        AppUser user = appUserRepository.getById(userId);
+        Avaliation aval = team.getAvaliations().stream().filter(x -> x.getId().getUser().equals(user)).findFirst()
+                .orElse(null);
+        if (aval != null)
+            avaliationRepository.delete(aval);
     }
 }

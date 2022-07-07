@@ -36,6 +36,11 @@ public class TeamResource {
         return ResponseEntity.ok().body(teamService.findAll());
     }
 
+    @GetMapping(value = "/members/{id}")
+    public ResponseEntity<List<String>> findTeamMembersUsernames(@PathVariable Long id) {
+        return ResponseEntity.ok().body(teamService.findTeamMembersUsernames(id));
+    }
+
     @GetMapping(value = "/avaliations/{id}")
     public ResponseEntity<List<Avaliation>> findTeamAvaliations(@PathVariable Long id) {
         return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
@@ -64,5 +69,11 @@ public class TeamResource {
     public ResponseEntity<?> deleteTeam(@PathVariable Long id) {
         teamService.deleteTeam(id);
         return ResponseEntity.ok().body("The Team has been deleted.");
+    }
+
+    @DeleteMapping(value = "/avaliations")
+    public ResponseEntity<?> deleteAvaliation(@RequestParam Long teamId, @RequestParam Long userId) {
+        teamService.deleteAvaliation(teamId, userId);
+        return ResponseEntity.ok().body("The Avaliation has been deleted.");
     }
 }
