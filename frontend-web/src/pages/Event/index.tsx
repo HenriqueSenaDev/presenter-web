@@ -100,6 +100,10 @@ const Event = () => {
         return <Navigate replace to="/" />
     }
 
+    if (!event) {
+        return <Navigate replace to="/library" />
+    }
+
     return (
         <div className="event--container">
             {ratePopUp && <RatePopUp team={team} setPopUp={setRatePopUp} />}

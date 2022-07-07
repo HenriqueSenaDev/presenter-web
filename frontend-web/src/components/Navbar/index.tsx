@@ -5,11 +5,12 @@ import { Context } from "context/AppContextProvider";
 
 import { ReactComponent as LogOutIcon } from "assets/images/logOut-Icon.svg";
 import { ReactComponent as CloseIcon } from "assets/images/close-Icon.svg";
+import { ReactComponent as EventIcon } from "assets/images/event-Icon.svg";
 
 const Navbar = () => {
     const [logOutPop, setLogoutPop] = useState<boolean>(false);
 
-    const { authenticated, user, handleLogout } = useContext(Context);
+    const { authenticated, user, handleLogout, setEvent } = useContext(Context);
 
     return (
         <>
@@ -19,6 +20,14 @@ const Navbar = () => {
                         <CloseIcon onClick={() => {
                             setLogoutPop(false);
                         }} />
+                    </div>
+                    <div className="logout--container"
+                        onClick={() => {
+                            setEvent(null);
+                        }}
+                    >
+                        <EventIcon />
+                        <h2>Biblioteca</h2>
                     </div>
                     <div className="logout--container"
                         onClick={() => {
