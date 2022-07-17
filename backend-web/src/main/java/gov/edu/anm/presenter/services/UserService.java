@@ -20,6 +20,8 @@ public interface UserService {
 
     public AppUser saveUser(AppUser appUser);
 
+    public List<AppUser> saveUsers(List<AppUser> users);
+
     public AppUser updateUser(AppUser appUser, Long id);
 
     public void deleteUser(Long id);

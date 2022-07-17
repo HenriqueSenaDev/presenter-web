@@ -1,13 +1,16 @@
 package gov.edu.anm.presenter.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Participation;
@@ -67,8 +70,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public AppUser saveUser(AppUser appUser) {
+        AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername());
+        if (existingUser != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The username " + appUser.getUsername() + " is already in use.");
+        }
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
+    }
+
+    @Override
+    public List<AppUser> saveUsers(List<AppUser> users) {
+        List<AppUser> savedUsers = new ArrayList<>();
+        users.forEach(user -> {
+            AppUser checkedUser = appUserRepository.findByUsername(user.getUsername());
+            if (checkedUser != null) {
+                throw new RuntimeException(
+                        "The username " + user.getUsername() + " is already in use.");
+            }
+        });
+        users.forEach(user -> {
+            AppUser savedUser = saveUser(user);
+            savedUsers.add(savedUser);
+        });
+        return savedUsers;
     }
 
     @Override

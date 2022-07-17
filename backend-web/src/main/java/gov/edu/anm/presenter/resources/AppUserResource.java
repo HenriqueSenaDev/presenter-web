@@ -70,9 +70,15 @@ public class AppUserResource {
     }
 
     @PostMapping(value = "/appusers")
-    public ResponseEntity<AppUser> saveUser(@RequestBody AppUser appUser) {
+    public ResponseEntity<?> saveUser(@RequestBody AppUser appUser) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/appUsers").toUriString());
         return ResponseEntity.created(uri).body(userService.saveUser(appUser));
+    }
+
+    @PostMapping(value = "/appusers/saveAll")
+    public ResponseEntity<?> saveUsers(@RequestBody List<AppUser> users) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/appUsers").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveUsers(users));
     }
 
     @PutMapping(value = "/appusers/{id}")
