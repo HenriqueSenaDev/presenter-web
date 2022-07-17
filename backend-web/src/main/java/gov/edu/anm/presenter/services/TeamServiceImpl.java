@@ -82,6 +82,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team saveTeam(Team team) {
+        team.setAvaliationsQuantity(0);
+        team.setAvaliations(new HashSet<>());
+        team.setAverage(0.0);
+        team.setPresented(false);
         return teamRepository.save(team);
     }
 
@@ -118,6 +122,9 @@ public class TeamServiceImpl implements TeamService {
     public void deleteTeam(Long id) {
         Team team = teamRepository.getById(id);
         avaliationRepository.deleteAll(team.getAvaliations());
+        List<Participation> parts = participationRepository.findAll();
+        parts.removeIf(part -> part.getTeam() != team);
+        participationRepository.deleteAll(parts);
         teamRepository.deleteById(id);
     }
 

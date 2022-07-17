@@ -29,6 +29,8 @@ public interface EventService {
 
     public Event updateEvent(Event event, Long id);
 
+    public List<Participation> updateMembersParticipations(List<String> usernames, Long teamId, Integer eventCode);
+
     public void deleteEvent(Long id);
 
     public void deleteParticipation(Long userId, Long eventId);

@@ -86,6 +86,15 @@ public class EventResource {
         return ResponseEntity.ok().body(eventService.updateEvent(event, id));
     }
 
+    @PutMapping(value = "/teams/members/{teamId}")
+    public ResponseEntity<List<Participation>> updateMembersParticipations(
+            @PathVariable Long teamId,
+            @RequestParam Integer eventCode,
+            @RequestBody List<String> usernames) {
+        return ResponseEntity.ok()
+                .body(eventService.updateMembersParticipations(usernames, teamId, eventCode));
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
