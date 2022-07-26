@@ -81,6 +81,22 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+	public List<Team> findEventTeamsByName(String teamName, Long eventId) {
+    	teamName = teamName.replace("+", " ");
+		List<Team> teams = teamRepository.findEventTeamsByName(teamName, eventId);
+		teams.forEach(team -> {
+			List<Avaliation> avaliations = findTeamAvaliations(team.getId());
+			Optional<Double> ponctuation = avaliations.stream().map(Avaliation::getValue).reduce((n1, n2) -> n1 + n2);
+			if (avaliations.size() == 0)
+				team.setAverage(0.0);
+			else
+				team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
+			team.setAvaliationsQuantity(avaliations.size());
+		});
+		return teams;
+	}
+    
+    @Override
     public Team saveTeam(Team team) {
         team.setAvaliationsQuantity(0);
         team.setAvaliations(new HashSet<>());

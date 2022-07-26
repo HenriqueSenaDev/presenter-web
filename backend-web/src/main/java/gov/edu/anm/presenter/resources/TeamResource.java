@@ -46,6 +46,12 @@ public class TeamResource {
         return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
     }
 
+    @GetMapping(value = "/query")
+    public ResponseEntity<List<Team>> findEventTeamsByName(@RequestParam String teamName,
+    		@RequestParam Long eventId) {
+    	return ResponseEntity.ok(teamService.findEventTeamsByName(teamName, eventId));
+    }
+
     @PostMapping
     public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());

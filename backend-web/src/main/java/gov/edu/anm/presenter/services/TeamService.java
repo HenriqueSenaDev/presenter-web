@@ -13,6 +13,8 @@ public interface TeamService {
     public List<String> findTeamMembersUsernames(Long id);
 
     public List<Avaliation> findTeamAvaliations(Long id);
+    
+    public List<Team> findEventTeamsByName(String teamName, Long eventId);
 
     public Team saveTeam(Team team);
 
