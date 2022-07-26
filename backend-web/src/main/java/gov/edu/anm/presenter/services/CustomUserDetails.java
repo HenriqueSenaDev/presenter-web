@@ -1,5 +1,6 @@
 package gov.edu.anm.presenter.services;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -9,9 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import gov.edu.anm.presenter.entities.AppUser;
 
-public class CustomUserDetails implements UserDetails {
-
-    private final AppUser appUser;
+public class CustomUserDetails implements UserDetails, Serializable{
+	private static final long serialVersionUID = 1L;
+	private final AppUser appUser;
 
     public CustomUserDetails(AppUser appUser) {
         this.appUser = appUser;

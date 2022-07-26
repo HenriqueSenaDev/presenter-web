@@ -53,7 +53,7 @@ public class EventResource {
     public ResponseEntity<List<Team>> findEventTeams(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventTeams(id));
     }
-
+    
     @PostMapping
     public ResponseEntity<Event> saveEvent(@RequestBody Event event) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
