@@ -16,6 +16,7 @@ import gov.edu.anm.presenter.entities.Participation;
 import gov.edu.anm.presenter.entities.Team;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
 import gov.edu.anm.presenter.repositories.AvaliationRepository;
+import gov.edu.anm.presenter.repositories.EventTeamsQuery;
 import gov.edu.anm.presenter.repositories.ParticipationRepository;
 import gov.edu.anm.presenter.repositories.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -81,9 +82,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-	public List<Team> findEventTeamsByName(String teamName, Long eventId) {
-    	teamName = teamName.replace("+", " ");
-		List<Team> teams = teamRepository.findEventTeamsByName(teamName, eventId);
+	public List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId) {
+    	value = value.replace("+", " ");
+		List<Team> teams = EventTeamsQuery.valueOf(queryBy.toUpperCase())
+				.query(value, eventId, teamRepository);
+		
 		teams.forEach(team -> {
 			List<Avaliation> avaliations = findTeamAvaliations(team.getId());
 			Optional<Double> ponctuation = avaliations.stream().map(Avaliation::getValue).reduce((n1, n2) -> n1 + n2);
@@ -93,6 +96,7 @@ public class TeamServiceImpl implements TeamService {
 				team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
 			team.setAvaliationsQuantity(avaliations.size());
 		});
+		
 		return teams;
 	}
     

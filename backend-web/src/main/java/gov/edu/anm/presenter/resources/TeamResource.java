@@ -47,9 +47,10 @@ public class TeamResource {
     }
 
     @GetMapping(value = "/query")
-    public ResponseEntity<List<Team>> findEventTeamsByName(@RequestParam String teamName,
-    		@RequestParam Long eventId) {
-    	return ResponseEntity.ok(teamService.findEventTeamsByName(teamName, eventId));
+    public ResponseEntity<List<Team>> findEventTeamsByQuery(@RequestParam String queryBy,
+    		@RequestParam Long eventId,
+    		@RequestParam String value) {
+    	return ResponseEntity.ok(teamService.findEventTeamsByQuery(queryBy, value, eventId));
     }
 
     @PostMapping

@@ -14,7 +14,7 @@ public interface TeamService {
 
     public List<Avaliation> findTeamAvaliations(Long id);
     
-    public List<Team> findEventTeamsByName(String teamName, Long eventId);
+    public List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId);
 
     public Team saveTeam(Team team);
 
