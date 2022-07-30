@@ -17,6 +17,12 @@ const Landing = () => {
 
    const { handleLogin, authenticated } = useContext(Context);
 
+   async function login() {
+      setLoading(true);
+      await handleLogin(username, password);
+      setLoading(false);
+   }
+
    if (authenticated) {
       return <Navigate replace to="/library" />
    }
@@ -63,15 +69,13 @@ const Landing = () => {
                         }}
                         onKeyUp={(event) => {
                            if (event.key === "Enter") {
-                              setLoading(true);
-                              handleLogin(username, password);
+                              login();
                            }
                         }}
                      ></input>
                      <button
                         onClick={() => {
-                           setLoading(true);
-                           handleLogin(username, password);
+                           login();
                         }}
                      >
                         Login

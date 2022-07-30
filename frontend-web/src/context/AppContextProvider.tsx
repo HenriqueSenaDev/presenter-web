@@ -1,5 +1,5 @@
-import React, { createContext, useState } from 'react';
-import { api } from "services";
+import React, { createContext, useEffect, useState } from 'react';
+import { useAxios } from "hooks/useAxios";
 
 interface Props {
    children: React.ReactNode
@@ -113,13 +113,16 @@ interface IAddAvaliationResponse {
 
 interface IContext {
    authenticated: boolean,
+   JWT: IJWT | null,
    user: IUser | null,
    event: IEvent | null,
    participations: IParticipation[] | [],
    teams: ITeam[] | null,
    handleLogin: Function,
+   handleUser: Function,
    handleEvent: Function,
    setEvent: Function,
+   setJWT: Function,
    handleLogout: Function,
    handleTeams: Function,
    handleParticipations: Function,
@@ -131,44 +134,38 @@ const Context = createContext({} as IContext);
 
 const AppContextProvider = ({ children }: Props) => {
    const [authenticated, setAuthenticated] = useState<boolean>(false);
-   const [JWT, setJWT] = useState<IJWT | null>(null);
+
+   const [JWT, setJWT] = useState<IJWT | null>(() => {
+      return localStorage.getItem('presenter_tokens')
+         ? JSON.parse(localStorage.getItem('presenter_tokens') as string)
+         : null;
+   });
+
    const [user, setUser] = useState<IUser | null>(null);
    const [event, setEvent] = useState<IEvent | null>(null);
    const [participations, setParticipations] = useState<IParticipation[]>([]);
    const [teams, setTeams] = useState<ITeam[] | null>(null);
 
+   const api = useAxios();
+
    const handleLogin = async (username: string, password: string) => {
       try {
          // Getting JWT
          const { data: JWTData } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
-         setAuthenticated(true);
-         setJWT({
-            access_token: JWTData.access_token,
-            refresh_token: JWTData.refresh_token
-         });
-         // Setting global JWT in axios config
-         api.defaults.headers.common['Authorization'] = `Bearer ${JWTData.access_token}`;
-         // Getting User info
-         const { data: user } = await api.get(`/api/appusers?username=${JWTData.user}`) as IUserResponse;
-         setUser(user);
+
+         // Setting local storage tokens
+         localStorage.setItem('presenter_tokens', JSON.stringify(JWTData));
+         setJWT(JWTData);
       } catch (error) {
          console.log('handleLogin:', error);
       }
    }
 
-   // const handleRefreshToken = async () => {
-   //    try {
-   //       const { data } = await api.get('/api/refreshtoken', {
-   //          headers: {
-   //             'Authorization': `Bearer ${JWT?.refresh_token}`
-   //          }
-   //       }) as IRefreshTokenResponse;
-   //       setJWT(data);
-   //       api.defaults.headers.common['Authorization'] = `Bearer ${data.access_token}`;
-   //    } catch (error) {
-   //       console.log('Refresh Error:', error);
-   //    }
-   // }
+   const handleUser = async () => {
+      // Getting User info
+      const { data: user } = await api.get(`/api/appusers/findByAccessToken`) as IUserResponse;
+      setUser(user);
+   }
 
    const handleEvent = async (eventIp: number) => {
       try {
@@ -221,22 +218,35 @@ const AppContextProvider = ({ children }: Props) => {
    }
 
    const handleLogout = () => {
+      localStorage.removeItem('presenter_tokens');
       setAuthenticated(false);
       setEvent(null);
       setUser(null);
       setJWT(null);
    }
 
+   useEffect(() => {
+      (async () => {
+         if (JWT) {
+            await handleUser();
+            setAuthenticated(true);
+         }
+      })();
+   }, [JWT]);
+
    return (
       <Context.Provider value={{
          authenticated,
+         JWT,
          user,
          event,
          participations,
          teams,
          handleLogin,
+         handleUser,
          handleEvent,
          setEvent,
+         setJWT,
          handleLogout,
          handleTeams,
          handleParticipations,
