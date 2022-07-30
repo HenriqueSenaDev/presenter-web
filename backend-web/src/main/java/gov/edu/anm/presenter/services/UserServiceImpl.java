@@ -2,6 +2,7 @@ package gov.edu.anm.presenter.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.AppRole;
+import gov.edu.anm.presenter.repositories.AppRoleRepository;
 import gov.edu.anm.presenter.repositories.AppUserRepository;
 import gov.edu.anm.presenter.repositories.ParticipationRepository;
-import gov.edu.anm.presenter.repositories.AppRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -32,11 +33,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     // UserDetailsService
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepository.findByUsername(username);
-        if (appUser == null) {
+        Optional<AppUser> appUser = appUserRepository.findByUsername(username);
+        if (appUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found in the database.");
         }
-        return new CustomUserDetails(appUser);
+        return new CustomUserDetails(appUser.get());
     }
 
     // UserService(custom)
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public AppUser getUserByUsername(String username) {
+    public Optional<AppUser> getUserByUsername(String username) {
         return appUserRepository.findByUsername(username);
     }
 
@@ -58,7 +59,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<AppRole> findUserAppRoles(String username) {
-        return List.copyOf(appUserRepository.findByUsername(username).getRoles());
+        return List.copyOf(appUserRepository.findByUsername(username)
+        		.orElseThrow(() -> new RuntimeException("User not found.")).getRoles());
     }
 
     @Override
@@ -70,7 +72,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public AppUser saveUser(AppUser appUser) {
-        AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername());
+        AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername())
+        		.orElseThrow(() -> new RuntimeException("User not found."));
         if (existingUser != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The username " + appUser.getUsername() + " is already in use.");
@@ -83,7 +86,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<AppUser> saveUsers(List<AppUser> users) {
         List<AppUser> savedUsers = new ArrayList<>();
         users.forEach(user -> {
-            AppUser checkedUser = appUserRepository.findByUsername(user.getUsername());
+            AppUser checkedUser = appUserRepository.findByUsername(user.getUsername())
+            		.orElseThrow(() -> new RuntimeException("User not found."));
             if (checkedUser != null) {
                 throw new RuntimeException(
                         "The username " + user.getUsername() + " is already in use.");
@@ -145,7 +149,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-        AppUser appUser = appUserRepository.findByUsername(username);
+        AppUser appUser = appUserRepository.findByUsername(username)
+        		.orElseThrow(() -> new RuntimeException("User not found."));
         AppRole role = appRoleRepository.findByName(roleName);
         appUser.getRoles().add(role);
         appUserRepository.saveAndFlush(appUser);
@@ -153,7 +158,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void removeRoleOfUser(String username, String roleName) {
-        AppUser user = appUserRepository.findByUsername(username);
+        AppUser user = appUserRepository.findByUsername(username)
+        		.orElseThrow(() -> new RuntimeException("User not found."));
         AppRole role = appRoleRepository.findByName(roleName);
         user.getRoles().remove(role);
         appUserRepository.saveAndFlush(user);

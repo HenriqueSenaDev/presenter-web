@@ -149,7 +149,8 @@ public class EventServiceImpl implements EventService {
 
 		List<AppUser> newTeamUsers = new ArrayList<>();
 		usernames.forEach(username -> {
-			AppUser searchUser = appUserRepository.findByUsername(username);
+			AppUser searchUser = appUserRepository.findByUsername(username)
+					.orElseThrow(() -> new RuntimeException("User not found."));
 			if (searchUser == null) {
 				searchUser = new AppUser(null, username, "testpassforstudent", new HashSet<>());
 				searchUser = userService.saveUser(searchUser);

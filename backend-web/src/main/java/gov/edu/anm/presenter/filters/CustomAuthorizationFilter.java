@@ -27,8 +27,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+    		FilterChain filterChain) throws ServletException, IOException {
         if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api/refreshtoken")) {
             filterChain.doFilter(request, response);
         } else {
@@ -38,9 +38,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     String token = authorizationHeader.substring("Bearer ".length());
                     Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getTokenSecret().getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
+                    
                     DecodedJWT decodedJWT = verifier.verify(token);
                     String username = decodedJWT.getSubject();
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
+                    
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     for (String role : roles) {
                         authorities.add(new SimpleGrantedAuthority(role));

@@ -1,16 +1,17 @@
 package gov.edu.anm.presenter.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.AppRole;
 
 public interface UserService {
     // AppUser methods
     public AppUser findUserById(Long id);
 
-    public AppUser getUserByUsername(String username);
+    public Optional<AppUser> getUserByUsername(String username);
 
     public List<AppUser> findAllUsers();
 

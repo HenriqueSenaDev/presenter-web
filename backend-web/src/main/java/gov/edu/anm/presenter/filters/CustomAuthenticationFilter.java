@@ -47,14 +47,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-			Authentication authResult)
-			throws IOException, ServletException {
+			Authentication authResult) throws IOException, ServletException {
 		CustomUserDetails customUserDetails = (CustomUserDetails) authResult.getPrincipal();
 		Algorithm algorithm = Algorithm.HMAC256(AuthUtils.getTokenSecret().getBytes());
 
 		String access_token = JWT.create()
 				.withSubject(customUserDetails.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
 				.withIssuer(request.getRequestURL().toString())
 				.withClaim("roles",
 						customUserDetails.getAuthorities().stream()
