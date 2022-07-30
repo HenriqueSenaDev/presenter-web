@@ -227,7 +227,7 @@ const AppContextProvider = ({ children }: Props) => {
 
    useEffect(() => {
       (async () => {
-         if (JWT) {
+         if (JWT && !user) {
             await handleUser();
             setAuthenticated(true);
          }
