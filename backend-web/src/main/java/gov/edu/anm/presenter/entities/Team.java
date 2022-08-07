@@ -12,12 +12,16 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(exclude = "avaliations")
 @Entity
 @Table(name = "TEAMS")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Team {
 
@@ -36,6 +40,7 @@ public class Team {
     @JsonIgnore
     Set<Avaliation> avaliations = new HashSet<>();
 
+    //Custom constructor
     public Team(String name, String project, String classRoom, Boolean presented) {
         this.name = name;
         this.project = project;

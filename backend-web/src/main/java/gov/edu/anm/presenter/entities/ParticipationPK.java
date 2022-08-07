@@ -7,9 +7,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@EqualsAndHashCode
 @Embeddable
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ParticipationPK implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -20,24 +28,5 @@ public class ParticipationPK implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AppUser user;
-
-    public ParticipationPK() {
-    }
-
-    public Event getEvent() {
-        return this.event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    public AppUser getUser() {
-        return this.user;
-    }
-
-    public void setUser(AppUser user) {
-        this.user = user;
-    }
-
+    
 }

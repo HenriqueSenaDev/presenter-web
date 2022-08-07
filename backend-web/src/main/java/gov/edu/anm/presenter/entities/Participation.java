@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "PARTICIPATIONS")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Participation {
     @EmbeddedId
     private ParticipationPK id = new ParticipationPK();

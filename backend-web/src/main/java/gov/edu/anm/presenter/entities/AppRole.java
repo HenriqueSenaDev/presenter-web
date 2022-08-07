@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "APP_ROLES")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AppRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public AppUser saveUser(AppUser appUser) {
         AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername())
-        		.orElseThrow(() -> new RuntimeException("User not found."));
+        		.orElse(null);
         if (existingUser != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "The username " + appUser.getUsername() + " is already in use.");
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         List<AppUser> savedUsers = new ArrayList<>();
         users.forEach(user -> {
             AppUser checkedUser = appUserRepository.findByUsername(user.getUsername())
-            		.orElseThrow(() -> new RuntimeException("User not found."));
+            		.orElse(null);
             if (checkedUser != null) {
                 throw new RuntimeException(
                         "The username " + user.getUsername() + " is already in use.");

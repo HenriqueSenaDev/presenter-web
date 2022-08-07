@@ -17,10 +17,10 @@ public interface EventService {
 
     public List<Event> findAllEvents();
 
-    public List<Participation> findEventParticipations(Long id);
-
     public List<Team> findEventTeams(Long id);
 
+    public List<Participation> findEventParticipations(Long id);
+    
     public Event saveEvent(Event event);
 
     public Participation addMemberParticipation(Integer eventCode, Long appUserId, Long teamId);
