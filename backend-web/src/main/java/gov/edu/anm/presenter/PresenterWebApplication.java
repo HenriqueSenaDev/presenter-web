@@ -32,15 +32,15 @@ public class PresenterWebApplication {
 	@Bean
 	CommandLineRunner run(UserService userService, EventService eventService, TeamService teamService) {
 		return args -> {
-			userService.saveUser(new AppUser(null, "master", "masteranmadmin", new HashSet<>()));
-			userService.saveRole(new AppRole(null, "ROLE_ADMIN"));
-			userService.saveRole(new AppRole(null, "ROLE_STUDENT"));
-			userService.addRoleToUser("master", "ROLE_ADMIN");
-			
-			eventService.saveEventRole(new EventRole(null, "JUROR"));
-			eventService.saveEventRole(new EventRole(null, "MEMBER"));
-			eventService.saveEvent(new Event(null, "Teste do Sistema Presenter", 3344, 565656, "Teste do Presenter Web no 2º Informática", new HashSet<>()));
-			eventService.addJurorParticipation(3344, 565656, 1L);
+//			userService.saveUser(new AppUser(null, "master", "masteranmadmin", new HashSet<>()));
+//			userService.saveRole(new AppRole(null, "ROLE_ADMIN"));
+//			userService.saveRole(new AppRole(null, "ROLE_STUDENT"));
+//			userService.addRoleToUser("master", "ROLE_ADMIN");
+//			
+//			eventService.saveEventRole(new EventRole(null, "JUROR"));
+//			eventService.saveEventRole(new EventRole(null, "MEMBER"));
+//			eventService.saveEvent(new Event(null, "Teste do Sistema Presenter", 3344, 565656, "Teste do Presenter Web no 2º Informática", new HashSet<>()));
+//			eventService.addJurorParticipation(3344, 565656, 1L);
 		};
 	}
 
