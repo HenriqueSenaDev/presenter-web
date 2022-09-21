@@ -1,0 +1,14 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import svgr from 'vite-plugin-svgr';
+
+export default defineConfig({
+   plugins: [react(), tsconfigPaths(), svgr()],
+   resolve: {
+      alias: [{
+         find: "common", replacement: resolve(__dirname, "src/common")
+      }]
+   },
+});

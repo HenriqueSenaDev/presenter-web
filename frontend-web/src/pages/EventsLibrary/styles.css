@@ -1,0 +1,94 @@
+.join--event--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.events--manager--container {
+    position: relative;
+    background-color: #92C7EF;
+    padding: 20px 20px 15px 20px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.addEventButton {
+    position: relative;
+    background: #92C7EF;
+    padding: 3px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: rgba(255, 255, 255, 0.2) 1px solid;
+}
+
+.addEventButton:hover {
+    background: #ADD3FA;
+}
+
+.addIcon {
+    width: 20px;
+    height: 20px
+}
+
+.join--event--wrapper {
+    text-align: center;
+}
+
+.join--event--container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 85%;
+    padding: 20px 45px 20px 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    height: auto;
+    font-size: 12px;
+}
+
+.events--container {
+    display: grid;
+    grid-gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.events--container span {
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
+    .join--event--container {
+        font-size: 12px;
+    }
+
+    .events--container {
+        max-width: 520px;
+    }
+}
+
+@media (min-width: 992px) {
+    .join--event--wrapper {
+        min-height: 60vh;
+    }
+
+    .join--event--container {
+        font-size: 13px;
+    }
+
+    .events--container {
+        max-width: 760px;
+    }
+}

@@ -1,0 +1,131 @@
+.landing--wrapper {
+    height: 100vh;
+}
+
+.landing--content {
+    min-height: 85%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.landing--card {
+    background-color: #92C7EF;
+    border-radius: 20px;
+    height: 100%;
+    width: 290px;
+    padding: 20px;
+    font-size: 15px;
+    max-width: 820px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.landing--card hr {
+    width: 100%;
+    border: #FFF solid 1px;
+}
+
+.landing--card--content h1 {
+    font-size: 40px;
+    font-family: "Oleo Script Swash Caps";
+}
+
+.landing--content--images {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.landing--card--content p {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.landing--content--images svg {
+    height: 40px;
+    width: 40px;
+}
+
+.landing--card--form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.landing--card--form h1 {
+    font-size: 26px;
+}
+
+.landing--card--form input {
+    color: #FFF;
+    font-size: 18px;
+    background-color: #ADD3FA;
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    max-width: 225px;
+}
+
+.landing--card--form input::placeholder {
+    color: rgba(255, 255, 255, 0.85)
+}
+
+.landing--card--form button {
+    color: #FFF;
+    font-size: 18px;
+    background-color: #ADD3FA;
+    border-radius: 15px;
+    padding: 5px 20px;
+    border: none;
+    max-width: 135px;
+    cursor: pointer;
+}
+
+@media(min-width: 768px) {
+    .landing--card {
+        width: 340px;
+        padding: 25px;
+    }
+}
+
+@media(min-width: 992px) {
+    .landing--card {
+        flex-direction: row;
+        width: 700px;
+        gap: 25px;
+        padding: 40px 62px;
+    }
+
+    .landing--card hr {
+        border-bottom: none;
+        border-top: none;
+        border-right: none;
+        border-left: 2px solid #FFF;
+        width: 3px;
+        height: 285px;
+    }
+
+    .landing--card--content h1 {
+        text-align: center;
+        font-size: 70px;
+        font-weight: 400;
+    }
+
+    .landing--card--content p {
+        font-size: 16px;
+    }
+
+    .landing--card--form {
+        gap: 22px;
+    }
+}
