@@ -38,7 +38,7 @@ const RatePopUp = ({ team, setPopUp }: IProps) => {
                     <h1>{team?.name}</h1>
                     <input type='text'
                         onChange={(event) => {
-                            setAvaliationValue(event.target.value);
+                            setAvaliationValue(event.target.value.replace(',', '.'));
                         }}
                         onKeyUp={async (event) => {
                             if (event.key === 'Enter') {
