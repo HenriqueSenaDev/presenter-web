@@ -7,9 +7,9 @@ const useAxios = () => {
     const { setJWT } = useContext(Context);
 
     const api = axios.create({
-        baseURL: "http://localhost:8080"
+        baseURL: import.meta.env.VITE_API_URL,
     });
-    
+
     api.interceptors.request.use(async req => {
         const tokens = JSON.parse(localStorage.getItem('presenter_tokens') as string);
         if (tokens) {
@@ -27,14 +27,14 @@ const useAxios = () => {
 
             const tokens = JSON.parse(localStorage.getItem('presenter_tokens') as string);
 
-            const response = await axios.get('http://localhost:8080/api/refreshtoken', {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/refreshtoken`, {
                 headers: {
                     'Authorization': `Bearer ${tokens.refresh_token}`
                 }
             });
 
             originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
-            
+
             localStorage.setItem('presenter_tokens', JSON.stringify(response.data));
 
             return axios(originalRequest);
