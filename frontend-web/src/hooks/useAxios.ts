@@ -7,7 +7,7 @@ const useAxios = () => {
     const { setJWT } = useContext(Context);
 
     const api = axios.create({
-        baseURL: "https://presenter-api.herokuapp.com"
+        baseURL: import.meta.env.VITE_API_URL,
     });
 
     api.interceptors.request.use(async req => {
@@ -27,7 +27,7 @@ const useAxios = () => {
 
             const tokens = JSON.parse(localStorage.getItem('presenter_tokens') as string);
 
-            const response = await axios.get('https://presenter-api.herokuapp.com/api/refreshtoken', {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/refreshtoken`, {
                 headers: {
                     'Authorization': `Bearer ${tokens.refresh_token}`
                 }
