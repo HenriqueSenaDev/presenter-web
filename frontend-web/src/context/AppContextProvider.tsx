@@ -196,7 +196,7 @@ const AppContextProvider = ({ children }: Props) => {
    }
 
    const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
-      await api.post(`/api/events/participations/add?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
+      await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
       // console.log(data);
       // console.log(status);
       await handleParticipations();
