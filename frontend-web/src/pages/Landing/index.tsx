@@ -56,6 +56,7 @@ const Landing = () => {
                         type="text"
                         placeholder="Username"
                         value={username}
+                        minLength={5}
                         onChange={(event) => {
                            setUsername(event.target.value);
                         }}
@@ -64,6 +65,7 @@ const Landing = () => {
                         type="password"
                         placeholder="Password"
                         value={password}
+                        minLength={5}
                         onChange={(event) => {
                            setPassword(event.target.value);
                         }}

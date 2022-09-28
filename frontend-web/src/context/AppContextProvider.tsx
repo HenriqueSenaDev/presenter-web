@@ -158,6 +158,7 @@ const AppContextProvider = ({ children }: Props) => {
          setJWT(JWTData);
       } catch (error) {
          console.log('handleLogin:', error);
+         return alert('Credenciais de usuário incorretas.');
       }
    }
 
@@ -196,10 +197,15 @@ const AppContextProvider = ({ children }: Props) => {
    }
 
    const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
-      await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
-      // console.log(data);
-      // console.log(status);
-      await handleParticipations();
+      try {
+         await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
+         // console.log(data);
+         // console.log(status);
+         await handleParticipations();
+      } catch (error) {
+         console.log('handleAddJurorParticipation:', error);
+         return alert('Código/senha do evento incorretos.');
+      }
    }
 
    const handleTeams = async () => {
