@@ -12,11 +12,12 @@ const AddEventPopup = ({ setAddPopupOpen }: IProps) => {
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { handleAddJurorParticipation } = useContext(Context);
+   const { handleAddJurorParticipation, handleParticipations } = useContext(Context);
 
    const addParticipation = async () => {
       setLoading(true);
       await handleAddJurorParticipation(eventCode, jurorCode);
+      await handleParticipations();
       setLoading(false);
       setAddPopupOpen(false);
    }

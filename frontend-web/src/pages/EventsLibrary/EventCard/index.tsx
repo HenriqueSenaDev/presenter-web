@@ -1,5 +1,7 @@
+import { ReactComponent as DeleteEvent } from "assets/images/close-Icon.svg";
+import { Context } from "context/AppContextProvider";
+import React, { useContext, useState } from "react";
 import "./styles.css"
-
 
 interface Props {
     appEvent: {
@@ -22,22 +24,43 @@ interface Props {
         },
         team: null
     },
-    onClick: () => void
+    setRemoveOpen: Function,
+    setEventToRemoveId: Function
 }
 
-const EventCard = ({ appEvent, onClick }: Props,) => {
+const EventCard = ({ appEvent, setRemoveOpen, setEventToRemoveId }: Props,) => {
+    const { handleEvent } = useContext(Context);
+
+    async function selectEvent(event: React.MouseEvent<HTMLElement>) {
+        await handleEvent(appEvent.id.event.id);
+    }
+
+    async function removeEvent(event: React.MouseEvent<HTMLElement>) {
+        event.stopPropagation();
+        setEventToRemoveId(appEvent.id.event.id);
+        setRemoveOpen(true);
+    }
+
     return (
-        <div className="event--card--container" onClick={onClick} >
-            <div className="event--card--header">
-                <h1>{appEvent.id.event.name}</h1>
-                <hr></hr>
+        <>
+            <div className="event--card--container" onClick={selectEvent} >
+                <div
+                    className="delete-event"
+                    onClick={removeEvent}
+                >
+                    <DeleteEvent />
+                </div>
+                <div className="event--card--header">
+                    <h1>{appEvent.id.event.name}</h1>
+                    <hr></hr>
+                </div>
+                <span>{
+                    appEvent.id.event.description.length < 65
+                        ? appEvent.id.event.description
+                        : appEvent.id.event.description.substring(0, 60) + '...'
+                }</span>
             </div>
-            <span>{
-                appEvent.id.event.description.length < 65
-                    ? appEvent.id.event.description
-                    : appEvent.id.event.description.substring(0, 60) + '...'
-            }</span>
-        </div>
+        </>
     )
 }
 

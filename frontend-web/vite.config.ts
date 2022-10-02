@@ -5,7 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-   plugins: [react(), tsconfigPaths(), svgr()],
+   plugins: [svgr(), react(), tsconfigPaths()],
    resolve: {
       alias: [{
          find: "common", replacement: resolve(__dirname, "src/common")
