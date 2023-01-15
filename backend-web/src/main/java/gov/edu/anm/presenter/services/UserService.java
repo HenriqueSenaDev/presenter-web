@@ -1,45 +1,26 @@
 package gov.edu.anm.presenter.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import gov.edu.anm.presenter.entities.AppRole;
 import gov.edu.anm.presenter.entities.AppUser;
 import gov.edu.anm.presenter.entities.Participation;
 
 public interface UserService {
-    // AppUser methods
-    public AppUser findUserById(Long id);
 
-    public Optional<AppUser> getUserByUsername(String username);
+    AppUser findUserById(Long id);
 
-    public List<AppUser> findAllUsers();
+    AppUser findUserByUsername(String username);
 
-    public List<AppRole> findUserAppRoles(String username);
+    AppUser findUserByToken(String token);
 
-    public List<Participation> findUserParticipations(Long id);
+    List<AppUser> findAllUsers();
 
-    public AppUser saveUser(AppUser appUser);
+    List<Participation> findUserParticipations(Long id);
 
-    public List<AppUser> saveUsers(List<AppUser> users);
+    AppUser saveUser(AppUser appUser);
 
-    public AppUser updateUser(AppUser appUser, Long id);
+    AppUser updateUser(AppUser appUser, Long id);
 
-    public void deleteUser(Long id);
-
-    // AppRole methods
-    public AppRole findRoleById(Long id);
-
-    public List<AppRole> findAllAppRoles();
-
-    public AppRole saveRole(AppRole role);
-
-    public AppRole updateAppRole(AppRole appRole, Long id);
-
-    public void deleteAppRole(Long id);
-
-    public void addRoleToUser(String username, String roleName);
-
-    public void removeRoleOfUser(String username, String roleName);
+    void deleteUser(Long id);
 
 }
