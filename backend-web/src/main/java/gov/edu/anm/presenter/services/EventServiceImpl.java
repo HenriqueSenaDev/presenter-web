@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class EventServiceImpl implements EventService {
 	private final AppUserRepository appUserRepository;
-	private final UserService userService;
+//	private final UserService userService;
 	private final EventRepository eventRepository;
 	private final EventRoleRepository eventRoleRepository;
 	private final ParticipationRepository participationRepository;
@@ -139,44 +138,44 @@ public class EventServiceImpl implements EventService {
 	// Método temporário
 	@Override
 	public List<Participation> updateMembersParticipations(List<String> usernames, Long teamId, Integer eventCode) {
-		Team team = teamRepository.findById(teamId).get();
-		List<Participation> parts = participationRepository.findAll();
-		parts.removeIf(x -> x.getTeam() != team);
+//		Team team = teamRepository.findById(teamId).get();
+//		List<Participation> parts = participationRepository.findAll();
+//		parts.removeIf(x -> x.getTeam() != team);
+//
+//		if (usernames.isEmpty()) {
+//			participationRepository.deleteAll(parts);
+//		}
+//
+//		List<AppUser> newTeamUsers = new ArrayList<>();
+//		usernames.forEach(username -> {
+//			AppUser searchUser = appUserRepository.findByUsername(username)
+//					.orElseThrow(() -> new RuntimeException("User not found."));
+//			if (searchUser == null) {
+//				searchUser = new AppUser(null, username, "testpassforstudent", new HashSet<>());
+//				searchUser = userService.saveUser(searchUser);
+//				userService.addRoleToUser(username, "ROLE_STUDENT");
+//				addMemberParticipation(eventCode, searchUser.getId(), teamId);
+//			} else {
+//				boolean x = false;
+//				for (Participation part : parts) {
+//					if (part.getId().getUser() == searchUser) {
+//						x = true;
+//					}
+//				}
+//				if (!x) {
+//					addMemberParticipation(eventCode, searchUser.getId(), teamId);
+//				}
+//			}
+//			newTeamUsers.add(searchUser);
+//		});
+//
+//		List<Participation> newCurrentParts = parts.stream()
+//				.filter(part -> newTeamUsers.contains(part.getId().getUser())).collect(Collectors.toList());
+//
+//		parts.removeIf(x -> newTeamUsers.contains(x.getId().getUser()));
+//		participationRepository.deleteAll(parts);
 
-		if (usernames.isEmpty()) {
-			participationRepository.deleteAll(parts);
-		}
-
-		List<AppUser> newTeamUsers = new ArrayList<>();
-		usernames.forEach(username -> {
-			AppUser searchUser = appUserRepository.findByUsername(username)
-					.orElseThrow(() -> new RuntimeException("User not found."));
-			if (searchUser == null) {
-				searchUser = new AppUser(null, username, "testpassforstudent", new HashSet<>());
-				searchUser = userService.saveUser(searchUser);
-				userService.addRoleToUser(username, "ROLE_STUDENT");
-				addMemberParticipation(eventCode, searchUser.getId(), teamId);
-			} else {
-				boolean x = false;
-				for (Participation part : parts) {
-					if (part.getId().getUser() == searchUser) {
-						x = true;
-					}
-				}
-				if (!x) {
-					addMemberParticipation(eventCode, searchUser.getId(), teamId);
-				}
-			}
-			newTeamUsers.add(searchUser);
-		});
-
-		List<Participation> newCurrentParts = parts.stream()
-				.filter(part -> newTeamUsers.contains(part.getId().getUser())).collect(Collectors.toList());
-
-		parts.removeIf(x -> newTeamUsers.contains(x.getId().getUser()));
-		participationRepository.deleteAll(parts);
-
-		return newCurrentParts;
+		return new ArrayList<>();
 	}
 
 	@Override
