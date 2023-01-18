@@ -31,7 +31,7 @@ public class SecurityConfig {
             .headers().frameOptions().sameOrigin().and()
             .authorizeHttpRequests()
             .antMatchers("/**/auth/**").permitAll()
-            .antMatchers("/api/**").hasAnyAuthority("ADMIN")
+            .antMatchers("/api/**").hasRole("ADMIN")
             .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authenticationProvider(authenticationProvider)
