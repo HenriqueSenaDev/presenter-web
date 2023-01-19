@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.entities;
+package gov.edu.anm.presenter.api.avaliation;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;

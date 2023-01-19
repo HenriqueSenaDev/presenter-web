@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.services;
+package gov.edu.anm.presenter.api.event;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,22 +6,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import gov.edu.anm.presenter.api.team.TeamService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Avaliation;
-import gov.edu.anm.presenter.entities.Event;
-import gov.edu.anm.presenter.entities.EventRole;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.ParticipationPK;
-import gov.edu.anm.presenter.entities.Team;
-import gov.edu.anm.presenter.repositories.AppUserRepository;
-import gov.edu.anm.presenter.repositories.AvaliationRepository;
-import gov.edu.anm.presenter.repositories.EventRepository;
-import gov.edu.anm.presenter.repositories.EventRoleRepository;
-import gov.edu.anm.presenter.repositories.ParticipationRepository;
-import gov.edu.anm.presenter.repositories.TeamRepository;
+import gov.edu.anm.presenter.api.appuser.AppUser;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.participation.ParticipationPK;
+import gov.edu.anm.presenter.api.team.Team;
+import gov.edu.anm.presenter.api.appuser.AppUserRepository;
+import gov.edu.anm.presenter.api.avaliation.AvaliationRepository;
+import gov.edu.anm.presenter.api.participation.ParticipationRepository;
+import gov.edu.anm.presenter.api.team.TeamRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

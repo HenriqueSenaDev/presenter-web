@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.config;
+package gov.edu.anm.presenter.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

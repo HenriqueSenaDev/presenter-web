@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.entities;
+package gov.edu.anm.presenter.api.appuser;
 
 import java.util.Collection;
 import java.util.List;

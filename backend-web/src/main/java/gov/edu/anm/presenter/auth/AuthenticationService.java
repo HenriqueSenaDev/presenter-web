@@ -1,8 +1,7 @@
 package gov.edu.anm.presenter.auth;
 
-import gov.edu.anm.presenter.config.JwtService;
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.repositories.AppUserRepository;
+import gov.edu.anm.presenter.api.appuser.AppUser;
+import gov.edu.anm.presenter.api.appuser.AppUserRepository;
 
 import lombok.RequiredArgsConstructor;
 

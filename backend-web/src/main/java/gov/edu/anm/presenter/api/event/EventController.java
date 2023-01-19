@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.resources;
+package gov.edu.anm.presenter.api.event;
 
 import java.net.URI;
 import java.util.List;
@@ -15,17 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import gov.edu.anm.presenter.entities.Event;
-import gov.edu.anm.presenter.entities.EventRole;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.Team;
-import gov.edu.anm.presenter.services.EventService;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.team.Team;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/api/events")
 @RequiredArgsConstructor
-public class EventResource {
+public class EventController {
     private final EventService eventService;
 
     // Event methods

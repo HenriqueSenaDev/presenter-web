@@ -1,11 +1,10 @@
-package gov.edu.anm.presenter.services;
+package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Participation;
+import gov.edu.anm.presenter.api.participation.Participation;
 
-public interface UserService {
+public interface AppUserService {
 
     AppUser findUserById(Long id);
 

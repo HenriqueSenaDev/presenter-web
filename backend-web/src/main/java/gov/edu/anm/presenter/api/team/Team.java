@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.entities;
+package gov.edu.anm.presenter.api.team;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

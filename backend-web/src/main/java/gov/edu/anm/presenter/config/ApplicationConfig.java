@@ -1,6 +1,6 @@
 package gov.edu.anm.presenter.config;
 
-import gov.edu.anm.presenter.repositories.AppUserRepository;
+import gov.edu.anm.presenter.api.appuser.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

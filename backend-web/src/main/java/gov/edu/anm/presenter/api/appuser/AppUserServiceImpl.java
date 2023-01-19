@@ -1,27 +1,23 @@
-package gov.edu.anm.presenter.services;
+package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.config.JwtService;
+import gov.edu.anm.presenter.auth.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.repositories.AppUserRepository;
-import gov.edu.anm.presenter.repositories.ParticipationRepository;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.participation.ParticipationRepository;
 
 import lombok.RequiredArgsConstructor;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService {
+public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final JwtService jwtService;
     private final ParticipationRepository participationRepository;

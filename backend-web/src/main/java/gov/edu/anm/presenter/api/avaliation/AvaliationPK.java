@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.entities;
+package gov.edu.anm.presenter.api.avaliation;
 
 import java.io.Serializable;
 
@@ -6,6 +6,8 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import gov.edu.anm.presenter.api.appuser.AppUser;
+import gov.edu.anm.presenter.api.team.Team;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.services;
+package gov.edu.anm.presenter.api.team;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,16 +9,14 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Avaliation;
-import gov.edu.anm.presenter.entities.AvaliationPK;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.Team;
-import gov.edu.anm.presenter.repositories.AppUserRepository;
-import gov.edu.anm.presenter.repositories.AvaliationRepository;
-import gov.edu.anm.presenter.repositories.EventTeamsQuery;
-import gov.edu.anm.presenter.repositories.ParticipationRepository;
-import gov.edu.anm.presenter.repositories.TeamRepository;
+import gov.edu.anm.presenter.api.appuser.AppUser;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.avaliation.AvaliationPK;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.appuser.AppUserRepository;
+import gov.edu.anm.presenter.api.avaliation.AvaliationRepository;
+import gov.edu.anm.presenter.api.event.EventTeamsQuery;
+import gov.edu.anm.presenter.api.participation.ParticipationRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

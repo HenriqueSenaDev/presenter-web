@@ -1,8 +1,6 @@
-package gov.edu.anm.presenter.repositories;
+package gov.edu.anm.presenter.api.event;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import gov.edu.anm.presenter.entities.EventRole;
 
 public interface EventRoleRepository extends JpaRepository<EventRole, Long> {
 

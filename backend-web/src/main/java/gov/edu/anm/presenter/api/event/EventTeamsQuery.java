@@ -1,8 +1,9 @@
-package gov.edu.anm.presenter.repositories;
+package gov.edu.anm.presenter.api.event;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.entities.Team;
+import gov.edu.anm.presenter.api.team.TeamRepository;
+import gov.edu.anm.presenter.api.team.Team;
 
 public enum EventTeamsQuery {
 

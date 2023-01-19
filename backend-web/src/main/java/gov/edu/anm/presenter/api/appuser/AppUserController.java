@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.resources;
+package gov.edu.anm.presenter.api.appuser;
 
 import java.net.URI;
 
@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import gov.edu.anm.presenter.entities.AppUser;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.services.UserService;
+import gov.edu.anm.presenter.api.participation.Participation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,22 +26,22 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/users")
-public class AppUserResource {
-	private final UserService userService;
+public class AppUserController {
+	private final AppUserService appUserService;
 
 	@GetMapping
 	public ResponseEntity<List<AppUser>> findAllUsers() {
-		return ResponseEntity.ok().body(userService.findAllUsers());
+		return ResponseEntity.ok().body(appUserService.findAllUsers());
 	}
 
 	@GetMapping(value = "/{username}")
 	public AppUser findUserByUsername(@PathVariable String username) {
-		return userService.findUserByUsername(username);
+		return appUserService.findUserByUsername(username);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<AppUser> findUserById(@PathVariable Long id) {
-		return ResponseEntity.ok().body(userService.findUserById(id));
+		return ResponseEntity.ok().body(appUserService.findUserById(id));
 	}
 
 	@GetMapping(value = "/findByToken")
@@ -55,28 +53,28 @@ public class AppUserResource {
 		}
 
 		final String token = authorizationHeader.substring("Bearer ".length());
-        return userService.findUserByToken(token);
+        return appUserService.findUserByToken(token);
 	}
 
 	@GetMapping(value = "/participations/{id}")
 	public ResponseEntity<List<Participation>> findUserParticipations(@PathVariable Long id) {
-		return ResponseEntity.ok().body(userService.findUserParticipations(id));
+		return ResponseEntity.ok().body(appUserService.findUserParticipations(id));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> saveUser(@RequestBody AppUser appUser) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/appUsers").toUriString());
-		return ResponseEntity.created(uri).body(userService.saveUser(appUser));
+		return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
 	}
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<AppUser> updateUser(@RequestBody AppUser appUser, @PathVariable Long id) {
-		return ResponseEntity.ok().body(userService.updateUser(appUser, id));
+		return ResponseEntity.ok().body(appUserService.updateUser(appUser, id));
 	}
 
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-		userService.deleteUser(id);
+		appUserService.deleteUser(id);
 		return ResponseEntity.noContent().build();
 	}
 

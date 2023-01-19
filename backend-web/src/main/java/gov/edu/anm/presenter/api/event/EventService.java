@@ -1,11 +1,9 @@
-package gov.edu.anm.presenter.services;
+package gov.edu.anm.presenter.api.event;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.entities.Event;
-import gov.edu.anm.presenter.entities.EventRole;
-import gov.edu.anm.presenter.entities.Participation;
-import gov.edu.anm.presenter.entities.Team;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.team.Team;
 
 public interface EventService {
     // Event methods

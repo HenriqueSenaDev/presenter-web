@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.resources;
+package gov.edu.anm.presenter.api.team;
 
 import java.net.URI;
 import java.util.List;
@@ -15,15 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import gov.edu.anm.presenter.entities.Avaliation;
-import gov.edu.anm.presenter.entities.Team;
-import gov.edu.anm.presenter.services.TeamService;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/api/teams")
 @RequiredArgsConstructor
-public class TeamResource {
+public class TeamController {
     private final TeamService teamService;
 
     @GetMapping(value = "/{id}")
