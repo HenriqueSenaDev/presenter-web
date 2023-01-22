@@ -24,7 +24,7 @@ public class AuthenticationService {
                 request.getUsername(),
                 request.getPassword()
         ));
-
+        System.out.println("ok");
         final AppUser user = appUserRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -33,11 +33,11 @@ public class AuthenticationService {
                 .builder()
                 .access_token(tokens.get("access_token"))
                 .refresh_token(tokens.get("refresh_token"))
-                .username(user.getUsername())
+                .profile(user)
                 .build();
     }
 
-    public AuthenticationResponseDto refresh(RefreshRequestDto request) {
+    public RefreshResponseDto refresh(RefreshRequestDto request) {
         final String refreshToken = request.getRefresh_token();
         final String username = jwtService.extractUsername(refreshToken);
 
@@ -45,11 +45,10 @@ public class AuthenticationService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         final String newAccessToken = jwtService.refreshAccessToken(user);
-        return AuthenticationResponseDto
+        return RefreshResponseDto
                 .builder()
                 .access_token(newAccessToken)
                 .refresh_token(refreshToken)
-                .username(username)
                 .build();
     }
 }
