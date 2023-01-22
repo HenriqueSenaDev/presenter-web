@@ -1,18 +1,14 @@
 package gov.edu.anm.presenter.api.team;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.avaliation.Avaliation;
+
+import gov.edu.anm.presenter.api.event.Event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,21 +28,36 @@ public class Team {
 
     private String name;
     private String project;
-    private String classRoom;
-    private Double average;
+    private String classroom;
     private Boolean presented;
-    private Integer avaliationsQuantity;
 
-    @OneToMany(mappedBy = "id.team")
+    @ElementCollection(targetClass=String.class)
+    @CollectionTable(name = "teams_members", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "list")
+    private List<String> members = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
     @JsonIgnore
-    Set<Avaliation> avaliations = new HashSet<>();
+    private Event event;
 
-    //Custom constructor
-    public Team(String name, String project, String classRoom, Boolean presented) {
-        this.name = name;
-        this.project = project;
-        this.classRoom = classRoom;
-        this.presented = presented;
+    @OneToMany(mappedBy = "id.team", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Avaliation> avaliations = new HashSet<>();
+
+    public Team(TeamInputDto teamInputDto) {
+        this.name = teamInputDto.getName();
+        this.project = teamInputDto.getProject();
+        this.classroom = teamInputDto.getClassroom();
+        this.presented = false;
+    }
+
+    public Double getAverage() {
+        final Optional<Double> count = this.avaliations
+                .stream().map(Avaliation::getValue).reduce(Double::sum);
+
+        final double average = count.orElse(0.0) / (double) this.avaliations.size();
+        return Double.isNaN(average) ? 0.0 : average;
     }
 
 }

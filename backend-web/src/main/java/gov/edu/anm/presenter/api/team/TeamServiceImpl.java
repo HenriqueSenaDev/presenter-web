@@ -2,22 +2,19 @@ package gov.edu.anm.presenter.api.team;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import gov.edu.anm.presenter.api.appuser.AppUser;
-import gov.edu.anm.presenter.api.avaliation.Avaliation;
-import gov.edu.anm.presenter.api.avaliation.AvaliationPK;
-import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.avaliation.Avaliation;
+import gov.edu.anm.presenter.avaliation.AvaliationPK;
 import gov.edu.anm.presenter.api.appuser.AppUserRepository;
-import gov.edu.anm.presenter.api.avaliation.AvaliationRepository;
-import gov.edu.anm.presenter.api.event.EventTeamsQuery;
-import gov.edu.anm.presenter.api.participation.ParticipationRepository;
+import gov.edu.anm.presenter.avaliation.AvaliationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -26,83 +23,48 @@ public class TeamServiceImpl implements TeamService {
     private final AppUserRepository appUserRepository;
     private final TeamRepository teamRepository;
     private final AvaliationRepository avaliationRepository;
-    private final ParticipationRepository participationRepository;
 
     @Override
     public Team findById(Long id) {
-        Team team = teamRepository.findById(id).get();
-        List<Avaliation> avaliations = findTeamAvaliations(team.getId());
-        Optional<Double> ponctuation = avaliations.stream()
-                .map(Avaliation::getValue)
-                .reduce((n1, n2) -> n1 + n2);
-        if (ponctuation.isEmpty()) {
-            team.setAverage(0.0);
-        } else {
-            team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
-        }
-        team.setAvaliationsQuantity(avaliations.size());
-        return team;
+        return teamRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
     }
 
     @Override
     public List<Team> findAll() {
-        List<Team> teams = teamRepository.findAll();
-        teams.forEach(team -> {
-            List<Avaliation> avaliations = findTeamAvaliations(team.getId());
-            Optional<Double> ponctuation = avaliations.stream()
-                    .map(Avaliation::getValue)
-                    .reduce((n1, n2) -> n1 + n2);
-            if (avaliations.size() == 0)
-                team.setAverage(0.0);
-            else
-                team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
-            team.setAvaliationsQuantity(avaliations.size());
-        });
-        return teams;
-    }
-
-    @Override
-    public List<String> findTeamMembersUsernames(Long id) {
-        Team team = teamRepository.findById(id).get();
-        List<Participation> parts = participationRepository.findAll();
-        Set<String> membersUsernames = new HashSet<>();
-        parts.removeIf(part -> part.getTeam() != team);
-        parts.forEach(part -> {
-            membersUsernames.add(part.getId().getUser().getUsername());
-        });
-
-        return List.copyOf(membersUsernames);
+        return teamRepository.findAll();
     }
 
     @Override
     public List<Avaliation> findTeamAvaliations(Long id) {
-        return List.copyOf(teamRepository.findById(id).get().getAvaliations());
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        return List.copyOf(team.getAvaliations());
     }
 
-    @Override
-	public List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId) {
-    	value = value.replace("+", " ");
-		List<Team> teams = EventTeamsQuery.valueOf(queryBy.toUpperCase())
-				.query(value, eventId, teamRepository);
-		
-		teams.forEach(team -> {
-			List<Avaliation> avaliations = findTeamAvaliations(team.getId());
-			Optional<Double> ponctuation = avaliations.stream().map(Avaliation::getValue).reduce((n1, n2) -> n1 + n2);
-			if (avaliations.size() == 0)
-				team.setAverage(0.0);
-			else
-				team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
-			team.setAvaliationsQuantity(avaliations.size());
-		});
-		
-		return teams;
-	}
+//    @Override
+//	public List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId) {
+//    	value = value.replace("+", " ");
+//		List<Team> teams = EventTeamsQuery.valueOf(queryBy.toUpperCase())
+//				.query(value, eventId, teamRepository);
+//
+//		teams.forEach(team -> {
+//			List<Avaliation> avaliations = findTeamAvaliations(team.getId());
+//			Optional<Double> ponctuation = avaliations.stream().map(Avaliation::getValue).reduce((n1, n2) -> n1 + n2);
+//			if (avaliations.size() == 0)
+//				team.setAverage(0.0);
+//			else
+//				team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
+//			team.setAvaliationsQuantity(avaliations.size());
+//		});
+//
+//		return teams;
+//	}
     
     @Override
-    public Team saveTeam(Team team) {
-        team.setAvaliationsQuantity(0);
+    public Team saveTeam(TeamInputDto teamInputDto) {
+        Team team = new Team(teamInputDto);
         team.setAvaliations(new HashSet<>());
-        team.setAverage(0.0);
         team.setPresented(false);
         return teamRepository.save(team);
     }
@@ -124,8 +86,8 @@ public class TeamServiceImpl implements TeamService {
         if (team.getProject() != null) {
             userTeam.setProject(team.getProject());
         }
-        if (team.getClassRoom() != null) {
-            userTeam.setClassRoom(team.getClassRoom());
+        if (team.getClassroom() != null) {
+            userTeam.setClassroom(team.getClassroom());
         }
         if (team.getAvaliations() != null) {
             userTeam.setAvaliations(team.getAvaliations());
@@ -138,11 +100,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void deleteTeam(Long id) {
-        Team team = teamRepository.getById(id);
-        avaliationRepository.deleteAll(team.getAvaliations());
-        List<Participation> parts = participationRepository.findAll();
-        parts.removeIf(part -> part.getTeam() != team);
-        participationRepository.deleteAll(parts);
         teamRepository.deleteById(id);
     }
 

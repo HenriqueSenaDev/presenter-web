@@ -2,19 +2,17 @@ package gov.edu.anm.presenter.api.team;
 
 import java.util.List;
 
-import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.avaliation.Avaliation;
 public interface TeamService {
     Team findById(Long id);
 
     List<Team> findAll();
 
-    List<String> findTeamMembersUsernames(Long id);
-
     List<Avaliation> findTeamAvaliations(Long id);
     
-    List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId);
+//    List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId);
 
-    Team saveTeam(Team team);
+    Team saveTeam(TeamInputDto team);
 
     Avaliation addAvaliation(Long teamId, Long userId, Double value);
 

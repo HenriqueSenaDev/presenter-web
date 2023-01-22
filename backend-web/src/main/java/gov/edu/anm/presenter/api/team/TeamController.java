@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.avaliation.Avaliation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -34,27 +34,22 @@ public class TeamController {
         return ResponseEntity.ok().body(teamService.findAll());
     }
 
-    @GetMapping(value = "/members/{id}")
-    public ResponseEntity<List<String>> findTeamMembersUsernames(@PathVariable Long id) {
-        return ResponseEntity.ok().body(teamService.findTeamMembersUsernames(id));
-    }
-
     @GetMapping(value = "/avaliations/{id}")
     public ResponseEntity<List<Avaliation>> findTeamAvaliations(@PathVariable Long id) {
         return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
     }
 
-    @GetMapping(value = "/query")
-    public ResponseEntity<List<Team>> findEventTeamsByQuery(@RequestParam String queryBy,
-    		@RequestParam Long eventId,
-    		@RequestParam String value) {
-    	return ResponseEntity.ok(teamService.findEventTeamsByQuery(queryBy, value, eventId));
-    }
+//    @GetMapping(value = "/query")
+//    public ResponseEntity<List<Team>> findEventTeamsByQuery(@RequestParam String queryBy,
+//    		@RequestParam Long eventId,
+//    		@RequestParam String value) {
+//    	return ResponseEntity.ok(teamService.findEventTeamsByQuery(queryBy, value, eventId));
+//    }
 
     @PostMapping
-    public ResponseEntity<Team> saveTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> saveTeam(@RequestBody TeamInputDto teamInputDto) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
-        return ResponseEntity.created(uri).body(teamService.saveTeam(team));
+        return ResponseEntity.created(uri).body(teamService.saveTeam(teamInputDto));
     }
 
     @PutMapping(value = "/{id}")
