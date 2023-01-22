@@ -1,10 +1,15 @@
 package gov.edu.anm.presenter.api.appuser;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import gov.edu.anm.presenter.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.participation.Participation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +36,17 @@ public class AppUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     private AppRole role;
 
-    // UserDetails username/password gettters/setters will be set up by lombok because they have same name in AppUser
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Participation> participations = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Avaliation> avaliations = new HashSet<>();
+
+    /* UserDetails username/password gettters and setters
+        will be set up by lombok because they have same
+        name in AppUser. */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
