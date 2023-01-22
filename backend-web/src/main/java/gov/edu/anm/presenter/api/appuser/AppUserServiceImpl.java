@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import gov.edu.anm.presenter.api.participation.Participation;
-import gov.edu.anm.presenter.api.participation.ParticipationRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final JwtService jwtService;
-    private final ParticipationRepository participationRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -50,9 +48,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public List<Participation> findUserParticipations(Long id) {
-        List<Participation> parts = participationRepository.findAll();
-        parts.removeIf(x -> x.getId().getUser().getId().equals(id));
-        return parts;
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        return List.copyOf(user.getParticipations());
     }
 
     @Override
