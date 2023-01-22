@@ -20,7 +20,7 @@ public class Participation {
     @EmbeddedId
     private ParticipationPK id = new ParticipationPK();
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private EventRole eventRole;
 
     @ManyToOne
