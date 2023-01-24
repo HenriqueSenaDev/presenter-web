@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.auth;
+package gov.edu.anm.presenter.auth.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequestDto {
+public class AuthRequestDto {
     private String username;
     private String password;
 }

@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.auth;
+package gov.edu.anm.presenter.auth.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

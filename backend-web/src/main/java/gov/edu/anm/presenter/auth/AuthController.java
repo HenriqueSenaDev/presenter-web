@@ -1,5 +1,9 @@
 package gov.edu.anm.presenter.auth;
 
+import gov.edu.anm.presenter.auth.dtos.AuthRequestDto;
+import gov.edu.anm.presenter.auth.dtos.AuthResponseDto;
+import gov.edu.anm.presenter.auth.dtos.RefreshRequestDto;
+import gov.edu.anm.presenter.auth.dtos.RefreshResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponseDto> authenticate(
-            @RequestBody AuthenticationRequestDto request
+    public ResponseEntity<AuthResponseDto> authenticate(
+            @RequestBody AuthRequestDto request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }

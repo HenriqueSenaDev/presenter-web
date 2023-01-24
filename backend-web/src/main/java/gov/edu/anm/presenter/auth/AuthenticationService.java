@@ -3,6 +3,11 @@ package gov.edu.anm.presenter.auth;
 import gov.edu.anm.presenter.api.appuser.AppUser;
 import gov.edu.anm.presenter.api.appuser.AppUserRepository;
 
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
+import gov.edu.anm.presenter.auth.dtos.AuthRequestDto;
+import gov.edu.anm.presenter.auth.dtos.AuthResponseDto;
+import gov.edu.anm.presenter.auth.dtos.RefreshRequestDto;
+import gov.edu.anm.presenter.auth.dtos.RefreshResponseDto;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
+    public AuthResponseDto authenticate(AuthRequestDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
@@ -29,11 +34,11 @@ public class AuthenticationService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         final Map<String, String> tokens = jwtService.generateTokens(user);
-        return AuthenticationResponseDto
+        return AuthResponseDto
                 .builder()
                 .access_token(tokens.get("access_token"))
                 .refresh_token(tokens.get("refresh_token"))
-                .profile(user)
+                .profile(new AppUserOutputDto(user))
                 .build();
     }
 
