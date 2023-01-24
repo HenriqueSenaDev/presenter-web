@@ -8,12 +8,9 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import gov.edu.anm.presenter.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
 import gov.edu.anm.presenter.api.participation.Participation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,10 +35,12 @@ public class AppUser implements UserDetails {
 
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Set<Participation> participations = new HashSet<>();
 
     @OneToMany(mappedBy = "id.user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Set<Avaliation> avaliations = new HashSet<>();
 
     /* UserDetails username/password gettters and setters

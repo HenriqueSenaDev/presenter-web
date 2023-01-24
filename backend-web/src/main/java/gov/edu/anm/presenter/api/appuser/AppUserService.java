@@ -2,23 +2,24 @@ package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
 
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 
 public interface AppUserService {
 
-    AppUser findUserById(Long id);
+    AppUserOutputDto findUserById(Long id);
 
-    AppUser findUserByUsername(String username);
+    AppUserOutputDto findUserByUsername(String username);
 
-    AppUser findUserByToken(String token);
+    AppUserOutputDto findUserByToken(String token);
 
-    List<AppUser> findAllUsers();
+    List<AppUserOutputDto> findAllUsers();
 
     List<Participation> findUserParticipations(Long id);
 
-    AppUser saveUser(AppUser appUser);
+    AppUserOutputDto saveUser(AppUser appUser);
 
-    AppUser updateUser(AppUser appUser, Long id);
+    AppUserOutputDto updateUser(AppUser appUser, Long id);
 
     void deleteUser(Long id);
 

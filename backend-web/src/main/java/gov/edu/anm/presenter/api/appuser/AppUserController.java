@@ -4,6 +4,7 @@ import java.net.URI;
 
 import java.util.List;
 
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,22 +31,22 @@ public class AppUserController {
 	private final AppUserService appUserService;
 
 	@GetMapping
-	public ResponseEntity<List<AppUser>> findAllUsers() {
+	public ResponseEntity<List<AppUserOutputDto>> findAllUsers() {
 		return ResponseEntity.ok().body(appUserService.findAllUsers());
 	}
 
 	@GetMapping(value = "/{username}")
-	public AppUser findUserByUsername(@PathVariable String username) {
+	public AppUserOutputDto findUserByUsername(@PathVariable String username) {
 		return appUserService.findUserByUsername(username);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<AppUser> findUserById(@PathVariable Long id) {
+	public ResponseEntity<AppUserOutputDto> findUserById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserById(id));
 	}
 
 	@GetMapping(value = "/findByToken")
-	public AppUser findUserByAccessToken(HttpServletRequest request) {
+	public AppUserOutputDto findUserByAccessToken(HttpServletRequest request) {
 		String authorizationHeader = request.getHeader("Authorization");
 
 		if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -68,7 +69,7 @@ public class AppUserController {
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<AppUser> updateUser(@RequestBody AppUser appUser, @PathVariable Long id) {
+	public ResponseEntity<AppUserOutputDto> updateUser(@RequestBody AppUser appUser, @PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.updateUser(appUser, id));
 	}
 

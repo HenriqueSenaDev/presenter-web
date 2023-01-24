@@ -1,7 +1,9 @@
 package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
 import gov.edu.anm.presenter.auth.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,28 +24,32 @@ public class AppUserServiceImpl implements AppUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public AppUser findUserById(Long id) {
-        return appUserRepository.findById(id)
+    public AppUserOutputDto findUserById(Long id) {
+        AppUser appUser = appUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        return new AppUserOutputDto(appUser);
     }
 
     @Override
-    public AppUser findUserByUsername(String username) {
-        return appUserRepository.findByUsername(username)
+    public AppUserOutputDto findUserByUsername(String username) {
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        return new AppUserOutputDto(appUser);
     }
 
     @Override
-    public AppUser findUserByToken(String token) {
+    public AppUserOutputDto findUserByToken(String token) {
         final String username = jwtService.extractUsername(token);
-        return appUserRepository.findByUsername(username)
+        AppUser appUser = appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        return new AppUserOutputDto(appUser);
     }
 
-
     @Override
-    public List<AppUser> findAllUsers() {
-        return appUserRepository.findAll();
+    public List<AppUserOutputDto> findAllUsers() {
+        return appUserRepository.findAll().stream()
+                .map(AppUserOutputDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,7 +60,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUser saveUser(AppUser appUser) {
+    public AppUserOutputDto saveUser(AppUser appUser) {
         AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername()).orElse(null);
         if (existingUser != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -62,11 +68,11 @@ public class AppUserServiceImpl implements AppUserService {
         }
 
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        return appUserRepository.save(appUser);
+        return new AppUserOutputDto(appUserRepository.save(appUser));
     }
 
     @Override
-    public AppUser updateUser(AppUser appUser, Long id) {
+    public AppUserOutputDto updateUser(AppUser appUser, Long id) {
         AppUser user = appUserRepository.findById(id).orElseThrow();
         if (appUser.getUsername() != null) {
             user.setUsername(appUser.getUsername());
@@ -74,7 +80,7 @@ public class AppUserServiceImpl implements AppUserService {
         if (appUser.getPassword() != null) {
             user.setPassword(appUser.getPassword());
         }
-        return appUserRepository.saveAndFlush(user);
+        return new AppUserOutputDto(appUserRepository.saveAndFlush(user));
     }
 
     @Override
