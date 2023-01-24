@@ -5,14 +5,16 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import gov.edu.anm.presenter.api.appuser.AppUser;
-import gov.edu.anm.presenter.avaliation.Avaliation;
-import gov.edu.anm.presenter.avaliation.AvaliationPK;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.avaliation.AvaliationPK;
 import gov.edu.anm.presenter.api.appuser.AppUserRepository;
-import gov.edu.anm.presenter.avaliation.AvaliationRepository;
+import gov.edu.anm.presenter.api.avaliation.AvaliationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -62,8 +64,8 @@ public class TeamServiceImpl implements TeamService {
 //	}
     
     @Override
-    public Team saveTeam(TeamInputDto teamInputDto) {
-        Team team = new Team(teamInputDto);
+    public Team saveTeam(TeamCreateDto teamCreateDto) {
+        Team team = new Team(teamCreateDto);
         team.setAvaliations(new HashSet<>());
         team.setPresented(false);
         return teamRepository.save(team);
@@ -78,22 +80,24 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team updateTeam(Team team, Long id) {
-        Team userTeam = teamRepository.getById(id);
-        if (team.getName() != null) {
-            userTeam.setName(team.getName());
+    public Team updateTeam(TeamUpdateDto teamUpdateDto, Long id) {
+        Team userTeam = teamRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+
+        if (teamUpdateDto.getName() != null) {
+            userTeam.setName(teamUpdateDto.getName());
         }
-        if (team.getProject() != null) {
-            userTeam.setProject(team.getProject());
+        if (teamUpdateDto.getProject() != null) {
+            userTeam.setProject(teamUpdateDto.getProject());
         }
-        if (team.getClassroom() != null) {
-            userTeam.setClassroom(team.getClassroom());
+        if (teamUpdateDto.getClassroom() != null) {
+            userTeam.setClassroom(teamUpdateDto.getClassroom());
         }
-        if (team.getAvaliations() != null) {
-            userTeam.setAvaliations(team.getAvaliations());
+        if (teamUpdateDto.getPresented() != null) {
+            userTeam.setPresented(teamUpdateDto.getPresented());
         }
-        if (team.getPresented() != null) {
-            userTeam.setPresented(team.getPresented());
+        if (teamUpdateDto.getMembers() != null) {
+            userTeam.setMembers(teamUpdateDto.getMembers());
         }
         return teamRepository.saveAndFlush(userTeam);
     }

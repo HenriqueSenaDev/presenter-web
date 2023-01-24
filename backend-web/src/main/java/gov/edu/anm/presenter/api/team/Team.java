@@ -6,15 +6,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gov.edu.anm.presenter.avaliation.Avaliation;
+import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.avaliation.Avaliation;
 
 import gov.edu.anm.presenter.api.event.Event;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@EqualsAndHashCode(exclude = "avaliations")
 @Entity
 @Table(name = "TEAMS")
 @Data
@@ -37,18 +34,19 @@ public class Team {
     private List<String> members = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @JoinColumn(name = "event_id")
     @JsonIgnore
     private Event event;
 
     @OneToMany(mappedBy = "id.team", cascade = CascadeType.ALL)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Set<Avaliation> avaliations = new HashSet<>();
 
-    public Team(TeamInputDto teamInputDto) {
-        this.name = teamInputDto.getName();
-        this.project = teamInputDto.getProject();
-        this.classroom = teamInputDto.getClassroom();
+    public Team(TeamCreateDto teamCreateDto) {
+        this.name = teamCreateDto.getName();
+        this.project = teamCreateDto.getProject();
+        this.classroom = teamCreateDto.getClassroom();
         this.presented = false;
     }
 
@@ -58,6 +56,10 @@ public class Team {
 
         final double average = count.orElse(0.0) / (double) this.avaliations.size();
         return Double.isNaN(average) ? 0.0 : average;
+    }
+
+    public Integer getAvaliationsQuantity() {
+        return this.avaliations.size();
     }
 
 }
