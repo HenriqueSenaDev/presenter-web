@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.Team;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(exclude = "participations")
 @Entity
 @Table(name = "EVENTS")
 @Data
@@ -31,17 +31,23 @@ public class Event {
     private String description;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
     private Set<Team> teams = new HashSet<>();
 
     @OneToMany(mappedBy = "id.event", cascade = CascadeType.ALL)
     @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private Set<Participation> participations = new HashSet<>();
 
-    public Event(EventInputDto eventInputDto) {
-        this.name = eventInputDto.getName();
-        this.joinCode = eventInputDto.getJoinCode();
-        this.jurorCode = eventInputDto.getJurorCode();
-        this.description = eventInputDto.getDescription();
+    public Event(EventCreateDto eventCreateDto) {
+        this.name = eventCreateDto.getName();
+        this.joinCode = eventCreateDto.getJoinCode();
+        this.jurorCode = eventCreateDto.getJurorCode();
+        this.description = eventCreateDto.getDescription();
+    }
+
+    public void putTeam(Team team) {
+        this.teams.add(team);
     }
 
 }

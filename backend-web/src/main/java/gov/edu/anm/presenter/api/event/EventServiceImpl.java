@@ -1,8 +1,9 @@
 package gov.edu.anm.presenter.api.event;
 
+import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.Team;
-import gov.edu.anm.presenter.api.team.TeamInputDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
 import gov.edu.anm.presenter.api.team.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,22 +45,23 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Event saveEvent(EventInputDto eventInputDto) {
-		return eventRepository.save(new Event(eventInputDto));
+	public Event saveEvent(EventCreateDto eventCreateDto) {
+		return eventRepository.save(new Event(eventCreateDto));
 	}
 
 	@Override
-	public Event putTeamInEvent(Long eventId, TeamInputDto teamInputDto) {
-		Team team = new Team(teamInputDto);
-		if (teamInputDto.getId() != null) {
-			team = teamRepository.findById(teamInputDto.getId())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
-		}
-
+	public Event putTeamInEvent(Long eventId, TeamCreateDto teamCreateDto) {
 		Event event = eventRepository.findById(eventId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
 
-		event.getTeams().add(team);
+		Team team = new Team(teamCreateDto);
+		if (teamCreateDto.getId() != null) {
+			team = teamRepository.findById(teamCreateDto.getId())
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+		}
+
+		team.setEvent(event);
+		event.putTeam(team);
 		return eventRepository.save(event);
 	}
 

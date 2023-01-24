@@ -1,7 +1,8 @@
 package gov.edu.anm.presenter.api.event;
 
+import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
 import gov.edu.anm.presenter.api.participation.Participation;
-import gov.edu.anm.presenter.api.team.TeamInputDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class EventController {
     }
     
     @PostMapping
-    public ResponseEntity<Event> saveEvent(@RequestBody EventInputDto event) {
+    public ResponseEntity<Event> saveEvent(@RequestBody EventCreateDto event) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
@@ -48,7 +49,7 @@ public class EventController {
     }
 
     @PutMapping(value = "/{eventId}/teams")
-    public ResponseEntity<Event> putTeamInEvent(@RequestBody TeamInputDto team, @PathVariable Long eventId) {
+    public ResponseEntity<Event> putTeamInEvent(@RequestBody TeamCreateDto team, @PathVariable Long eventId) {
         return ResponseEntity.ok().body(eventService.putTeamInEvent(eventId, team));
     }
 

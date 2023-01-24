@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.avaliation;
+package gov.edu.anm.presenter.api.avaliation;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
