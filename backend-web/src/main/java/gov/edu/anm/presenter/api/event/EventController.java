@@ -43,14 +43,14 @@ public class EventController {
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
 
+    @PostMapping(value = "/{eventId}/teams")
+    public ResponseEntity<Event> createTeamInEvent(@RequestBody TeamCreateDto team, @PathVariable Long eventId) {
+        return ResponseEntity.ok().body(eventService.createTeamInEvent(eventId, team));
+    }
+
     @PutMapping(value = "/{id}")
     public ResponseEntity<Event> updateEvent(@RequestBody Event event, @PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.updateEvent(event, id));
-    }
-
-    @PutMapping(value = "/{eventId}/teams")
-    public ResponseEntity<Event> putTeamInEvent(@RequestBody TeamCreateDto team, @PathVariable Long eventId) {
-        return ResponseEntity.ok().body(eventService.putTeamInEvent(eventId, team));
     }
 
     @DeleteMapping(value = "/{id}")

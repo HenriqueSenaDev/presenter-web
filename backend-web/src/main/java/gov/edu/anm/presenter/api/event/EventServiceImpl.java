@@ -50,16 +50,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Event putTeamInEvent(Long eventId, TeamCreateDto teamCreateDto) {
+	public Event createTeamInEvent(Long eventId, TeamCreateDto teamCreateDto) {
 		Event event = eventRepository.findById(eventId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
 
 		Team team = new Team(teamCreateDto);
-		if (teamCreateDto.getId() != null) {
-			team = teamRepository.findById(teamCreateDto.getId())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
-		}
-
 		team.setEvent(event);
 		event.putTeam(team);
 		return eventRepository.save(event);

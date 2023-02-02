@@ -20,7 +20,7 @@ public interface EventService {
 
     Event updateEvent(Event event, Long id);
 
-    Event putTeamInEvent(Long eventId, TeamCreateDto team);
+    Event createTeamInEvent(Long eventId, TeamCreateDto team);
 
     void deleteEvent(Long id);
 
