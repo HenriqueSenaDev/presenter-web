@@ -47,6 +47,7 @@ public class Team {
         this.name = teamCreateDto.getName();
         this.project = teamCreateDto.getProject();
         this.classroom = teamCreateDto.getClassroom();
+        this.members = teamCreateDto.getMembers();
         this.presented = false;
     }
 

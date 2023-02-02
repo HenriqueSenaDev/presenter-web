@@ -29,7 +29,7 @@ public class AuthenticationService {
                 request.getUsername(),
                 request.getPassword()
         ));
-        System.out.println("ok");
+
         final AppUser user = appUserRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
