@@ -14,7 +14,7 @@
 	<name>presenter-web</name>
 	<description>Web presenter system from EEEP Alfredo Nunes de Melo</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

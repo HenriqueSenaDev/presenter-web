@@ -11,8 +11,6 @@ public interface TeamService {
     List<Team> findAll();
 
     List<Avaliation> findTeamAvaliations(Long id);
-    
-//    List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId);
 
     Team saveTeam(TeamCreateDto team);
 

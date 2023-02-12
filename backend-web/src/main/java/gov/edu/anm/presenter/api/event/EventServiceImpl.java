@@ -18,7 +18,6 @@ import java.util.List;
 @Transactional
 public class EventServiceImpl implements EventService {
 	private final EventRepository eventRepository;
-	private final TeamRepository teamRepository;
 
 	@Override
 	public Event findEventById(Long id) {

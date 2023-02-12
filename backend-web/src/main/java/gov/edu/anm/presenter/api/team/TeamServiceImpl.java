@@ -43,25 +43,6 @@ public class TeamServiceImpl implements TeamService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         return List.copyOf(team.getAvaliations());
     }
-
-//    @Override
-//	public List<Team> findEventTeamsByQuery(String queryBy, String value, Long eventId) {
-//    	value = value.replace("+", " ");
-//		List<Team> teams = EventTeamsQuery.valueOf(queryBy.toUpperCase())
-//				.query(value, eventId, teamRepository);
-//
-//		teams.forEach(team -> {
-//			List<Avaliation> avaliations = findTeamAvaliations(team.getId());
-//			Optional<Double> ponctuation = avaliations.stream().map(Avaliation::getValue).reduce((n1, n2) -> n1 + n2);
-//			if (avaliations.size() == 0)
-//				team.setAverage(0.0);
-//			else
-//				team.setAverage(ponctuation.orElse(0.0) / avaliations.size());
-//			team.setAvaliationsQuantity(avaliations.size());
-//		});
-//
-//		return teams;
-//	}
     
     @Override
     public Team saveTeam(TeamCreateDto teamCreateDto) {

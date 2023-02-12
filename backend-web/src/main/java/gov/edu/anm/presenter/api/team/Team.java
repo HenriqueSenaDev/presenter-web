@@ -18,7 +18,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Team {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
