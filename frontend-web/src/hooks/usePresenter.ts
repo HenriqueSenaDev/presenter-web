@@ -1,4 +1,4 @@
-import { IUserCredentials } from "common/@Interfaces";
+import { IParticipation, IUserCredentials } from "common/@Interfaces";
 import { useAxios } from "hooks/useAxios";
 
 export function usePresenter() {
@@ -6,9 +6,14 @@ export function usePresenter() {
 
     return {
         signIn: async (username: string, password: string) => {
-            return await axios.post<IUserCredentials>('/api/auth/authenticate', {
+            const res = await axios.post<IUserCredentials>('/auth/authenticate', {
                 username, password
             });
+            return res.data;
+        },
+        findUserParticipations: async (userId: number) => {
+            const res = await axios.get<IParticipation[]>(`/users/participations/${userId}`);
+            return res.data;
         }
     }
 }
