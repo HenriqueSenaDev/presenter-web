@@ -1,10 +1,9 @@
-import './App.css';
-
 import { AppContextProvider } from "context/AppContextProvider";
 import AppRoutes from 'routes';
 
-function App() {
+import './App.css';
 
+function App() {
   return (
     <AppContextProvider>
       <AppRoutes />
