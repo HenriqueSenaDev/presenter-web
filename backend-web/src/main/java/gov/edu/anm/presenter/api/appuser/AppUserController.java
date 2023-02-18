@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.List;
 
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
+import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import gov.edu.anm.presenter.api.participation.Participation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -58,13 +57,13 @@ public class AppUserController {
 	}
 
 	@GetMapping(value = "/participations/{id}")
-	public ResponseEntity<List<Participation>> findUserParticipations(@PathVariable Long id) {
+	public ResponseEntity<List<ParticipationOutputDto>> findUserParticipations(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserParticipations(id));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> saveUser(@RequestBody AppUser appUser) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/appUsers").toUriString());
+		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").toUriString());
 		return ResponseEntity.created(uri).body(appUserService.saveUser(appUser));
 	}
 

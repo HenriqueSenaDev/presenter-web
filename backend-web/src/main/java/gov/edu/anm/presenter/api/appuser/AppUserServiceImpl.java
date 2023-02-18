@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
+import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 import gov.edu.anm.presenter.auth.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,10 +54,10 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public List<Participation> findUserParticipations(Long id) {
+    public List<ParticipationOutputDto> findUserParticipations(Long id) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-        return List.copyOf(user.getParticipations());
+        return user.getParticipations().stream().map(ParticipationOutputDto::new).toList();
     }
 
     @Override

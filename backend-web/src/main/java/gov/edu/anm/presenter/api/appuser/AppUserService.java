@@ -4,6 +4,7 @@ import java.util.List;
 
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 
 public interface AppUserService {
 
@@ -15,7 +16,7 @@ public interface AppUserService {
 
     List<AppUserOutputDto> findAllUsers();
 
-    List<Participation> findUserParticipations(Long id);
+    List<ParticipationOutputDto> findUserParticipations(Long id);
 
     AppUserOutputDto saveUser(AppUser appUser);
 
