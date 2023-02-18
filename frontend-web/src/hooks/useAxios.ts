@@ -4,10 +4,10 @@ import { Context } from 'context/AppContextProvider';
 import { useContext } from 'react';
 
 export const useAxios = () => {
-    const { JWT, setJWT, user } = useContext(Context);
+    const { JWT, setJWT, user, setAuthenticated } = useContext(Context);
 
     const axiosInstance = axios.create({
-        baseURL: import.meta.env.VITE_API_URL,
+        baseURL: `${import.meta.env.VITE_API_URL}/api`,
     });
 
     axiosInstance.interceptors.request.use(async req => {
@@ -34,6 +34,10 @@ export const useAxios = () => {
             ));
 
             return axios(originalRequest);
+        }
+        else {
+            setAuthenticated(false);
+            localStorage.removeItem('presenter_session');
         }
         return Promise.reject(error);
     });
