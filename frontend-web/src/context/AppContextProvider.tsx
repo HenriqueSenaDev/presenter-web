@@ -1,39 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { useAxios } from "hooks/useAxios";
-
-interface Props {
-   children: React.ReactNode
-}
-
-interface IJWT {
-   access_token: string,
-   refresh_token: string,
-}
-
-interface IUserAndJWT {
-   access_token: string,
-   refresh_token: string,
-   user: string,
-}
-
-interface ILoginResponse {
-   status: number,
-   data: IUserAndJWT
-}
-
-interface IUser {
-   id: number,
-   roles: [{
-      id: number,
-      name: string
-   }],
-   username: string
-}
-
-interface IUserResponse {
-   data: IUser
-   status: number
-}
+import { usePresenter } from 'hooks/usePresenter';
+import { IJWT, IUserCredentials, IUserProfile } from 'common/@Interfaces';
 
 interface IEvent {
    id: number,
@@ -114,12 +81,11 @@ interface IAddAvaliationResponse {
 interface IContext {
    authenticated: boolean,
    JWT: IJWT | null,
-   user: IUser | null,
+   user: IUserProfile | null,
    event: IEvent | null,
    participations: IParticipation[] | [],
    teams: ITeam[] | null,
    handleLogin: Function,
-   handleUser: Function,
    handleEvent: Function,
    setEvent: Function,
    setJWT: Function,
@@ -133,52 +99,43 @@ interface IContext {
 
 const Context = createContext({} as IContext);
 
-const AppContextProvider = ({ children }: Props) => {
+const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
    const [authenticated, setAuthenticated] = useState<boolean>(false);
-
-   const [JWT, setJWT] = useState<IJWT | null>(() => {
-      return localStorage.getItem('presenter_tokens')
-         ? JSON.parse(localStorage.getItem('presenter_tokens') as string)
-         : null;
-   });
-
-   const [user, setUser] = useState<IUser | null>(null);
+   const [JWT, setJWT] = useState<IJWT | null>(null);
+   const [user, setUser] = useState<IUserProfile | null>(null);
    const [event, setEvent] = useState<IEvent | null>(null);
    const [participations, setParticipations] = useState<IParticipation[]>([]);
    const [teams, setTeams] = useState<ITeam[] | null>(null);
 
-   const api = useAxios();
+   const { signIn } = usePresenter();
 
    const handleLogin = async (username: string, password: string) => {
       try {
-         // Getting JWT
-         const { data: JWTData } = await api.post(`/login?username=${username.trim()}&password=${password.trim()}`) as ILoginResponse;
+         const userCredentials = (await signIn(username, password)).data;
+         const { access_token, refresh_token, profile } = userCredentials;
 
-         // Setting local storage tokens
-         localStorage.setItem('presenter_tokens', JSON.stringify(JWTData));
-         setJWT(JWTData);
-      } catch (error) {
+         localStorage.setItem('presenter_session', JSON.stringify(userCredentials));
+
+         setJWT({ access_token, refresh_token });
+         setUser(profile);
+         setAuthenticated(true);
+      }
+      catch (error) {
          console.log('handleLogin:', error);
          return alert('Credenciais de usuário incorretas.');
       }
    }
 
-   const handleUser = async () => {
-      // Getting User info
-      const { data: user } = await api.get(`/api/appusers/findByAccessToken`) as IUserResponse;
-      setUser(user);
-   }
-
    const handleEvent = async (eventIp: number) => {
       try {
-         if (user?.roles[0].name === 'ROLE_ADMIN') {
-            const { data } = await api.get(`/api/events/${eventIp}`) as IEventResponse;
-            setEvent(data);
-            // console.log(data);
-         }
-         else {
-            alert("You don't have access to this page.");
-         }
+         // if (user?.roles[0].name === 'ROLE_ADMIN') {
+         //    const { data } = await api.get(`/api/events/${eventIp}`) as IEventResponse;
+         //    setEvent(data);
+         //    // console.log(data);
+         // }
+         // else {
+         //    alert("You don't have access to this page.");
+         // }
       } catch (error) {
          console.log('handleEvent:', error);
       }
@@ -186,56 +143,56 @@ const AppContextProvider = ({ children }: Props) => {
    }
 
    const handleParticipations = async () => {
-      try {
-         if (user && JWT) {
-            const { data } = await api.get(`/api/appusers/participations/${user?.id}`) as IParticipationsResponse;
-            setParticipations(data);
-            // console.log(data);
-         }
-      } catch (error) {
-         console.log('handleParticipations:', error);
-      }
+      // try {
+      //    if (user && JWT) {
+      //       const { data } = await api.get(`/api/appusers/participations/${user?.id}`) as IParticipationsResponse;
+      //       setParticipations(data);
+      //       // console.log(data);
+      //    }
+      // } catch (error) {
+      //    console.log('handleParticipations:', error);
+      // }
    }
 
    const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
-      try {
-         const data = await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
-         console.log(data);
-         // console.log(status);
-         await handleParticipations();
-      } catch (error) {
-         console.log('handleAddJurorParticipation:', error);
-         return alert('Código ou senha do evento estão incorretos.');
-      }
+      // try {
+      //    const data = await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
+      //    console.log(data);
+      //    // console.log(status);
+      //    await handleParticipations();
+      // } catch (error) {
+      //    console.log('handleAddJurorParticipation:', error);
+      //    return alert('Código ou senha do evento estão incorretos.');
+      // }
    }
 
    const handleRemoveParticipation = async (eventId: number) => {
-      try {
-         const data = await api.delete(`/api/events/participations?userId=${user?.id}&eventId=${eventId}`);
-         // console.log(data);
-         await handleParticipations();
-      } catch (error) {
-         console.log('handleRemoveParticipation:', error);
-      }
+      // try {
+      //    const data = await api.delete(`/api/events/participations?userId=${user?.id}&eventId=${eventId}`);
+      //    // console.log(data);
+      //    await handleParticipations();
+      // } catch (error) {
+      //    console.log('handleRemoveParticipation:', error);
+      // }
    }
 
    const handleTeams = async () => {
-      if (event && JWT) {
-         const { data } = await api.get(`/api/events/teams/${event.id}`) as ITeamsResponse;
-         setTeams(data);
-         // console.log(data);
-      }
+      // if (event && JWT) {
+      //    const { data } = await api.get(`/api/events/teams/${event.id}`) as ITeamsResponse;
+      //    setTeams(data);
+      //    // console.log(data);
+      // }
    }
 
    const handleAddAvaliation = async (teamId: number, userId: number, value: number) => {
-      await api.put(`/api/teams/avaliations/add?teamId=${teamId}&userId=${userId}&value=${value}`) as IAddAvaliationResponse;
-      handleTeams();
+      // await api.put(`/api/teams/avaliations/add?teamId=${teamId}&userId=${userId}&value=${value}`) as IAddAvaliationResponse;
+      // handleTeams();
       // console.log(data);
       // console.log(status);
    }
 
    const handleLogout = () => {
-      localStorage.removeItem('presenter_tokens');
+      localStorage.removeItem('presenter_session');
       setAuthenticated(false);
       setEvent(null);
       setUser(null);
@@ -243,13 +200,14 @@ const AppContextProvider = ({ children }: Props) => {
    }
 
    useEffect(() => {
-      (async () => {
-         if (JWT && !user) {
-            await handleUser();
-            setAuthenticated(true);
-         }
-      })();
-   }, [JWT]);
+      const storedCredentials = localStorage.getItem('presenter_session') as string;
+      if (storedCredentials) {
+         const { access_token, refresh_token, profile } = JSON.parse(storedCredentials) as IUserCredentials;
+         setJWT({ access_token, refresh_token });
+         setUser(profile);
+         setAuthenticated(true);
+      }
+   }, []);
 
    return (
       <Context.Provider value={{
@@ -260,7 +218,6 @@ const AppContextProvider = ({ children }: Props) => {
          participations,
          teams,
          handleLogin,
-         handleUser,
          handleEvent,
          setEvent,
          setJWT,
