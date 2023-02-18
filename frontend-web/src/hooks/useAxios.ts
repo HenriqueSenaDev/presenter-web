@@ -1,48 +1,42 @@
 import axios from 'axios';
+import { IJWT } from 'common/@Interfaces';
 import { Context } from 'context/AppContextProvider';
 import { useContext } from 'react';
 
-const useAxios = () => {
+export const useAxios = () => {
+    const { JWT, setJWT, user } = useContext(Context);
 
-    const { setJWT } = useContext(Context);
-
-    const api = axios.create({
+    const axiosInstance = axios.create({
         baseURL: import.meta.env.VITE_API_URL,
     });
 
-    api.interceptors.request.use(async req => {
-        const tokens = JSON.parse(localStorage.getItem('presenter_tokens') as string);
-        if (tokens) {
-            req.headers!.Authorization = `Bearer ${tokens.access_token}`
-        }
-
+    axiosInstance.interceptors.request.use(async req => {
+        if (JWT) req.headers!.Authorization = `Bearer ${JWT?.access_token}`
         return req;
     });
 
-    api.interceptors.response.use(res => res, async (error) => {
+    axiosInstance.interceptors.response.use(res => res, async (error) => {
         const originalRequest = error.config;
 
         if (error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const tokens = JSON.parse(localStorage.getItem('presenter_tokens') as string);
-
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/refreshtoken`, {
-                headers: {
-                    'Authorization': `Bearer ${tokens.refresh_token}`
-                }
+            const refreshRes = await axios.post<IJWT>(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {
+                refresh_token: JWT!.refresh_token
             });
+            const { access_token, refresh_token } = refreshRes.data;
+            
+            originalRequest.headers.Authorization = `Bearer ${access_token}`;
 
-            originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
-
-            localStorage.setItem('presenter_tokens', JSON.stringify(response.data));
+            setJWT(refreshRes.data);
+            localStorage.setItem('presenter_session', JSON.stringify(
+                { access_token, refresh_token, user }
+            ));
 
             return axios(originalRequest);
         }
         return Promise.reject(error);
     });
 
-    return api;
+    return axiosInstance;
 }
-
-export { useAxios };
