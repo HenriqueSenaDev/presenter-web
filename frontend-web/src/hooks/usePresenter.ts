@@ -14,6 +14,12 @@ export function usePresenter() {
         findUserParticipations: async (userId: number) => {
             const res = await axios.get<IParticipation[]>(`/users/participations/${userId}`);
             return res.data;
+        },
+        addJurorParticipation: async (userId: number, joinCode: string, jurorCode: string) => {
+            const res = await axios.post(`/participations/juror`, {
+                userId, joinCode, jurorCode
+            });
+            return res.data;
         }
     }
 }
