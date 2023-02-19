@@ -1,64 +1,55 @@
 import { ReactComponent as DeleteEvent } from "assets/images/close-Icon.svg";
+import React, { useContext } from "react";
 import { Context } from "context/AppContextProvider";
-import React, { useContext, useState } from "react";
 import "./styles.css"
 
-interface Props {
-    appEvent: {
-        id: {
-            event: {
-                id: number,
-                name: string,
-                code: number,
-                jurorCorde: number,
-                description: string
-            },
-            user: {
-                id: number,
-                username: string
-            }
-        },
-        eventRole: {
-            id: number,
-            name: string
-        },
-        team: null
+interface IProps {
+    event: {
+        id: number,
+        name: string,
+        description: string
     },
-    setRemoveOpen: Function,
     setEventToRemoveId: Function
 }
 
-const EventCard = ({ appEvent, setRemoveOpen, setEventToRemoveId }: Props,) => {
+const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
     const { handleEvent } = useContext(Context);
 
-    async function selectEvent(event: React.MouseEvent<HTMLElement>) {
-        await handleEvent(appEvent.id.event.id);
+    async function selectEvent() {
+        // await handleEvent(event.id);
     }
 
-    async function removeEvent(event: React.MouseEvent<HTMLElement>) {
-        event.stopPropagation();
-        setEventToRemoveId(appEvent.id.event.id);
-        setRemoveOpen(true);
+    async function removeEvent(mouseEvt: React.MouseEvent<HTMLElement>) {
+        mouseEvt.stopPropagation();
+        setEventToRemoveId(event.id);
     }
 
     return (
         <>
-            <div className="event--card--container" onClick={selectEvent} >
+            <div
+                className="event--card--container"
+                onClick={selectEvent}
+            >
                 <div
                     className="delete-event"
                     onClick={removeEvent}
                 >
                     <DeleteEvent />
                 </div>
+
                 <div className="event--card--header">
-                    <h1>{appEvent.id.event.name}</h1>
-                    <hr></hr>
+                    <h1>{event.name}</h1>
+
+                    <hr />
                 </div>
-                <span>{
-                    appEvent.id.event.description.length < 65
-                        ? appEvent.id.event.description
-                        : appEvent.id.event.description.substring(0, 60) + '...'
-                }</span>
+
+                <span>
+                    {
+                        event.description.length < 65
+                            ? event.description
+                            : event.description.substring(0, 60) + '...'
+                    }
+                </span>
             </div>
         </>
     )

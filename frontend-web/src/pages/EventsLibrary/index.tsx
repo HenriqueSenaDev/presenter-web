@@ -1,40 +1,38 @@
+import { ReactComponent as AddIcon } from "assets/images/add-Icon.svg";
 import { useState, useContext, useEffect } from "react";
-import { Context } from "context/AppContextProvider";
 import { Navigate } from "react-router-dom";
+import { Context } from "context/AppContextProvider";
+import { IParticipation } from "../../common/@Interfaces";
+import { usePresenter } from "hooks/usePresenter";
 import Navbar from "../../components/Navbar";
 import EventCard from "./EventCard";
 import AddEventPopup from "./AddEventPopup";
 import RemoveEventPopUp from "./RemoveEventPopUp";
-import { ReactComponent as AddIcon } from "assets/images/add-Icon.svg";
 import "./styles.css";
 
 const EventsLibrary = () => {
    const [addPopupOpen, setAddPopupOpen] = useState<boolean>(false);
-   const [removePopupOpen, setRemovePopupOpen] = useState<boolean>(false);
    const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
+   const [participations, setParticipations] = useState<IParticipation[]>([]);
 
-   const {
-      authenticated,
-      user,
-      event,
-      participations,
-      handleParticipations
-   } = useContext(Context);
+   const { findUserParticipations } = usePresenter();
 
-   document.addEventListener('click', ({ target }) => {
+   const { authenticated, user, event, } = useContext(Context);
+
+   function handleClick(evt: React.MouseEvent<HTMLElement>) {
+      const { target } = evt;
+
       if (document.querySelector('.join--event--main') === target) {
          setAddPopupOpen(false);
       }
       if (document.querySelector('.remove-event-main') === target) {
-         setRemovePopupOpen(false);
+         setEventToRemoveId(null);
       }
-   });
+   }
 
    useEffect(() => {
-      (async () => {
-         await handleParticipations();
-      })();
-   }, [user]);
+      (async () => setParticipations(await findUserParticipations(user!.id)))();
+   }, []);
 
    if (!authenticated) {
       return <Navigate replace to="/" />
@@ -46,48 +44,50 @@ const EventsLibrary = () => {
 
    return (
       <>
-         <div>
-            {
+         <div onClick={handleClick}>
+            {/* {
                addPopupOpen &&
                <AddEventPopup
                   setAddPopupOpen={setAddPopupOpen}
                />
             }
+
             {
-               removePopupOpen &&
+               eventToRemoveId &&
                <RemoveEventPopUp
-                  setRemovePopupOpen={setRemovePopupOpen}
+                  setEventToRemoveId={setEventToRemoveId}
                   eventToRemoveId={eventToRemoveId}
                />
-            }
+            } */}
+
             <Navbar />
+
             <div className="join--event--wrapper">
                <div className="join--event--container">
                   <h1>Biblioteca de Eventos</h1>
+
                   <div className="events--manager--container">
                      <div className="events--container">
                         {
-                           participations && participations.map(part => {
-                              return (
-                                 <EventCard
-                                    appEvent={part}
-                                    key={part.id.event.id}
-                                    setRemoveOpen={setRemovePopupOpen}
-                                    setEventToRemoveId={setEventToRemoveId}
-                                 />
-                              );
-                           })
-                        }
-                        {
-                           !participations.length &&
-                           <span>Adicione um evento para participar.</span>
+                           participations.length ? (
+                              participations.map(part => {
+                                 return (
+                                    <EventCard
+                                       event={part.event}
+                                       key={part.event.id}
+                                       setEventToRemoveId={setEventToRemoveId}
+                                    />
+                                 );
+                              })
+                           ) : (
+                              <span>Adicione um evento para participar.</span>
+                           )
                         }
                      </div>
+
                      <div
                         className="addEventButton"
-                        onClick={() => {
-                           setAddPopupOpen(true);
-                        }}
+                        onClick={() => setAddPopupOpen(true)}
                      >
                         <AddIcon className="addIcon" />
                      </div>
