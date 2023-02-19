@@ -1,48 +1,64 @@
-import "./styles.css";
+import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
 import { Context } from "context/AppContextProvider";
-import WhiteGif from "assets/images/white-Gif.gif";
+import { usePresenter } from 'hooks/usePresenter';
+import "./styles.css";
 
 interface IProps {
-   setAddPopupOpen: Function
+   setIsAddPopupOpen: Function,
+   handleParticipations: Function
 }
 
-const AddEventPopup = ({ setAddPopupOpen }: IProps) => {
-   const [eventCode, setEventCode] = useState<string>("");
+const AddEventPopup = ({ setIsAddPopupOpen, handleParticipations }: IProps) => {
+   const [joinCode, setJoinCode] = useState<string>("");
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { handleAddJurorParticipation, handleParticipations } = useContext(Context);
+   const { user } = useContext(Context);
+   const { addJurorParticipation } = usePresenter();
 
-   const addParticipation = async () => {
+   function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {
+      if (document.querySelector('.join--event--main') === target) {
+         setIsAddPopupOpen(false);
+      }
+   }
+
+   async function addParticipation() {
       setLoading(true);
-      await handleAddJurorParticipation(eventCode, jurorCode);
+      await addJurorParticipation(user!.id, joinCode, jurorCode);
       await handleParticipations();
-      setLoading(false);
-      setAddPopupOpen(false);
+      setIsAddPopupOpen(false);
    }
 
    return (
-      <div className="join--event--main">
+      <div
+         className="join--event--main"
+         onClick={checkOutClick}
+      >
          <div className="join--card--container">
             {loading ?
                <div className="loading--add">
                   <h1>Presenter</h1>
-                  <img src={WhiteGif} alt="loading-gif" ></img>
+
+                  <img src={loadingGif} alt="loading-gif" ></img>
                </div>
                :
                <>
                   <div className="form--container">
                      <h1>Digite o código do evento:</h1>
-                     <input type="text"
-                        value={eventCode}
+
+                     <input
+                        type="text"
+                        value={joinCode}
                         onChange={(event) => {
-                           setEventCode(event.target.value);
+                           setJoinCode(event.target.value);
                         }}
-                     ></input>
+                     />
                   </div>
+
                   <div className="form--container">
                      <h1>É jurado?<br />Digite a senha de jurado:</h1>
+
                      <input type="text"
                         value={jurorCode}
                         onChange={(event) => {
@@ -53,8 +69,9 @@ const AddEventPopup = ({ setAddPopupOpen }: IProps) => {
                               await addParticipation();
                            }
                         }}
-                     ></input>
+                     />
                   </div>
+
                   <button onClick={addParticipation}>
                      Entrar
                   </button>

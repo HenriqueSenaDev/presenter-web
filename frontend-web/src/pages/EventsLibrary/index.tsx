@@ -11,91 +11,78 @@ import RemoveEventPopUp from "./RemoveEventPopUp";
 import "./styles.css";
 
 const EventsLibrary = () => {
-   const [addPopupOpen, setAddPopupOpen] = useState<boolean>(false);
-   const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
    const [participations, setParticipations] = useState<IParticipation[]>([]);
+   const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
+   const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
 
+   const { authenticated, user } = useContext(Context);
    const { findUserParticipations } = usePresenter();
 
-   const { authenticated, user, event, } = useContext(Context);
-
-   function handleClick(evt: React.MouseEvent<HTMLElement>) {
-      const { target } = evt;
-
-      if (document.querySelector('.join--event--main') === target) {
-         setAddPopupOpen(false);
-      }
-      if (document.querySelector('.remove-event-main') === target) {
-         setEventToRemoveId(null);
-      }
+   async function handleParticipations() {
+      setParticipations(await findUserParticipations(user!.id));
    }
 
    useEffect(() => {
-      (async () => setParticipations(await findUserParticipations(user!.id)))();
+      handleParticipations();
    }, []);
 
    if (!authenticated) {
       return <Navigate replace to="/" />
    }
 
-   if (event) {
-      return <Navigate replace to="/event" />
-   }
-
    return (
-      <>
-         <div onClick={handleClick}>
-            {/* {
-               addPopupOpen &&
-               <AddEventPopup
-                  setAddPopupOpen={setAddPopupOpen}
-               />
-            }
+      <div>
+         {
+            isAddPopupOpen &&
+            <AddEventPopup
+               setIsAddPopupOpen={setIsAddPopupOpen}
+               handleParticipations={handleParticipations}
+            />
+         }
 
-            {
-               eventToRemoveId &&
-               <RemoveEventPopUp
-                  setEventToRemoveId={setEventToRemoveId}
-                  eventToRemoveId={eventToRemoveId}
-               />
-            } */}
+         {/* {
+            eventToRemoveId &&
+            <RemoveEventPopUp
+               eventToRemoveId={eventToRemoveId}
+               setEventToRemoveId={setEventToRemoveId}
+            />
+         } */}
 
-            <Navbar />
+         <Navbar />
 
-            <div className="join--event--wrapper">
-               <div className="join--event--container">
-                  <h1>Biblioteca de Eventos</h1>
+         <div className="join--event--wrapper">
+            <div className="join--event--container">
+               <h1>Biblioteca de Eventos</h1>
 
-                  <div className="events--manager--container">
-                     <div className="events--container">
-                        {
-                           participations.length ? (
-                              participations.map(part => {
-                                 return (
-                                    <EventCard
-                                       event={part.event}
-                                       key={part.event.id}
-                                       setEventToRemoveId={setEventToRemoveId}
-                                    />
-                                 );
-                              })
-                           ) : (
-                              <span>Adicione um evento para participar.</span>
-                           )
-                        }
-                     </div>
+               <div className="events--manager--container">
+                  <div className="events--container">
+                     {
+                        participations.length ? (
+                           participations.map(part => {
+                              return (
+                                 <EventCard
+                                    event={part.event}
+                                    key={part.event.id}
+                                    setEventToRemoveId={setEventToRemoveId}
+                                 />
+                              );
+                           })
+                        ) : (
+                           <span>Adicione um evento para participar.</span>
+                        )
+                     }
+                  </div>
 
-                     <div
-                        className="addEventButton"
-                        onClick={() => setAddPopupOpen(true)}
-                     >
-                        <AddIcon className="addIcon" />
-                     </div>
+                  <div
+                     className="addEventButton"
+                     onClick={() => setIsAddPopupOpen(true)}
+                  >
+                     <AddIcon className="addIcon" />
                   </div>
                </div>
             </div>
          </div>
-      </>
+      </div>
    );
 }
 
