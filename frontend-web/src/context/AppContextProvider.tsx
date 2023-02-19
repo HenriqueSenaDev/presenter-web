@@ -12,37 +12,6 @@ interface IEventResponse {
    status: number
 }
 
-interface IParticipation {
-   id: {
-      event: {
-         id: number,
-         name: string,
-         code: number,
-         jurorCorde: number,
-         description: string
-      },
-      user: {
-         id: number,
-         username: string
-      }
-   },
-   eventRole: {
-      id: number,
-      name: string
-   },
-   team: null
-}
-
-interface IParticipationsResponse {
-   data: IParticipation[],
-   status: number
-}
-
-interface IAddParticipationResponse {
-   data: IParticipation,
-   status: number
-}
-
 interface ITeam {
    id: number,
    name: string,
@@ -83,15 +52,14 @@ interface IContext {
    JWT: IJWT | null,
    user: IUserProfile | null,
    event: IEvent | null,
-   participations: IParticipation[] | [],
    teams: ITeam[] | null,
    handleLogin: Function,
    handleEvent: Function,
    setEvent: Function,
    setJWT: Function,
+   setAuthenticated: Function,
    handleLogout: Function,
    handleTeams: Function,
-   handleParticipations: Function,
    handleAddJurorParticipation: Function,
    handleRemoveParticipation: Function,
    handleAddAvaliation: Function
@@ -104,14 +72,13 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
    const [JWT, setJWT] = useState<IJWT | null>(null);
    const [user, setUser] = useState<IUserProfile | null>(null);
    const [event, setEvent] = useState<IEvent | null>(null);
-   const [participations, setParticipations] = useState<IParticipation[]>([]);
    const [teams, setTeams] = useState<ITeam[] | null>(null);
 
    const { signIn } = usePresenter();
 
    const handleLogin = async (username: string, password: string) => {
       try {
-         const userCredentials = (await signIn(username, password)).data;
+         const userCredentials = (await signIn(username, password));
          const { access_token, refresh_token, profile } = userCredentials;
 
          localStorage.setItem('presenter_session', JSON.stringify(userCredentials));
@@ -140,18 +107,6 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
          console.log('handleEvent:', error);
       }
 
-   }
-
-   const handleParticipations = async () => {
-      // try {
-      //    if (user && JWT) {
-      //       const { data } = await api.get(`/api/appusers/participations/${user?.id}`) as IParticipationsResponse;
-      //       setParticipations(data);
-      //       // console.log(data);
-      //    }
-      // } catch (error) {
-      //    console.log('handleParticipations:', error);
-      // }
    }
 
    const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
@@ -215,15 +170,14 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
          JWT,
          user,
          event,
-         participations,
          teams,
+         setAuthenticated,
          handleLogin,
          handleEvent,
          setEvent,
          setJWT,
          handleLogout,
          handleTeams,
-         handleParticipations,
          handleAddJurorParticipation,
          handleRemoveParticipation,
          handleAddAvaliation
