@@ -1,44 +1,62 @@
-import { Context } from 'context/AppContextProvider';
+import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
-import WhiteGif from "assets/images/white-Gif.gif";
+import { Context } from 'context/AppContextProvider';
+import { usePresenter } from 'hooks/usePresenter';
 import './styles.css';
 
 interface Props {
-    setRemovePopupOpen: Function,
-    eventToRemoveId: number | null
+    eventToRemoveId: number | null,
+    setEventToRemoveId: Function,
+    handleParticipations: Function
 }
 
-const RemoveEventPopUp = ({ setRemovePopupOpen, eventToRemoveId }: Props) => {
+const RemoveEventPopUp = ({ eventToRemoveId, setEventToRemoveId, handleParticipations }: Props) => {
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { handleRemoveParticipation, handleParticipations } = useContext(Context);
+    const { user } = useContext(Context);
+    const { removeParticipation } = usePresenter();
 
-    async function removeParticipation() {
+    async function removeUserParticipation() {
         setLoading(true);
-        await handleRemoveParticipation(eventToRemoveId);
+        await removeParticipation(user!.id, eventToRemoveId as number);
         await handleParticipations();
-        setRemovePopupOpen(false);
-        setLoading(false);
+        setEventToRemoveId(null);
+    }
+
+    function closePopUp() {
+        setEventToRemoveId(null);
+    }
+
+    function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {
+        if (document.querySelector('.remove-event-main') === target) {
+            closePopUp();
+        }
     }
 
     return (
-        <div className="remove-event-main">
+        <div
+            className="remove-event-main"
+            onClick={checkOutClick}
+        >
             <div className="remove-card-container">
                 {loading ? (
                     <div className="loading--add">
                         <h1>Presenter</h1>
-                        <img src={WhiteGif} alt="loading-gif" ></img>
+
+                        <img src={loadingGif} alt="loading-gif" />
                     </div>
                 ) : (
                     <>
                         <h1>Remover evento?</h1>
+
                         <div className="remove-event-buttons">
-                            <button onClick={removeParticipation}>
+                            <button onClick={removeUserParticipation}>
                                 Sim
                             </button>
-                            <button onClick={() => {
-                                setRemovePopupOpen(false);
-                            }}>Cancelar</button>
+
+                            <button onClick={closePopUp}>
+                                Cancelar
+                            </button>
                         </div>
                     </>
                 )}

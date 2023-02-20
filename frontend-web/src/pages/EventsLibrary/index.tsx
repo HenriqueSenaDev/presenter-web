@@ -40,13 +40,14 @@ const EventsLibrary = () => {
             />
          }
 
-         {/* {
+         {
             eventToRemoveId &&
             <RemoveEventPopUp
                eventToRemoveId={eventToRemoveId}
                setEventToRemoveId={setEventToRemoveId}
+               handleParticipations={handleParticipations}
             />
-         } */}
+         }
 
          <Navbar />
 
