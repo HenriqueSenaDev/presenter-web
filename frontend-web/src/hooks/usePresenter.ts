@@ -16,10 +16,15 @@ export function usePresenter() {
             return res.data;
         },
         addJurorParticipation: async (userId: number, joinCode: string, jurorCode: string) => {
-            const res = await axios.post(`/participations/juror`, {
+            const res = await axios.post<IParticipation>(`/participations/juror`, {
                 userId, joinCode, jurorCode
             });
             return res.data;
+        },
+        removeParticipation: async (userId: number, eventId: number) => {
+            await axios.delete('/participations', {
+                params: { userId, eventId }
+            })
         }
     }
 }
