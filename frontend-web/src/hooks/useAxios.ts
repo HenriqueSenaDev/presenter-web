@@ -15,30 +15,36 @@ export const useAxios = () => {
         return req;
     });
 
+    // handling token refreshing
     axiosInstance.interceptors.response.use(res => res, async (error) => {
         const originalRequest = error.config;
+        const checkExpiredToken = error.response.data.message.includes('JWT expired');
 
-        if (error.response.status === 403 && !originalRequest._retry) {
+        if (checkExpiredToken && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            const refreshRes = await axios.post<IJWT>(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {
-                refresh_token: JWT!.refresh_token
-            });
-            const { access_token, refresh_token } = refreshRes.data;
+            try {
+                const refreshRes = await axios.post<IJWT>(`${import.meta.env.VITE_API_URL}/api/auth/refresh`, {
+                    refresh_token: JWT!.refresh_token
+                });
+
+                const { access_token, refresh_token } = refreshRes.data;
             
-            originalRequest.headers.Authorization = `Bearer ${access_token}`;
+                originalRequest.headers.Authorization = `Bearer ${access_token}`;
 
-            setJWT(refreshRes.data);
-            localStorage.setItem('presenter_session', JSON.stringify(
-                { access_token, refresh_token, user }
-            ));
+                setJWT(refreshRes.data);
+                localStorage.setItem('presenter_session', JSON.stringify(
+                    { access_token, refresh_token, profile: user }
+                ));
 
-            return axios(originalRequest);
+                return axios(originalRequest);
+            }
+            catch (error: any) {
+                localStorage.removeItem('presenter_session');
+                setAuthenticated(false);
+            }
         }
-        else {
-            setAuthenticated(false);
-            localStorage.removeItem('presenter_session');
-        }
+
         return Promise.reject(error);
     });
 
