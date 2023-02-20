@@ -60,8 +60,6 @@ interface IContext {
    setAuthenticated: Function,
    handleLogout: Function,
    handleTeams: Function,
-   handleAddJurorParticipation: Function,
-   handleRemoveParticipation: Function,
    handleAddAvaliation: Function
 }
 
@@ -107,28 +105,6 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
          console.log('handleEvent:', error);
       }
 
-   }
-
-   const handleAddJurorParticipation = async (eventCode: string, jurorCode: string) => {
-      // try {
-      //    const data = await api.post(`/api/events/participations/add/juror?eventCode=${eventCode}&jurorCode=${jurorCode}&userId=${user?.id}`) as IAddParticipationResponse;
-      //    console.log(data);
-      //    // console.log(status);
-      //    await handleParticipations();
-      // } catch (error) {
-      //    console.log('handleAddJurorParticipation:', error);
-      //    return alert('Código ou senha do evento estão incorretos.');
-      // }
-   }
-
-   const handleRemoveParticipation = async (eventId: number) => {
-      // try {
-      //    const data = await api.delete(`/api/events/participations?userId=${user?.id}&eventId=${eventId}`);
-      //    // console.log(data);
-      //    await handleParticipations();
-      // } catch (error) {
-      //    console.log('handleRemoveParticipation:', error);
-      // }
    }
 
    const handleTeams = async () => {
@@ -178,8 +154,6 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
          setJWT,
          handleLogout,
          handleTeams,
-         handleAddJurorParticipation,
-         handleRemoveParticipation,
          handleAddAvaliation
       }}>
          {children}
