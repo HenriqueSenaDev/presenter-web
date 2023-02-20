@@ -5,4 +5,6 @@ import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 
 public interface ParticipationService {
     ParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto);
+
+    void removeParticipation(Long userId, Long eventId);
 }

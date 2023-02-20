@@ -34,4 +34,15 @@ public class ParticipationServiceImpl implements ParticipationService {
         ParticipationPK id = new ParticipationPK(event, user);
         return new ParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.JUROR)));
     }
+
+    @Override
+    public void removeParticipation(Long userId, Long eventId) {
+        AppUser user = appUserRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+
+        ParticipationPK id = new ParticipationPK(event, user);
+        participationRepository.deleteById(id);
+    }
 }

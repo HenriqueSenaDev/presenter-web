@@ -21,4 +21,10 @@ public class ParticipationController {
         return ResponseEntity.created(uri).body(participationService.addJurorParticipation(addJurorRequestDto));
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> removeParticipation(@RequestParam Long userId, @RequestParam Long eventId) {
+        participationService.removeParticipation(userId, eventId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
