@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { IJWT } from 'common/@Interfaces';
-import { Context } from 'context/AppContextProvider';
+import { ProfileContext } from 'context/ProfileContext';
 import { useContext } from 'react';
 
 export const useAxios = () => {
-    const { JWT, setJWT, user, setAuthenticated } = useContext(Context);
+    const { JWT, setJWT, user, setAuthenticated } = useContext(ProfileContext);
 
     const axiosInstance = axios.create({
         baseURL: `${import.meta.env.VITE_API_URL}/api`,

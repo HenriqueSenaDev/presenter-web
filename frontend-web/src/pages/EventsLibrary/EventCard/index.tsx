@@ -1,6 +1,5 @@
 import { ReactComponent as DeleteEvent } from "assets/images/close-Icon.svg";
 import React, { useContext } from "react";
-import { Context } from "context/AppContextProvider";
 import "./styles.css"
 
 interface IProps {
@@ -13,8 +12,6 @@ interface IProps {
 }
 
 const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
-    const { handleEvent } = useContext(Context);
-
     async function selectEvent() {
         // await handleEvent(event.id);
     }

@@ -4,7 +4,7 @@ import { ReactComponent as ComputerIcon } from "assets/images/computer-Icon.svg"
 import { ReactComponent as RankingIcon } from "assets/images/leaderboard-Icon.svg";
 import { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { Context } from "context/AppContextProvider";
+import { ProfileContext } from "context/ProfileContext";
 import Navbar from "components/Navbar";
 import Loading from "pages/Loading";
 import "./styles.css";
@@ -14,7 +14,7 @@ const Landing = () => {
    const [password, setPassword] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { handleLogin, authenticated } = useContext(Context);
+   const { handleLogin, authenticated } = useContext(ProfileContext);
 
    async function signIn() {
       setLoading(true);

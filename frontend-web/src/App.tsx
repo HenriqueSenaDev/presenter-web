@@ -1,4 +1,4 @@
-import { AppContextProvider } from "context/AppContextProvider";
+import { AppContextProvider } from "context/ProfileContext";
 import { PresenterContextProvider } from "context/PresenterContext";
 import AppRoutes from 'routes';
 

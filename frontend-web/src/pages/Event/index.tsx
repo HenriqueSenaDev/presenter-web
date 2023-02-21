@@ -3,7 +3,7 @@ import "./styles.css";
 import Navbar from "components/Navbar";
 import RatePopUp from "./RatePopUp";
 
-import { Context } from "context/AppContextProvider";
+import { ProfileContext } from "context/ProfileContext";
 import { useContext, useEffect, useState } from "react";
 
 import { Navigate } from "react-router-dom";
@@ -71,38 +71,38 @@ const Event = () => {
     const [team, setTeam] = useState<ITeamInfo | null>(null);
     const [ratePopUp, setRatePopUp] = useState<boolean>(false);
 
-    const { authenticated, event, teams, handleTeams } = useContext(Context);
+    const { authenticated } = useContext(ProfileContext);
 
-    useEffect(() => {
-        (async () => {
-            await handleTeams();
-        })()
-    }, [event]);
+    // useEffect(() => {
+    //     (async () => {
+    //         await handleTeams();
+    //     })()
+    // }, [event]);
 
-    useEffect(() => {
-        if (teams) {
-            const newRows: IRow[] = [];
-            teams.forEach(team => {
-                newRows.push({
-                    id: team.id,
-                    avaliacoes: team.avaliationsQuantity,
-                    equipe: team.name,
-                    media: team.average.toFixed(1),
-                    projeto: team.project,
-                    turma: team.classRoom
-                } as IRow);
-            });
-            setRows(newRows);
-        }
-    }, [teams])
+    // useEffect(() => {
+    //     if (teams) {
+    //         const newRows: IRow[] = [];
+    //         teams.forEach(team => {
+    //             newRows.push({
+    //                 id: team.id,
+    //                 avaliacoes: team.avaliationsQuantity,
+    //                 equipe: team.name,
+    //                 media: team.average.toFixed(1),
+    //                 projeto: team.project,
+    //                 turma: team.classRoom
+    //             } as IRow);
+    //         });
+    //         setRows(newRows);
+    //     }
+    // }, [teams])
 
     if (!authenticated) {
         return <Navigate replace to="/" />
     }
 
-    if (!event) {
-        return <Navigate replace to="/library" />
-    }
+    // if (!event) {
+    //     return <Navigate replace to="/library" />
+    // }
 
     return (
         <div className="event--container">

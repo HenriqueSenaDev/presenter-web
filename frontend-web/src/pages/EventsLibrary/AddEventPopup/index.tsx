@@ -1,6 +1,6 @@
 import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
-import { Context } from "context/AppContextProvider";
+import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
 import { usePresenter } from 'hooks/usePresenter';
 import "./styles.css";
@@ -14,7 +14,7 @@ const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { user } = useContext(Context);
+   const { user } = useContext(ProfileContext);
    const { handleParticipations } = useContext(PresenterContext);
 
    const { addJurorParticipation } = usePresenter();

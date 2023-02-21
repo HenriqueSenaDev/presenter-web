@@ -2,19 +2,17 @@ import React, { createContext, useEffect, useState } from 'react';
 import { usePresenter } from 'hooks/usePresenter';
 import { IJWT, IUserCredentials, IUserProfile } from 'common/@Interfaces';
 
-interface IContext {
-   authenticated: boolean,
-   JWT: IJWT | null,
+interface IProfileContext {
+   authenticated: boolean, setAuthenticated: Function,
+   JWT: IJWT | null, setJWT: Function,
    user: IUserProfile | null,
    handleLogin: Function,
-   setJWT: Function,
-   setAuthenticated: Function,
    handleLogout: Function,
 }
 
-const Context = createContext<IContext>({} as IContext);
+const ProfileContext = createContext<IProfileContext>({} as IProfileContext);
 
-const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
+const ProfileContextProvider = ({ children }: { children: React.ReactNode }) => {
    const [authenticated, setAuthenticated] = useState<boolean>(false);
    const [JWT, setJWT] = useState<IJWT | null>(null);
    const [user, setUser] = useState<IUserProfile | null>(null);
@@ -56,18 +54,17 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
    }, []);
 
    return (
-      <Context.Provider value={{
-         authenticated,
-         JWT,
-         user,
-         setAuthenticated,
-         handleLogin,
-         setJWT,
-         handleLogout,
-      }}>
+      <ProfileContext.Provider
+         value={{
+            authenticated, setAuthenticated,
+            JWT, setJWT,
+            user,
+            handleLogin,
+            handleLogout,
+         }}>
          {children}
-      </Context.Provider>
+      </ProfileContext.Provider>
    );
 }
 
-export { Context, AppContextProvider };
+export { ProfileContext, ProfileContextProvider };

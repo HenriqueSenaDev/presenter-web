@@ -1,7 +1,7 @@
 import { ReactComponent as AddIcon } from "assets/images/add-Icon.svg";
 import { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { Context } from "context/AppContextProvider";
+import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
 import Navbar from "../../components/Navbar";
 import EventCard from "./EventCard";
@@ -13,7 +13,7 @@ const EventsLibrary = () => {
    const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
    const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
 
-   const { authenticated } = useContext(Context);
+   const { authenticated } = useContext(ProfileContext);
    const { participations, handleParticipations } = useContext(PresenterContext);
 
    useEffect(() => {

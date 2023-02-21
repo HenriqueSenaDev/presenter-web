@@ -1,7 +1,7 @@
 import "./styles.css";
 import { ReactComponent as ProfileIcon } from "assets/images/profile-Icon.svg";
 import { useContext, useState } from "react";
-import { Context } from "context/AppContextProvider";
+import { ProfileContext } from "context/ProfileContext";
 
 interface ITeamInfo {
     id: number,
@@ -16,7 +16,7 @@ interface IProps {
 const RatePopUp = ({ team, setPopUp }: IProps) => {
     const [avaliationValue, setAvaliationValue] = useState<string>("");
 
-    const { user, handleAddAvaliation } = useContext(Context);
+    const { user } = useContext(ProfileContext);
 
     return (
         <div className="rate--popup--container"
@@ -42,7 +42,7 @@ const RatePopUp = ({ team, setPopUp }: IProps) => {
                         }}
                         onKeyUp={async (event) => {
                             if (event.key === 'Enter') {
-                                handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
+                                // handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
                                 setPopUp(false);
                             }
                         }}
@@ -50,7 +50,7 @@ const RatePopUp = ({ team, setPopUp }: IProps) => {
                 </div>
                 <button
                     onClick={async () => {
-                        handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
+                        // handleAddAvaliation(team?.id, user?.id, Number(avaliationValue));
                         setPopUp(false);
                     }}
                 >Avaliar</button>

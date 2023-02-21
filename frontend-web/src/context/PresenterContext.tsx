@@ -1,7 +1,7 @@
 import { IEvent, IParticipation } from "common/@Interfaces";
 import { createContext, useState, useContext } from "react"
 import { usePresenter } from "hooks/usePresenter";
-import { Context } from "context/AppContextProvider";
+import { Context } from "context/ProfileContext";
 
 interface IPresenterContext {
     participations: IParticipation[], handleParticipations: Function,
