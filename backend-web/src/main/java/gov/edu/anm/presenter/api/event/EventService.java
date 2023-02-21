@@ -1,6 +1,7 @@
 package gov.edu.anm.presenter.api.event;
 
 import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface EventService {
 
-    Event findEventById(Long id);
+    EventOutputDto findEventById(Long id);
 
     Event findEventByJoinCode(String code);
 

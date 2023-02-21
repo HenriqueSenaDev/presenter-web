@@ -1,6 +1,7 @@
 package gov.edu.anm.presenter.api.event;
 
 import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Event> findEventById(@PathVariable Long id) {
+    public ResponseEntity<EventOutputDto> findEventById(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventById(id));
     }
 

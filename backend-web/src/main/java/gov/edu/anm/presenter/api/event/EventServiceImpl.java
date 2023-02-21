@@ -1,10 +1,10 @@
 package gov.edu.anm.presenter.api.event;
 
 import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.Team;
 import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
-import gov.edu.anm.presenter.api.team.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,9 +20,10 @@ public class EventServiceImpl implements EventService {
 	private final EventRepository eventRepository;
 
 	@Override
-	public Event findEventById(Long id) {
-		return eventRepository.findById(id)
+	public EventOutputDto findEventById(Long id) {
+		Event event = eventRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+		return new EventOutputDto(event);
 	}
 
 	@Override
