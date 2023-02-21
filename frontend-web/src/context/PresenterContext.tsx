@@ -1,7 +1,7 @@
 import { IEvent, IParticipation } from "common/@Interfaces";
 import { createContext, useState, useContext } from "react"
 import { usePresenter } from "hooks/usePresenter";
-import { Context } from "context/ProfileContext";
+import { ProfileContext } from "context/ProfileContext";
 
 interface IPresenterContext {
     participations: IParticipation[], handleParticipations: Function,
@@ -21,8 +21,8 @@ function PresenterContextProvider({ children }: { children: React.ReactNode }) {
         setParticipations(await findUserParticipations(user!.id));
     }
 
-    function handleEvent() {
-
+    async function handleEvent(eventId: number) {
+        setEvent(await findEvent(eventId));
     }
 
     return (

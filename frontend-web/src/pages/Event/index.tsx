@@ -100,9 +100,7 @@ const Event = () => {
         return <Navigate replace to="/" />
     }
 
-    // if (!event) {
-    //     return <Navigate replace to="/library" />
-    // }
+    return <h1>Hello World!</h1>;
 
     return (
         <div className="event--container">

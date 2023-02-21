@@ -1,5 +1,7 @@
 import { ReactComponent as DeleteEvent } from "assets/images/close-Icon.svg";
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { PresenterContext } from "context/PresenterContext";
 import "./styles.css"
 
 interface IProps {
@@ -12,8 +14,13 @@ interface IProps {
 }
 
 const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
+    const { handleEvent } = useContext(PresenterContext);
+
+    const navigate = useNavigate();
+
     async function selectEvent() {
-        // await handleEvent(event.id);
+        await handleEvent(event.id);
+        navigate('/event');
     }
 
     async function removeEvent(mouseEvt: React.MouseEvent<HTMLElement>) {
