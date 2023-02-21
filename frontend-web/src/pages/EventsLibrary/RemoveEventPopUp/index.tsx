@@ -1,19 +1,21 @@
 import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
 import { Context } from 'context/AppContextProvider';
+import { PresenterContext } from "context/PresenterContext";
 import { usePresenter } from 'hooks/usePresenter';
 import './styles.css';
 
 interface Props {
     eventToRemoveId: number | null,
-    setEventToRemoveId: Function,
-    handleParticipations: Function
+    setEventToRemoveId: Function
 }
 
-const RemoveEventPopUp = ({ eventToRemoveId, setEventToRemoveId, handleParticipations }: Props) => {
+const RemoveEventPopUp = ({ eventToRemoveId, setEventToRemoveId }: Props) => {
     const [loading, setLoading] = useState<boolean>(false);
 
     const { user } = useContext(Context);
+    const { handleParticipations } = useContext(PresenterContext);
+
     const { removeParticipation } = usePresenter();
 
     async function removeUserParticipation() {

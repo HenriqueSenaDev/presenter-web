@@ -1,20 +1,22 @@
 import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
 import { Context } from "context/AppContextProvider";
+import { PresenterContext } from "context/PresenterContext";
 import { usePresenter } from 'hooks/usePresenter';
 import "./styles.css";
 
 interface IProps {
-   setIsAddPopupOpen: Function,
-   handleParticipations: Function
+   setIsAddPopupOpen: Function
 }
 
-const AddEventPopup = ({ setIsAddPopupOpen, handleParticipations }: IProps) => {
+const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
    const [joinCode, setJoinCode] = useState<string>("");
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
    const { user } = useContext(Context);
+   const { handleParticipations } = useContext(PresenterContext);
+
    const { addJurorParticipation } = usePresenter();
 
    function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {

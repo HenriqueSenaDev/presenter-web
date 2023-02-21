@@ -2,8 +2,7 @@ import { ReactComponent as AddIcon } from "assets/images/add-Icon.svg";
 import { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Context } from "context/AppContextProvider";
-import { IParticipation } from "../../common/@Interfaces";
-import { usePresenter } from "hooks/usePresenter";
+import { PresenterContext } from "context/PresenterContext";
 import Navbar from "../../components/Navbar";
 import EventCard from "./EventCard";
 import AddEventPopup from "./AddEventPopup";
@@ -11,16 +10,11 @@ import RemoveEventPopUp from "./RemoveEventPopUp";
 import "./styles.css";
 
 const EventsLibrary = () => {
-   const [participations, setParticipations] = useState<IParticipation[]>([]);
    const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
    const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
 
-   const { authenticated, user } = useContext(Context);
-   const { findUserParticipations } = usePresenter();
-
-   async function handleParticipations() {
-      setParticipations(await findUserParticipations(user!.id));
-   }
+   const { authenticated } = useContext(Context);
+   const { participations, handleParticipations } = useContext(PresenterContext);
 
    useEffect(() => {
       handleParticipations();
@@ -34,10 +28,7 @@ const EventsLibrary = () => {
       <div>
          {
             isAddPopupOpen &&
-            <AddEventPopup
-               setIsAddPopupOpen={setIsAddPopupOpen}
-               handleParticipations={handleParticipations}
-            />
+            <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
          }
 
          {
@@ -45,7 +36,6 @@ const EventsLibrary = () => {
             <RemoveEventPopUp
                eventToRemoveId={eventToRemoveId}
                setEventToRemoveId={setEventToRemoveId}
-               handleParticipations={handleParticipations}
             />
          }
 
