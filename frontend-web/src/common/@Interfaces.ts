@@ -23,3 +23,19 @@ export interface IParticipation {
         description: string
     }
 }
+
+export interface IEvent {
+    id: number;
+    name: string;
+    description: string;
+    teams: Team[];
+}
+
+export interface Team {
+    id: number;
+    name: string;
+    project: string;
+    classroom: string;
+    presented: boolean;
+    members: string[];
+}

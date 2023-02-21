@@ -50,9 +50,7 @@ const AddEventPopup = ({ setIsAddPopupOpen, handleParticipations }: IProps) => {
                      <input
                         type="text"
                         value={joinCode}
-                        onChange={(event) => {
-                           setJoinCode(event.target.value);
-                        }}
+                        onChange={(event) => setJoinCode(event.target.value)}
                      />
                   </div>
 
@@ -61,9 +59,7 @@ const AddEventPopup = ({ setIsAddPopupOpen, handleParticipations }: IProps) => {
 
                      <input type="text"
                         value={jurorCode}
-                        onChange={(event) => {
-                           setJurorCode(event.target.value);
-                        }}
+                        onChange={(event) => setJurorCode(event.target.value)}
                         onKeyUp={async ({ key }) => {
                            if (key === 'Enter') {
                               await addParticipation();

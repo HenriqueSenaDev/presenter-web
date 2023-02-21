@@ -1,4 +1,4 @@
-import { IParticipation, IUserCredentials } from "common/@Interfaces";
+import { IEvent, IParticipation, IUserCredentials } from "common/@Interfaces";
 import { useAxios } from "hooks/useAxios";
 
 export function usePresenter() {
@@ -12,8 +12,7 @@ export function usePresenter() {
             return res.data;
         },
         findUserParticipations: async (userId: number) => {
-            const res = await axios.get<IParticipation[]>(`/users/participations/${userId}`);
-            return res.data;
+            return (await axios.get<IParticipation[]>(`/users/participations/${userId}`)).data;
         },
         addJurorParticipation: async (userId: number, joinCode: string, jurorCode: string) => {
             const res = await axios.post<IParticipation>(`/participations/juror`, {
@@ -24,7 +23,10 @@ export function usePresenter() {
         removeParticipation: async (userId: number, eventId: number) => {
             await axios.delete('/participations', {
                 params: { userId, eventId }
-            })
+            });
+        },
+        findEvent: async (eventId: number) => {
+            return (await axios.get<IEvent>(`/events/${eventId}`)).data;
         }
     }
 }
