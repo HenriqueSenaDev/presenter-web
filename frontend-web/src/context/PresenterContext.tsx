@@ -14,8 +14,8 @@ function PresenterContextProvider({ children }: { children: React.ReactNode }) {
     const [participations, setParticipations] = useState<IParticipation[]>([]);
     const [event, setEvent] = useState<IEvent | null>(null);
 
-    const { user } = useContext(Context);
-    const { findUserParticipations } = usePresenter();
+    const { user } = useContext(ProfileContext);
+    const { findUserParticipations, findEvent } = usePresenter();
 
     async function handleParticipations() {
         setParticipations(await findUserParticipations(user!.id));

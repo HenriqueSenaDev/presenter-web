@@ -1,16 +1,15 @@
-import { AppContextProvider } from "context/ProfileContext";
+import { ProfileContextProvider } from "context/ProfileContext";
 import { PresenterContextProvider } from "context/PresenterContext";
 import AppRoutes from 'routes';
-
 import './App.css';
 
 function App() {
   return (
-    <AppContextProvider>
+    <ProfileContextProvider>
       <PresenterContextProvider>
         <AppRoutes />
       </PresenterContextProvider>
-    </AppContextProvider>
+    </ProfileContextProvider>
   );
 }
 
