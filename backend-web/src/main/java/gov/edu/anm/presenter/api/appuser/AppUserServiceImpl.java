@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import gov.edu.anm.presenter.api.participation.Participation;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
