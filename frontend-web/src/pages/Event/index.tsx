@@ -82,7 +82,7 @@ const Event = () => {
             }
         ));
         setRows(newRows);
-    }, []);
+    }, [event]);
 
     if (!authenticated) {
         return <Navigate replace to="/" />
@@ -90,12 +90,12 @@ const Event = () => {
 
     return (
         <div className="event--container">
-            {/* {team &&
+            {team &&
                 <RatePopUp
                     team={team}
                     setTeam={setTeam}
                 />
-            } */}
+            }
 
             <Navbar />
 
