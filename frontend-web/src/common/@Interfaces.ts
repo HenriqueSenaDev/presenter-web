@@ -38,4 +38,6 @@ export interface Team {
     classroom: string;
     presented: boolean;
     members: string[];
+    average: number;
+    avaliationsQuantity: number;
 }

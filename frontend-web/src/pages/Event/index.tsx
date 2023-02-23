@@ -1,14 +1,11 @@
-import "./styles.css";
-
+import { useContext, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
+import { ProfileContext } from "context/ProfileContext";
+import { PresenterContext } from "context/PresenterContext";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Navbar from "components/Navbar";
 import RatePopUp from "./RatePopUp";
-
-import { ProfileContext } from "context/ProfileContext";
-import { useContext, useEffect, useState } from "react";
-
-import { Navigate } from "react-router-dom";
-
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import "./styles.css";
 
 const columns: GridColDef[] = [
     {
@@ -69,45 +66,42 @@ interface ITeamInfo {
 const Event = () => {
     const [rows, setRows] = useState<IRow[] | []>([]);
     const [team, setTeam] = useState<ITeamInfo | null>(null);
-    const [ratePopUp, setRatePopUp] = useState<boolean>(false);
 
     const { authenticated } = useContext(ProfileContext);
+    const { event } = useContext(PresenterContext);
 
-    // useEffect(() => {
-    //     (async () => {
-    //         await handleTeams();
-    //     })()
-    // }, [event]);
-
-    // useEffect(() => {
-    //     if (teams) {
-    //         const newRows: IRow[] = [];
-    //         teams.forEach(team => {
-    //             newRows.push({
-    //                 id: team.id,
-    //                 avaliacoes: team.avaliationsQuantity,
-    //                 equipe: team.name,
-    //                 media: team.average.toFixed(1),
-    //                 projeto: team.project,
-    //                 turma: team.classRoom
-    //             } as IRow);
-    //         });
-    //         setRows(newRows);
-    //     }
-    // }, [teams])
+    useEffect(() => {
+        const newRows: IRow[] = event!.teams.map(team => (
+            {
+                id: team.id,
+                equipe: team.name,
+                projeto: team.project,
+                turma: team.classroom,
+                avaliacoes: team.avaliationsQuantity,
+                media: team.average.toFixed(2)
+            }
+        ));
+        setRows(newRows);
+    }, []);
 
     if (!authenticated) {
         return <Navigate replace to="/" />
     }
 
-    return <h1>Hello World!</h1>;
-
     return (
         <div className="event--container">
-            {ratePopUp && <RatePopUp team={team} setPopUp={setRatePopUp} />}
+            {/* {team &&
+                <RatePopUp
+                    team={team}
+                    setTeam={setTeam}
+                />
+            } */}
+
             <Navbar />
+
             <div className="event--info--container">
                 <h1>Clique na equipe para adicionar avaliação.</h1>
+
                 <div className="event--tab--card">
                     <DataGrid
                         sx={{
@@ -127,12 +121,10 @@ const Event = () => {
                         pageSize={100}
                         rowsPerPageOptions={[100]}
                         onRowClick={(props) => {
-                            setRatePopUp(true);
                             setTeam({
                                 id: Number(props.id),
                                 name: props.row.equipe
                             });
-                            // console.log(props);
                         }}
                     />
                 </div>
