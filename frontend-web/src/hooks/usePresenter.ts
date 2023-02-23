@@ -1,4 +1,4 @@
-import { IEvent, IParticipation, IUserCredentials } from "common/@Interfaces";
+import { IAvaliation, IEvent, IParticipation, IUserCredentials } from "common/@Interfaces";
 import { useAxios } from "hooks/useAxios";
 
 export function usePresenter() {
@@ -27,6 +27,12 @@ export function usePresenter() {
         },
         findEvent: async (eventId: number) => {
             return (await axios.get<IEvent>(`/events/${eventId}`)).data;
+        },
+        addAvaliationToTeam: async (userId: number, teamId: number, value: number) => {
+            const res = await axios.put<IAvaliation>('/avaliations', {
+                userId, teamId, value
+            });
+            return res.data;
         }
     }
 }

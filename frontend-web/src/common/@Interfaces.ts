@@ -41,3 +41,9 @@ export interface Team {
     average: number;
     avaliationsQuantity: number;
 }
+
+export interface IAvaliation {
+    userId: number;
+    teamId: number;
+    value: number;
+}
