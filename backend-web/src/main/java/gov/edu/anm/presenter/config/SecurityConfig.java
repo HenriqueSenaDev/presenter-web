@@ -30,7 +30,7 @@ public class SecurityConfig {
             .csrf().disable()
             .headers().frameOptions().sameOrigin().and()
             .authorizeHttpRequests()
-            .antMatchers("/**/auth/**").permitAll()
+            .antMatchers("/**/auth/**", "/**/swagger/**").permitAll()
             .antMatchers("/api/**").hasRole("ADMIN")
             .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
