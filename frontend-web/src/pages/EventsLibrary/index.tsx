@@ -4,9 +4,9 @@ import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
 import Navbar from "../../components/Navbar";
-import EventCard from "./EventCard";
-import AddEventPopup from "./AddEventPopup";
-import RemoveEventPopUp from "./RemoveEventPopUp";
+import EventCard from "./components/EventCard";
+import AddEventPopup from "./components/AddEventPopup";
+import RemoveEventPopUp from "./components/RemoveEventPopUp";
 import "./styles.css";
 
 const EventsLibrary = () => {

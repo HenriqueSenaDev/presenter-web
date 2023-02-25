@@ -4,7 +4,7 @@ import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Navbar from "components/Navbar";
-import RatePopUp from "./RatePopUp";
+import RatePopUp from "./components/RatePopUp";
 import "./styles.css";
 
 const columns: GridColDef[] = [
