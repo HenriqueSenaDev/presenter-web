@@ -1,4 +1,5 @@
-import { IAvaliation, IEvent, IParticipation, IUserCredentials } from "common/@Interfaces";
+import { IAvaliation, IEvent, IParticipation } from "common/@types/presenter.types";
+import { IUserCredentials } from "common/@types/profile.types";
 import { useAxios } from "hooks/useAxios";
 
 export function usePresenter() {

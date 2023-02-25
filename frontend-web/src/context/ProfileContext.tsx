@@ -1,6 +1,6 @@
+import { IJWT, IUserCredentials, IUserProfile } from 'common/@types/profile.types';
 import React, { createContext, useEffect, useState } from 'react';
 import { usePresenter } from 'hooks/usePresenter';
-import { IJWT, IUserCredentials, IUserProfile } from 'common/@Interfaces';
 
 interface IProfileContext {
    authenticated: boolean, setAuthenticated: Function,

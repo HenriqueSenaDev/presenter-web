@@ -1,4 +1,4 @@
-import { IEvent, IParticipation } from "common/@Interfaces";
+import { IEvent, IParticipation } from "common/@types/presenter.types";
 import { createContext, useState, useContext } from "react"
 import { usePresenter } from "hooks/usePresenter";
 import { ProfileContext } from "context/ProfileContext";

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IJWT } from 'common/@Interfaces';
+import { IJWT } from 'common/@types/profile.types';
 import { ProfileContext } from 'context/ProfileContext';
 import { useContext } from 'react';
 
