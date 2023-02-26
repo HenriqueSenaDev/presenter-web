@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventInputDto;
 import gov.edu.anm.presenter.api.participation.Participation;
 import gov.edu.anm.presenter.api.team.Team;
 import lombok.AllArgsConstructor;
@@ -39,11 +39,11 @@ public class Event {
     @EqualsAndHashCode.Exclude
     private Set<Participation> participations = new HashSet<>();
 
-    public Event(EventCreateDto eventCreateDto) {
-        this.name = eventCreateDto.getName();
-        this.joinCode = eventCreateDto.getJoinCode();
-        this.jurorCode = eventCreateDto.getJurorCode();
-        this.description = eventCreateDto.getDescription();
+    public Event(EventInputDto eventInputDto) {
+        this.name = eventInputDto.getName();
+        this.joinCode = eventInputDto.getJoinCode();
+        this.jurorCode = eventInputDto.getJurorCode();
+        this.description = eventInputDto.getDescription();
     }
 
     public void putTeam(Team team) {

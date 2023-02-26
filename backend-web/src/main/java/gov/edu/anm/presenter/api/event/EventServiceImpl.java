@@ -1,10 +1,10 @@
 package gov.edu.anm.presenter.api.event;
 
-import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventInputDto;
 import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
-import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.participation.dtos.EventParticipationOutputDto;
 import gov.edu.anm.presenter.api.team.Team;
-import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamInputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,58 +27,49 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Event findEventByJoinCode(String code) {
-		return eventRepository.findByJoinCode(code)
+	public EventOutputDto findEventByJoinCode(String code) {
+		Event event = eventRepository.findByJoinCode(code)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+		return new EventOutputDto(event);
 	}
 
 	@Override
-	public List<Event> findAllEvents() {
-		return eventRepository.findAll();
+	public List<EventOutputDto> findAllEvents() {
+		return eventRepository.findAll().stream().map(EventOutputDto::new).toList();
 	}
 
 	@Override
-	public List<Participation> findEventParticipations(Long id) {
+	public List<EventParticipationOutputDto> findEventParticipations(Long id) {
 		Event evt = eventRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
-		return List.copyOf(evt.getParticipations());
+		return evt.getParticipations().stream().map(EventParticipationOutputDto::new).toList();
 	}
 
 	@Override
-	public Event saveEvent(EventCreateDto eventCreateDto) {
-		return eventRepository.save(new Event(eventCreateDto));
+	public Event saveEvent(EventInputDto eventInputDto) {
+		return eventRepository.save(new Event(eventInputDto));
 	}
 
 	@Override
-	public Event createTeamInEvent(Long eventId, TeamCreateDto teamCreateDto) {
+	public EventOutputDto createTeamInEvent(Long eventId, TeamInputDto teamInputDto) {
 		Event event = eventRepository.findById(eventId)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
 
-		Team team = new Team(teamCreateDto);
+		Team team = new Team(teamInputDto);
 		team.setEvent(event);
 		event.putTeam(team);
-		return eventRepository.save(event);
+
+		return new EventOutputDto(eventRepository.save(event));
 	}
 
 	@Override
-	public Event updateEvent(Event event, Long id) {
-		Event evt = eventRepository.findById(id)
+	public Event updateEvent(EventInputDto eventInputDto, Long id) {
+		eventRepository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
 
-		if (event.getJoinCode() != null) {
-			evt.setJoinCode(event.getJoinCode());
-		}
-		if (event.getName() != null) {
-			evt.setName(event.getName());
-		}
-		if (event.getJurorCode() != null) {
-			evt.setJurorCode(event.getJurorCode());
-		}
-		if (event.getDescription() != null) {
-			evt.setDescription(event.getDescription());
-		}
-
-		return eventRepository.saveAndFlush(evt);
+		Event eventToUpdate = new Event(eventInputDto);
+		eventToUpdate.setId(id);
+		return eventRepository.saveAndFlush(eventToUpdate);
 	}
 
 	@Override

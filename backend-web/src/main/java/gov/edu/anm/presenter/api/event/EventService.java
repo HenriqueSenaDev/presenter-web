@@ -1,9 +1,9 @@
 package gov.edu.anm.presenter.api.event;
 
-import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventInputDto;
 import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
-import gov.edu.anm.presenter.api.participation.Participation;
-import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.participation.dtos.EventParticipationOutputDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamInputDto;
 
 import java.util.List;
 
@@ -11,17 +11,17 @@ public interface EventService {
 
     EventOutputDto findEventById(Long id);
 
-    Event findEventByJoinCode(String code);
+    EventOutputDto findEventByJoinCode(String code);
 
-    List<Event> findAllEvents();
+    List<EventOutputDto> findAllEvents();
 
-    List<Participation> findEventParticipations(Long id);
+    List<EventParticipationOutputDto> findEventParticipations(Long id);
     
-    Event saveEvent(EventCreateDto event);
+    Event saveEvent(EventInputDto event);
 
-    Event updateEvent(Event event, Long id);
+    Event updateEvent(EventInputDto event, Long id);
 
-    Event createTeamInEvent(Long eventId, TeamCreateDto team);
+    EventOutputDto createTeamInEvent(Long eventId, TeamInputDto team);
 
     void deleteEvent(Long id);
 

@@ -1,9 +1,9 @@
 package gov.edu.anm.presenter.api.event;
 
-import gov.edu.anm.presenter.api.event.dtos.EventCreateDto;
+import gov.edu.anm.presenter.api.event.dtos.EventInputDto;
 import gov.edu.anm.presenter.api.event.dtos.EventOutputDto;
-import gov.edu.anm.presenter.api.participation.Participation;
-import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.participation.dtos.EventParticipationOutputDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamInputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,40 +24,40 @@ public class EventController {
     }
 
     @GetMapping(value = "/code/{code}")
-    public ResponseEntity<Event> findByJoinCode(@PathVariable String code) {
+    public ResponseEntity<EventOutputDto> findByJoinCode(@PathVariable String code) {
         return ResponseEntity.ok().body(eventService.findEventByJoinCode(code));
     }
 
     @GetMapping
-    public ResponseEntity<List<Event>> findAllEvents() {
+    public ResponseEntity<List<EventOutputDto>> findAllEvents() {
         return ResponseEntity.ok().body(eventService.findAllEvents());
     }
 
     @GetMapping(value = "/participations/{id}")
-    public ResponseEntity<List<Participation>> findEventParticipations(@PathVariable Long id) {
+    public ResponseEntity<List<EventParticipationOutputDto>> findEventParticipations(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventParticipations(id));
     }
     
     @PostMapping
-    public ResponseEntity<Event> saveEvent(@RequestBody EventCreateDto event) {
+    public ResponseEntity<Event> saveEvent(@RequestBody EventInputDto event) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
 
     @PostMapping(value = "/{eventId}/teams")
-    public ResponseEntity<Event> createTeamInEvent(@RequestBody TeamCreateDto team, @PathVariable Long eventId) {
+    public ResponseEntity<EventOutputDto> createTeamInEvent(@RequestBody TeamInputDto team, @PathVariable Long eventId) {
         return ResponseEntity.ok().body(eventService.createTeamInEvent(eventId, team));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event, @PathVariable Long id) {
-        return ResponseEntity.ok().body(eventService.updateEvent(event, id));
+    public ResponseEntity<Event> updateEvent(@RequestBody EventInputDto eventInputDto, @PathVariable Long id) {
+        return ResponseEntity.ok().body(eventService.updateEvent(eventInputDto, id));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
-        return ResponseEntity.ok("The Event has been deleted.");
+        return ResponseEntity.noContent().build();
     }
 
 }
