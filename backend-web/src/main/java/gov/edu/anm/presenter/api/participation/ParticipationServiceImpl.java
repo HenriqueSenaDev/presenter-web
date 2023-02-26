@@ -6,7 +6,7 @@ import gov.edu.anm.presenter.api.event.Event;
 import gov.edu.anm.presenter.api.event.EventRepository;
 import gov.edu.anm.presenter.api.event.EventRole;
 import gov.edu.anm.presenter.api.participation.dtos.AddJurorRequestDto;
-import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
+import gov.edu.anm.presenter.api.participation.dtos.UserParticipationOutputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final ParticipationRepository participationRepository;
 
     @Override
-    public ParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto) {
+    public UserParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto) {
         AppUser user = appUserRepository.findById(addJurorRequestDto.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         Event event = eventRepository.findByJoinCode(addJurorRequestDto.getJoinCode())
@@ -32,7 +32,7 @@ public class ParticipationServiceImpl implements ParticipationService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event juror code does not match");
 
         ParticipationPK id = new ParticipationPK(event, user);
-        return new ParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.JUROR)));
+        return new UserParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.JUROR)));
     }
 
     @Override
