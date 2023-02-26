@@ -1,7 +1,6 @@
 package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserInputDto;
@@ -55,25 +54,25 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserOutputDto saveUser(AppUserInputDto appUserInputDto) {
+    public AppUser saveUser(AppUserInputDto appUserInputDto) {
         appUserRepository.findByUsername(appUserInputDto.getUsername())
             .ifPresent(user -> {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username " + user.getUsername() + " is already in use.");
             });
 
         appUserInputDto.setPassword(passwordEncoder.encode(appUserInputDto.getPassword()));
-        return new AppUserOutputDto(appUserRepository.save(new AppUser(appUserInputDto)));
+        return appUserRepository.save(new AppUser(appUserInputDto));
     }
 
     @Override
-    public AppUserOutputDto updateUser(AppUserInputDto appUserInputDto, Long id) {
+    public AppUser updateUser(AppUserInputDto appUserInputDto, Long id) {
         appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         appUserInputDto.setPassword(passwordEncoder.encode(appUserInputDto.getPassword()));
 
         AppUser userToUpdate = new AppUser(appUserInputDto);
         userToUpdate.setId(id);
-        return new AppUserOutputDto(appUserRepository.saveAndFlush(userToUpdate));
+        return appUserRepository.saveAndFlush(userToUpdate);
     }
 
     @Override

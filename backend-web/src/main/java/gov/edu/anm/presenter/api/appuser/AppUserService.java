@@ -17,9 +17,9 @@ public interface AppUserService {
 
     List<ParticipationOutputDto> findUserParticipations(Long id);
 
-    AppUserOutputDto saveUser(AppUserInputDto appUser);
+    AppUser saveUser(AppUserInputDto appUser);
 
-    AppUserOutputDto updateUser(AppUserInputDto appUser, Long id);
+    AppUser updateUser(AppUserInputDto appUser, Long id);
 
     void deleteUser(Long id);
 
