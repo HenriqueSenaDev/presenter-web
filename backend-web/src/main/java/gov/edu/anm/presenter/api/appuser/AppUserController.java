@@ -6,7 +6,7 @@ import java.util.List;
 
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserInputDto;
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
-import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
+import gov.edu.anm.presenter.api.participation.dtos.UserParticipationOutputDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,18 +42,18 @@ public class AppUserController {
 	}
 
 	@GetMapping(value = "/participations/{id}")
-	public ResponseEntity<List<ParticipationOutputDto>> findUserParticipations(@PathVariable Long id) {
+	public ResponseEntity<List<UserParticipationOutputDto>> findUserParticipations(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserParticipations(id));
 	}
 
 	@PostMapping
-	public ResponseEntity<?> saveUser(@RequestBody AppUserInputDto appUserInputDto) {
+	public ResponseEntity<AppUser> saveUser(@RequestBody AppUserInputDto appUserInputDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").toUriString());
 		return ResponseEntity.created(uri).body(appUserService.saveUser(appUserInputDto));
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<AppUserOutputDto> updateUser(@RequestBody AppUserInputDto appUserInputDto, @PathVariable Long id) {
+	public ResponseEntity<AppUser> updateUser(@RequestBody AppUserInputDto appUserInputDto, @PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.updateUser(appUserInputDto, id));
 	}
 

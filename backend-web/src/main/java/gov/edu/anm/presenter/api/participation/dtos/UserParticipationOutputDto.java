@@ -6,11 +6,11 @@ import gov.edu.anm.presenter.api.participation.Participation;
 import lombok.Data;
 
 @Data
-public class ParticipationOutputDto {
+public class UserParticipationOutputDto {
     private EventParticipationDto event;
     private EventRole eventRole;
 
-    public ParticipationOutputDto(Participation participation) {
+    public UserParticipationOutputDto(Participation participation) {
         this.event = new EventParticipationDto(participation.getId().getEvent());
         this.eventRole = participation.getEventRole();
     }
