@@ -1,8 +1,10 @@
 package gov.edu.anm.presenter.api.appuser;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserInputDto;
 import gov.edu.anm.presenter.api.appuser.dtos.AppUserOutputDto;
 import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 import gov.edu.anm.presenter.auth.JwtService;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +41,6 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserOutputDto findUserByToken(String token) {
-        final String username = jwtService.extractUsername(token);
-        AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-        return new AppUserOutputDto(appUser);
-    }
-
-    @Override
     public List<AppUserOutputDto> findAllUsers() {
         return appUserRepository.findAll().stream()
                 .map(AppUserOutputDto::new)
@@ -59,27 +55,25 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public AppUserOutputDto saveUser(AppUser appUser) {
-        AppUser existingUser = appUserRepository.findByUsername(appUser.getUsername()).orElse(null);
-        if (existingUser != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "The username " + appUser.getUsername() + " is already in use.");
-        }
+    public AppUserOutputDto saveUser(AppUserInputDto appUserInputDto) {
+        appUserRepository.findByUsername(appUserInputDto.getUsername())
+            .ifPresent(user -> {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username " + user.getUsername() + " is already in use.");
+            });
 
-        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        return new AppUserOutputDto(appUserRepository.save(appUser));
+        appUserInputDto.setPassword(passwordEncoder.encode(appUserInputDto.getPassword()));
+        return new AppUserOutputDto(appUserRepository.save(new AppUser(appUserInputDto)));
     }
 
     @Override
-    public AppUserOutputDto updateUser(AppUser appUser, Long id) {
-        AppUser user = appUserRepository.findById(id).orElseThrow();
-        if (appUser.getUsername() != null) {
-            user.setUsername(appUser.getUsername());
-        }
-        if (appUser.getPassword() != null) {
-            user.setPassword(appUser.getPassword());
-        }
-        return new AppUserOutputDto(appUserRepository.saveAndFlush(user));
+    public AppUserOutputDto updateUser(AppUserInputDto appUserInputDto, Long id) {
+        appUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        appUserInputDto.setPassword(passwordEncoder.encode(appUserInputDto.getPassword()));
+
+        AppUser userToUpdate = new AppUser(appUserInputDto);
+        userToUpdate.setId(id);
+        return new AppUserOutputDto(appUserRepository.saveAndFlush(userToUpdate));
     }
 
     @Override

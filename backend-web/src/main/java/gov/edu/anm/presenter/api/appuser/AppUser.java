@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import gov.edu.anm.presenter.api.appuser.dtos.AppUserInputDto;
 import gov.edu.anm.presenter.api.avaliation.Avaliation;
 import gov.edu.anm.presenter.api.participation.Participation;
 import lombok.*;
@@ -46,6 +47,12 @@ public class AppUser implements UserDetails {
     /* UserDetails username/password gettters and setters
         will be set up by lombok because they have same
         name in AppUser. */
+
+    public AppUser(AppUserInputDto appUserInputDto) {
+        this.username = appUserInputDto.getUsername();
+        this.password = appUserInputDto.getPassword();
+        this.role = appUserInputDto.getRole();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
