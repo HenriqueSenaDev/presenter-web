@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TeamCreateDto {
+public class TeamInputDto {
     private String name;
     private String project;
     private String classroom;

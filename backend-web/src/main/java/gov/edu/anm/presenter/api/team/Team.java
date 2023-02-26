@@ -6,10 +6,11 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gov.edu.anm.presenter.api.team.dtos.TeamCreateDto;
+import gov.edu.anm.presenter.api.team.dtos.TeamInputDto;
 import gov.edu.anm.presenter.api.avaliation.Avaliation;
 
 import gov.edu.anm.presenter.api.event.Event;
+import gov.edu.anm.presenter.api.team.dtos.TeamUpdateDto;
 import lombok.*;
 
 @Entity
@@ -42,12 +43,20 @@ public class Team {
     @EqualsAndHashCode.Exclude
     private Set<Avaliation> avaliations = new HashSet<>();
 
-    public Team(TeamCreateDto teamCreateDto) {
-        this.name = teamCreateDto.getName();
-        this.project = teamCreateDto.getProject();
-        this.classroom = teamCreateDto.getClassroom();
-        this.members = teamCreateDto.getMembers();
+    public Team(TeamInputDto teamInputDto) {
+        this.name = teamInputDto.getName();
+        this.project = teamInputDto.getProject();
+        this.classroom = teamInputDto.getClassroom();
+        this.members = teamInputDto.getMembers();
         this.presented = false;
+    }
+
+    public Team(TeamUpdateDto teamUpdateDto) {
+        this.name = teamUpdateDto.getName();
+        this.project = teamUpdateDto.getProject();
+        this.classroom = teamUpdateDto.getClassroom();
+        this.presented = teamUpdateDto.getPresented();
+        this.members = teamUpdateDto.getMembers();
     }
 
     public Double getAverage() {
