@@ -2,6 +2,7 @@ package gov.edu.anm.presenter.api.avaliation;
 
 import gov.edu.anm.presenter.api.avaliation.dtos.AddAvaliationRequestDto;
 import gov.edu.anm.presenter.api.avaliation.dtos.AvaliationOutputDto;
+import gov.edu.anm.presenter.api.avaliation.dtos.TeamAvaliationOutputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AvaliationController {
     }
 
     @PutMapping
-    public ResponseEntity<AvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequestDto addAvaliationRequestDto) {
+    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequestDto addAvaliationRequestDto) {
         return ResponseEntity.ok(avaliationService.addAvaliationToTeam(addAvaliationRequestDto));
     }
 
