@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import gov.edu.anm.presenter.api.avaliation.dtos.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.api.team.dtos.TeamOutputDto;
 import gov.edu.anm.presenter.api.team.dtos.TeamUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import gov.edu.anm.presenter.api.avaliation.Avaliation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,10 +32,10 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<Avaliation> findTeamAvaliations(Long id) {
+    public List<TeamAvaliationOutputDto> findTeamAvaliations(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-        return List.copyOf(team.getAvaliations());
+        return team.getAvaliations().stream().map(TeamAvaliationOutputDto::new).toList();
     }
 
     @Override
