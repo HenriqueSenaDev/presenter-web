@@ -6,11 +6,10 @@ import gov.edu.anm.presenter.api.participation.dtos.EventParticipationOutputDto;
 import gov.edu.anm.presenter.api.team.Team;
 import gov.edu.anm.presenter.api.team.dtos.TeamInputDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -22,14 +21,14 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public EventOutputDto findEventById(Long id) {
 		Event event = eventRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 		return new EventOutputDto(event);
 	}
 
 	@Override
 	public EventOutputDto findEventByJoinCode(String code) {
 		Event event = eventRepository.findByJoinCode(code)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 		return new EventOutputDto(event);
 	}
 
@@ -41,7 +40,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public List<EventParticipationOutputDto> findEventParticipations(Long id) {
 		Event evt = eventRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 		return evt.getParticipations().stream().map(EventParticipationOutputDto::new).toList();
 	}
 
@@ -53,7 +52,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public EventOutputDto createTeamInEvent(Long eventId, TeamInputDto teamInputDto) {
 		Event event = eventRepository.findById(eventId)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
 		Team team = new Team(teamInputDto);
 		team.setEvent(event);
@@ -65,7 +64,7 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Event updateEvent(EventInputDto eventInputDto, Long id) {
 		eventRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
 		Event eventToUpdate = new Event(eventInputDto);
 		eventToUpdate.setId(id);

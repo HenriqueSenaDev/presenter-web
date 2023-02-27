@@ -11,12 +11,14 @@ import gov.edu.anm.presenter.api.participation.ParticipationPK;
 import gov.edu.anm.presenter.api.participation.ParticipationRepository;
 import gov.edu.anm.presenter.api.team.Team;
 import gov.edu.anm.presenter.api.team.TeamRepository;
+import gov.edu.anm.presenter.exceptions.UnauthorizedRoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -31,12 +33,12 @@ public class AvaliationServiceImpl implements AvaliationService {
     @Override
     public AvaliationOutputDto findById(Long userId, Long teamId) {
         AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
         Avaliation avaliation = avaliationRepository.findById(new AvaliationPK(user, team))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Avaliation not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Avaliation not found"));
         return new AvaliationOutputDto(avaliation);
     }
 
@@ -48,14 +50,14 @@ public class AvaliationServiceImpl implements AvaliationService {
     @Override
     public TeamAvaliationOutputDto addAvaliationToTeam(AddAvaliationRequestDto addAvaliationRequestDto) {
         AppUser user = appUserRepository.findById(addAvaliationRequestDto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(addAvaliationRequestDto.getTeamId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
         Participation part = participationRepository.findById(new ParticipationPK(team.getEvent(), user))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Participation not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Participation not found"));
         if (part.getEventRole().equals(EventRole.SPECTATOR))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not an event juror");
+            throw new UnauthorizedRoleException("Not an event juror");
 
         AvaliationPK id = new AvaliationPK(user, team);
         return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, addAvaliationRequestDto.getValue())));
@@ -64,9 +66,9 @@ public class AvaliationServiceImpl implements AvaliationService {
     @Override
     public void deleteAvaliation(Long userId, Long teamId) {
         AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
         AvaliationPK id = new AvaliationPK(user, team);
         avaliationRepository.deleteById(id);

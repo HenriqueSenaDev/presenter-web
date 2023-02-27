@@ -9,11 +9,14 @@ import gov.edu.anm.presenter.api.participation.dtos.AddJurorRequestDto;
 import gov.edu.anm.presenter.api.participation.dtos.AddSpectatorRequestDto;
 import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.participation.dtos.UserParticipationOutputDto;
+import gov.edu.anm.presenter.exceptions.UnmatchedCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -26,24 +29,24 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public ParticipationOutputDto findById(Long userId, Long eventId) {
         AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
         Participation participation = participationRepository.findById(new ParticipationPK(event, user))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Participation not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Participation not found"));
         return new ParticipationOutputDto(participation);
     }
 
     @Override
     public UserParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto) {
         AppUser user = appUserRepository.findById(addJurorRequestDto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event event = eventRepository.findByJoinCode(addJurorRequestDto.getJoinCode())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
         if (!event.getJurorCode().equals(addJurorRequestDto.getJurorCode()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event juror code does not match");
+            throw new UnmatchedCodeException("Event juror code does not match");
 
         ParticipationPK id = new ParticipationPK(event, user);
         return new UserParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.JUROR)));
@@ -52,9 +55,9 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public UserParticipationOutputDto addSpectatorParticipation(AddSpectatorRequestDto addSpectatorRequestDto) {
         AppUser user = appUserRepository.findById(addSpectatorRequestDto.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event event = eventRepository.findByJoinCode(addSpectatorRequestDto.getJoinCode())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
         ParticipationPK id = new ParticipationPK(event, user);
         return new UserParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.SPECTATOR)));
@@ -63,9 +66,9 @@ public class ParticipationServiceImpl implements ParticipationService {
     @Override
     public void removeParticipation(Long userId, Long eventId) {
         AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
         ParticipationPK id = new ParticipationPK(event, user);
         participationRepository.deleteById(id);
