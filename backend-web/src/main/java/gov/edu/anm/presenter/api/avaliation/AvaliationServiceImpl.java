@@ -5,6 +5,10 @@ import gov.edu.anm.presenter.api.appuser.AppUserRepository;
 import gov.edu.anm.presenter.api.avaliation.dtos.AddAvaliationRequestDto;
 import gov.edu.anm.presenter.api.avaliation.dtos.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.avaliation.dtos.TeamAvaliationOutputDto;
+import gov.edu.anm.presenter.api.event.EventRole;
+import gov.edu.anm.presenter.api.participation.Participation;
+import gov.edu.anm.presenter.api.participation.ParticipationPK;
+import gov.edu.anm.presenter.api.participation.ParticipationRepository;
 import gov.edu.anm.presenter.api.team.Team;
 import gov.edu.anm.presenter.api.team.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ public class AvaliationServiceImpl implements AvaliationService {
     private final AppUserRepository appUserRepository;
     private final TeamRepository teamRepository;
     private final AvaliationRepository avaliationRepository;
+    private final ParticipationRepository participationRepository;
 
     @Override
     public AvaliationOutputDto findById(Long userId, Long teamId) {
@@ -46,6 +51,11 @@ public class AvaliationServiceImpl implements AvaliationService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
         Team team = teamRepository.findById(addAvaliationRequestDto.getTeamId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Team not found"));
+
+        Participation part = participationRepository.findById(new ParticipationPK(team.getEvent(), user))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Participation not found"));
+        if (part.getEventRole().equals(EventRole.SPECTATOR))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not an event juror");
 
         AvaliationPK id = new AvaliationPK(user, team);
         return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, addAvaliationRequestDto.getValue())));
