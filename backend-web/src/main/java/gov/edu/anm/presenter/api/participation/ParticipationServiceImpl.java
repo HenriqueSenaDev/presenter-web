@@ -6,6 +6,8 @@ import gov.edu.anm.presenter.api.event.Event;
 import gov.edu.anm.presenter.api.event.EventRepository;
 import gov.edu.anm.presenter.api.event.EventRole;
 import gov.edu.anm.presenter.api.participation.dtos.AddJurorRequestDto;
+import gov.edu.anm.presenter.api.participation.dtos.AddSpectatorRequestDto;
+import gov.edu.anm.presenter.api.participation.dtos.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.participation.dtos.UserParticipationOutputDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,18 @@ public class ParticipationServiceImpl implements ParticipationService {
     private final ParticipationRepository participationRepository;
 
     @Override
+    public ParticipationOutputDto findById(Long userId, Long eventId) {
+        AppUser user = appUserRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+
+        Participation participation = participationRepository.findById(new ParticipationPK(event, user))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Participation not found"));
+        return new ParticipationOutputDto(participation);
+    }
+
+    @Override
     public UserParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto) {
         AppUser user = appUserRepository.findById(addJurorRequestDto.getUserId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
@@ -33,6 +47,17 @@ public class ParticipationServiceImpl implements ParticipationService {
 
         ParticipationPK id = new ParticipationPK(event, user);
         return new UserParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.JUROR)));
+    }
+
+    @Override
+    public UserParticipationOutputDto addSpectatorParticipation(AddSpectatorRequestDto addSpectatorRequestDto) {
+        AppUser user = appUserRepository.findById(addSpectatorRequestDto.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        Event event = eventRepository.findByJoinCode(addSpectatorRequestDto.getJoinCode())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Event not found"));
+
+        ParticipationPK id = new ParticipationPK(event, user);
+        return new UserParticipationOutputDto(participationRepository.save(new Participation(id, EventRole.SPECTATOR)));
     }
 
     @Override
