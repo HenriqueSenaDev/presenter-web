@@ -3,6 +3,7 @@ package gov.edu.anm.presenter.domain.team;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamUpdateDto;
+import gov.edu.anm.presenter.domain.event.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,14 @@ public class TeamServiceImpl implements TeamService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         return team.getAvaliations().stream().map(TeamAvaliationOutputDto::new).toList();
     }
+
+    @Override
+    public Event findTeamEvent(Long id) {
+        Team team = teamRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Team not found"));
+        return team.getEvent();
+    }
+
 
     @Override
     public Team updateTeam(TeamUpdateDto teamUpdateDto, Long id) {
