@@ -14,7 +14,7 @@ import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/participations")
+@RequestMapping("/api/admin/participations")
 public class ParticipationController {
     private final ParticipationService participationService;
 

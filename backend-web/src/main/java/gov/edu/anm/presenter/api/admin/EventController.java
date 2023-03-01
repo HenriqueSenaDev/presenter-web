@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/events")
+@RequestMapping(value = "/api/admin/events")
 @RequiredArgsConstructor
 public class EventController {
     private final EventService eventService;
