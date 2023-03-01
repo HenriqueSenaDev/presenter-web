@@ -1,6 +1,6 @@
 package gov.edu.anm.presenter.api.admin;
 
-import gov.edu.anm.presenter.api.common.requests.participations.AddAvaliationRequest;
+import gov.edu.anm.presenter.api.common.requests.avaliations.AddAvaliationRequest;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.domain.avaliations.AvaliationService;

@@ -2,7 +2,7 @@ package gov.edu.anm.presenter.domain.avaliations;
 
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
-import gov.edu.anm.presenter.api.common.requests.participations.AddAvaliationRequest;
+import gov.edu.anm.presenter.api.common.requests.avaliations.AddAvaliationRequest;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.domain.event.EventRole;
