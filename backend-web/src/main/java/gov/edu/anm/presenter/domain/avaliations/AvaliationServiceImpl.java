@@ -2,7 +2,7 @@ package gov.edu.anm.presenter.domain.avaliations;
 
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
-import gov.edu.anm.presenter.api.common.requests.AddAvaliationRequestDto;
+import gov.edu.anm.presenter.api.common.requests.participations.AddAvaliationRequest;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.domain.event.EventRole;
@@ -46,10 +46,10 @@ public class AvaliationServiceImpl implements AvaliationService {
     }
 
     @Override
-    public TeamAvaliationOutputDto addAvaliationToTeam(AddAvaliationRequestDto addAvaliationRequestDto) {
-        AppUser user = appUserRepository.findById(addAvaliationRequestDto.getUserId())
+    public TeamAvaliationOutputDto addAvaliationToTeam(AddAvaliationRequest addAvaliationRequest) {
+        AppUser user = appUserRepository.findById(addAvaliationRequest.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Team team = teamRepository.findById(addAvaliationRequestDto.getTeamId())
+        Team team = teamRepository.findById(addAvaliationRequest.getTeamId())
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
         Participation part = participationRepository.findById(new ParticipationPK(team.getEvent(), user))
@@ -58,7 +58,7 @@ public class AvaliationServiceImpl implements AvaliationService {
             throw new UnauthorizedRoleException("Not an event juror");
 
         AvaliationPK id = new AvaliationPK(user, team);
-        return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, addAvaliationRequestDto.getValue())));
+        return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, addAvaliationRequest.getValue())));
     }
 
     @Override

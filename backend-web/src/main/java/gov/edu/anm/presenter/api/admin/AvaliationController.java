@@ -1,6 +1,6 @@
 package gov.edu.anm.presenter.api.admin;
 
-import gov.edu.anm.presenter.api.common.requests.AddAvaliationRequestDto;
+import gov.edu.anm.presenter.api.common.requests.participations.AddAvaliationRequest;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.domain.avaliations.AvaliationService;
@@ -27,8 +27,8 @@ public class AvaliationController {
     }
 
     @PutMapping
-    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequestDto addAvaliationRequestDto) {
-        return ResponseEntity.ok(avaliationService.addAvaliationToTeam(addAvaliationRequestDto));
+    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequest addAvaliationRequest) {
+        return ResponseEntity.ok(avaliationService.addAvaliationToTeam(addAvaliationRequest));
     }
 
     @DeleteMapping
