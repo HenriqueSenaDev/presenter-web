@@ -1,9 +1,9 @@
 package gov.edu.anm.presenter.core.auth;
 
-import gov.edu.anm.presenter.core.auth.requests.AuthRequestDto;
-import gov.edu.anm.presenter.core.auth.responses.AuthResponseDto;
-import gov.edu.anm.presenter.core.auth.requests.RefreshRequestDto;
-import gov.edu.anm.presenter.core.auth.responses.RefreshResponseDto;
+import gov.edu.anm.presenter.core.auth.requests.AuthRequest;
+import gov.edu.anm.presenter.core.auth.responses.AuthResponse;
+import gov.edu.anm.presenter.core.auth.requests.RefreshRequest;
+import gov.edu.anm.presenter.core.auth.responses.RefreshResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,15 +19,15 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthResponseDto> authenticate(
-            @RequestBody AuthRequestDto request
+    public ResponseEntity<AuthResponse> authenticate(
+            @RequestBody AuthRequest request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshResponseDto> refreshToken(
-            @RequestBody RefreshRequestDto request
+    public ResponseEntity<RefreshResponse> refreshToken(
+            @RequestBody RefreshRequest request
     ) {
         return ResponseEntity.ok(authenticationService.refresh(request));
     }

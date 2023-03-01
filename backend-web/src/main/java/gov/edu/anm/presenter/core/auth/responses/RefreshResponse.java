@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.core.auth.requests;
+package gov.edu.anm.presenter.core.auth.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequestDto {
-    private String username;
-    private String password;
+public class RefreshResponse {
+
+    private String access_token;
+    private String refresh_token;
+
 }

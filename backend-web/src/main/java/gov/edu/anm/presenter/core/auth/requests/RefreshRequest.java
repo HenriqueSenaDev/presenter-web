@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshRequestDto {
+public class RefreshRequest {
 
     private String refresh_token;
 

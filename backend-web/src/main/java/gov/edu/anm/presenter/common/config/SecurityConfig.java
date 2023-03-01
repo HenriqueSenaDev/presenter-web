@@ -1,6 +1,7 @@
 package gov.edu.anm.presenter.common.config;
 
 import gov.edu.anm.presenter.api.exceptionhandler.ExceptionHandlerFilter;
+import gov.edu.anm.presenter.core.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.annotation.Bean;
