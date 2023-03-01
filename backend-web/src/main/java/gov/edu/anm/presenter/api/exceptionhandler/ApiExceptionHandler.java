@@ -1,8 +1,8 @@
 package gov.edu.anm.presenter.api.exceptionhandler;
 
-import gov.edu.anm.presenter.exceptions.UnauthorizedRoleException;
-import gov.edu.anm.presenter.exceptions.UnavailableSubjectException;
-import gov.edu.anm.presenter.exceptions.UnmatchedCodeException;
+import gov.edu.anm.presenter.domain.exceptions.UnauthorizedRoleException;
+import gov.edu.anm.presenter.domain.exceptions.UnavailableSubjectException;
+import gov.edu.anm.presenter.domain.exceptions.UnmatchedCodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
