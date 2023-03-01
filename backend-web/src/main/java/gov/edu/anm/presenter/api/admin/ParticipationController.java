@@ -1,7 +1,7 @@
 package gov.edu.anm.presenter.api.admin;
 
-import gov.edu.anm.presenter.api.common.requests.AddJurorRequestDto;
-import gov.edu.anm.presenter.api.common.requests.AddSpectatorRequestDto;
+import gov.edu.anm.presenter.api.common.requests.participations.AddJurorParticipationRequest;
+import gov.edu.anm.presenter.api.common.requests.participations.AddSpectatorParticipationRequest;
 import gov.edu.anm.presenter.api.common.dtos.participation.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.domain.participation.ParticipationService;
@@ -24,15 +24,15 @@ public class ParticipationController {
     }
 
     @PostMapping("/juror")
-    public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@RequestBody AddJurorRequestDto addJurorRequestDto) {
+    public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@RequestBody AddJurorParticipationRequest addJurorParticipationRequest) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
-        return ResponseEntity.created(uri).body(participationService.addJurorParticipation(addJurorRequestDto));
+        return ResponseEntity.created(uri).body(participationService.addJurorParticipation(addJurorParticipationRequest));
     }
 
     @PostMapping("/spectator")
-    public ResponseEntity<UserParticipationOutputDto> addSpectatorParticipation(@RequestBody AddSpectatorRequestDto addSpectatorRequestDto) {
+    public ResponseEntity<UserParticipationOutputDto> addSpectatorParticipation(@RequestBody AddSpectatorParticipationRequest addSpectatorParticipationRequest) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
-        return ResponseEntity.created(uri).body(participationService.addSpectatorParticipation(addSpectatorRequestDto));
+        return ResponseEntity.created(uri).body(participationService.addSpectatorParticipation(addSpectatorParticipationRequest));
     }
 
     @DeleteMapping

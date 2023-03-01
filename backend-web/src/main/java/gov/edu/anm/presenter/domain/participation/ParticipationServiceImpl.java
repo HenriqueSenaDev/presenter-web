@@ -5,8 +5,8 @@ import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
 import gov.edu.anm.presenter.domain.event.Event;
 import gov.edu.anm.presenter.domain.event.EventRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
-import gov.edu.anm.presenter.api.common.requests.AddJurorRequestDto;
-import gov.edu.anm.presenter.api.common.requests.AddSpectatorRequestDto;
+import gov.edu.anm.presenter.api.common.requests.participations.AddJurorParticipationRequest;
+import gov.edu.anm.presenter.api.common.requests.participations.AddSpectatorParticipationRequest;
 import gov.edu.anm.presenter.api.common.dtos.participation.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.domain.exceptions.UnmatchedCodeException;
@@ -37,13 +37,13 @@ public class ParticipationServiceImpl implements ParticipationService {
     }
 
     @Override
-    public UserParticipationOutputDto addJurorParticipation(AddJurorRequestDto addJurorRequestDto) {
-        AppUser user = appUserRepository.findById(addJurorRequestDto.getUserId())
+    public UserParticipationOutputDto addJurorParticipation(AddJurorParticipationRequest addJurorParticipationRequest) {
+        AppUser user = appUserRepository.findById(addJurorParticipationRequest.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Event event = eventRepository.findByJoinCode(addJurorRequestDto.getJoinCode())
+        Event event = eventRepository.findByJoinCode(addJurorParticipationRequest.getJoinCode())
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
-        if (!event.getJurorCode().equals(addJurorRequestDto.getJurorCode()))
+        if (!event.getJurorCode().equals(addJurorParticipationRequest.getJurorCode()))
             throw new UnmatchedCodeException("Event juror code does not match");
 
         ParticipationPK id = new ParticipationPK(event, user);
@@ -51,10 +51,10 @@ public class ParticipationServiceImpl implements ParticipationService {
     }
 
     @Override
-    public UserParticipationOutputDto addSpectatorParticipation(AddSpectatorRequestDto addSpectatorRequestDto) {
-        AppUser user = appUserRepository.findById(addSpectatorRequestDto.getUserId())
+    public UserParticipationOutputDto addSpectatorParticipation(AddSpectatorParticipationRequest addSpectatorParticipationRequest) {
+        AppUser user = appUserRepository.findById(addSpectatorParticipationRequest.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Event event = eventRepository.findByJoinCode(addSpectatorRequestDto.getJoinCode())
+        Event event = eventRepository.findByJoinCode(addSpectatorParticipationRequest.getJoinCode())
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
         ParticipationPK id = new ParticipationPK(event, user);
