@@ -1,5 +1,6 @@
 package gov.edu.anm.presenter.api.exceptionhandler;
 
+import gov.edu.anm.presenter.domain.exceptions.OutOfEventException;
 import gov.edu.anm.presenter.domain.exceptions.UnauthorizedRoleException;
 import gov.edu.anm.presenter.domain.exceptions.UnavailableSubjectException;
 import gov.edu.anm.presenter.domain.exceptions.UnmatchedCodeException;
@@ -46,6 +47,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UnmatchedCodeException.class)
     public ResponseEntity<Object> handleUnmatchedCodeException(UnmatchedCodeException ex, WebRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        var errorMessage = new ResponseErrorMessage(status.value(), OffsetDateTime.now(), ex.getMessage());
+
+        return handleExceptionInternal(ex, errorMessage, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(OutOfEventException.class)
+    public ResponseEntity<Object> handleOutOfEventException(OutOfEventException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
         var errorMessage = new ResponseErrorMessage(status.value(), OffsetDateTime.now(), ex.getMessage());
 
         return handleExceptionInternal(ex, errorMessage, new HttpHeaders(), status, request);
