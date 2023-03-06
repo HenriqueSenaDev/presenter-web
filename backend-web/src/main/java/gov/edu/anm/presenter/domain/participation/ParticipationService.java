@@ -1,13 +1,14 @@
 package gov.edu.anm.presenter.domain.participation;
 
-import gov.edu.anm.presenter.api.common.requests.participations.AddJurorParticipationRequest;
-import gov.edu.anm.presenter.api.common.requests.participations.AddSpectatorParticipationRequest;
 import gov.edu.anm.presenter.api.common.dtos.participation.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
+import gov.edu.anm.presenter.domain.event.EventRole;
+
+import java.util.List;
 
 public interface ParticipationService {
     ParticipationOutputDto findById(Long userId, Long eventId);
-    UserParticipationOutputDto addJurorParticipation(AddJurorParticipationRequest addJurorParticipationRequest);
-    UserParticipationOutputDto addSpectatorParticipation(AddSpectatorParticipationRequest addSpectatorParticipationRequest);
+    UserParticipationOutputDto addParticipation(Long userId, Long eventId, EventRole role);
     void removeParticipation(Long userId, Long eventId);
+    List<ParticipationOutputDto> findAll();
 }

@@ -1,9 +1,8 @@
 package gov.edu.anm.presenter.api.admin;
 
-import gov.edu.anm.presenter.api.common.requests.participations.AddJurorParticipationRequest;
-import gov.edu.anm.presenter.api.common.requests.participations.AddSpectatorParticipationRequest;
 import gov.edu.anm.presenter.api.common.dtos.participation.ParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
+import gov.edu.anm.presenter.api.common.requests.participations.AddParticipationRequest;
 import gov.edu.anm.presenter.domain.participation.ParticipationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,16 +23,16 @@ public class ParticipationController {
         return ResponseEntity.ok(participationService.findById(userId, eventId));
     }
 
-    @PostMapping("/juror")
-    public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@RequestBody AddJurorParticipationRequest addJurorParticipationRequest) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
-        return ResponseEntity.created(uri).body(participationService.addJurorParticipation(addJurorParticipationRequest));
-    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ParticipationOutputDto>> findAll() {
+        return ResponseEntity.ok(participationService.findAll());
+    };
 
-    @PostMapping("/spectator")
-    public ResponseEntity<UserParticipationOutputDto> addSpectatorParticipation(@RequestBody AddSpectatorParticipationRequest addSpectatorParticipationRequest) {
+    @PutMapping
+    public ResponseEntity<UserParticipationOutputDto> addParticipation(@RequestBody AddParticipationRequest request) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
-        return ResponseEntity.created(uri).body(participationService.addSpectatorParticipation(addSpectatorParticipationRequest));
+        return ResponseEntity.created(uri)
+                .body(participationService.addParticipation(request.getUserId(), request.getEventId(), request.getRole()));
     }
 
     @DeleteMapping
