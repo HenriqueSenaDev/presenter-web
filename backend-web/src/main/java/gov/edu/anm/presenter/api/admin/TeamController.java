@@ -27,7 +27,7 @@ public class TeamController {
         return ResponseEntity.ok().body(teamService.findAll());
     }
 
-    @GetMapping(value = "/avaliations/{id}")
+    @GetMapping(value = "/{id}/avaliations")
     public ResponseEntity<List<TeamAvaliationOutputDto>> findTeamAvaliations(@PathVariable Long id) {
         return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
     }
