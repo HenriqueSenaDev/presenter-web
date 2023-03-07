@@ -1,17 +1,16 @@
 package gov.edu.anm.presenter.domain.avaliations;
 
-import gov.edu.anm.presenter.domain.appuser.AppUser;
-import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
-import gov.edu.anm.presenter.api.common.requests.avaliations.AddAvaliationRequest;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
+import gov.edu.anm.presenter.domain.appuser.AppUser;
+import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
+import gov.edu.anm.presenter.domain.exceptions.UnauthorizedRoleException;
 import gov.edu.anm.presenter.domain.participation.Participation;
 import gov.edu.anm.presenter.domain.participation.ParticipationPK;
 import gov.edu.anm.presenter.domain.participation.ParticipationRepository;
 import gov.edu.anm.presenter.domain.team.Team;
 import gov.edu.anm.presenter.domain.team.TeamRepository;
-import gov.edu.anm.presenter.domain.exceptions.UnauthorizedRoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,10 +45,10 @@ public class AvaliationServiceImpl implements AvaliationService {
     }
 
     @Override
-    public TeamAvaliationOutputDto addAvaliationToTeam(AddAvaliationRequest addAvaliationRequest) {
-        AppUser user = appUserRepository.findById(addAvaliationRequest.getUserId())
+    public TeamAvaliationOutputDto addAvaliationToTeam(Long userId, Long teamId, Double value) {
+        AppUser user = appUserRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Team team = teamRepository.findById(addAvaliationRequest.getTeamId())
+        Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
         Participation part = participationRepository.findById(new ParticipationPK(team.getEvent(), user))
@@ -58,7 +57,7 @@ public class AvaliationServiceImpl implements AvaliationService {
             throw new UnauthorizedRoleException("Not an event juror");
 
         AvaliationPK id = new AvaliationPK(user, team);
-        return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, addAvaliationRequest.getValue())));
+        return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, value)));
     }
 
     @Override

@@ -27,8 +27,8 @@ public class AvaliationController {
     }
 
     @PutMapping
-    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequest addAvaliationRequest) {
-        return ResponseEntity.ok(avaliationService.addAvaliationToTeam(addAvaliationRequest));
+    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequest request) {
+        return ResponseEntity.ok(avaliationService.addAvaliationToTeam(request.getUserId(), request.getTeamId(), request.getValue()));
     }
 
     @DeleteMapping

@@ -9,7 +9,7 @@ import java.util.List;
 public interface AvaliationService {
     AvaliationOutputDto findById(Long userId, Long teamId);
     List<AvaliationOutputDto> findAll();
-    TeamAvaliationOutputDto addAvaliationToTeam(AddAvaliationRequest addAvaliationRequest);
+    TeamAvaliationOutputDto addAvaliationToTeam(Long userId,Long teamId, Double value);
     void deleteAvaliation(Long userId, Long teamId);
 
 }
