@@ -1,8 +1,7 @@
 package gov.edu.anm.presenter.domain.team;
 
-import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.team.TeamOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamUpdateDto;
+import gov.edu.anm.presenter.domain.avaliations.Avaliation;
 import gov.edu.anm.presenter.domain.event.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,22 +17,21 @@ public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
 
     @Override
-    public TeamOutputDto findById(Long id) {
-        Team team = teamRepository.findById(id)
+    public Team findById(Long id) {
+        return teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
-        return new TeamOutputDto(team);
     }
 
     @Override
-    public List<TeamOutputDto> findAll() {
-        return teamRepository.findAll().stream().map(TeamOutputDto::new).toList();
+    public List<Team> findAll() {
+        return teamRepository.findAll();
     }
 
     @Override
-    public List<TeamAvaliationOutputDto> findTeamAvaliations(Long id) {
+    public List<Avaliation> findTeamAvaliations(Long id) {
         Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return team.getAvaliations().stream().map(TeamAvaliationOutputDto::new).toList();
+        return List.copyOf(team.getAvaliations());
     }
 
     @Override
@@ -43,15 +41,13 @@ public class TeamServiceImpl implements TeamService {
         return team.getEvent();
     }
 
-
     @Override
     public Team updateTeam(TeamUpdateDto teamUpdateDto, Long id) {
-        teamRepository.findById(id)
+        Team team = teamRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
-        Team teamToUpdate = new Team(teamUpdateDto);
-        teamToUpdate.setId(id);
-        return teamRepository.saveAndFlush(teamToUpdate);
+        team.update(teamUpdateDto);
+        return teamRepository.saveAndFlush(team);
     }
 
     @Override

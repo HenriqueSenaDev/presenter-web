@@ -1,8 +1,7 @@
-package gov.edu.anm.presenter.api.admin;
+package gov.edu.anm.presenter.api.controllers.admin;
 
-import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.team.TeamOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamUpdateDto;
+import gov.edu.anm.presenter.domain.avaliations.Avaliation;
 import gov.edu.anm.presenter.domain.team.Team;
 import gov.edu.anm.presenter.domain.team.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +17,17 @@ public class TeamController {
     private final TeamService teamService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<TeamOutputDto> findById(@PathVariable Long id) {
+    public ResponseEntity<Team> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(teamService.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<TeamOutputDto>> findAll() {
+    public ResponseEntity<List<Team>> findAll() {
         return ResponseEntity.ok().body(teamService.findAll());
     }
 
     @GetMapping(value = "/{id}/avaliations")
-    public ResponseEntity<List<TeamAvaliationOutputDto>> findTeamAvaliations(@PathVariable Long id) {
+    public ResponseEntity<List<Avaliation>> findTeamAvaliations(@PathVariable Long id) {
         return ResponseEntity.ok().body(teamService.findTeamAvaliations(id));
     }
 

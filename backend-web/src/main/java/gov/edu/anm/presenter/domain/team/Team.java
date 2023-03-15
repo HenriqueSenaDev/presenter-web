@@ -71,4 +71,12 @@ public class Team {
         return this.avaliations.size();
     }
 
+    public void update(TeamUpdateDto dto) {
+        this.name = dto.getName();
+        this.classroom = dto.getClassroom();
+        this.project = dto.getProject();
+        this.presented = dto.getPresented();
+        this.members = dto.getMembers();
+    }
+
 }
