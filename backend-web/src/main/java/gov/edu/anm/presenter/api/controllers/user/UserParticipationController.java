@@ -1,4 +1,4 @@
-package gov.edu.anm.presenter.api.user;
+package gov.edu.anm.presenter.api.controllers.user;
 
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.requests.participations.AddUserJurorParticipationRequest;
@@ -9,6 +9,7 @@ import gov.edu.anm.presenter.domain.event.Event;
 import gov.edu.anm.presenter.domain.event.EventRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
 import gov.edu.anm.presenter.domain.exceptions.UnmatchedCodeException;
+import gov.edu.anm.presenter.domain.participation.Participation;
 import gov.edu.anm.presenter.domain.participation.ParticipationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,8 @@ public class UserParticipationController {
         if (!request.getJurorCode().equals(event.getJurorCode()))
             throw new UnmatchedCodeException("Juror code doesn't match");
 
-        return ResponseEntity.ok(participationService.addParticipation(user.getId(), event.getId(), EventRole.JUROR));
+        Participation part = participationService.addParticipation(user.getId(), event.getId(), EventRole.JUROR);
+        return ResponseEntity.ok(new UserParticipationOutputDto(part));
     }
 
     @PutMapping("/spectator")
@@ -42,7 +44,8 @@ public class UserParticipationController {
         Event event = eventRepository.findByJoinCode(request.getJoinCode())
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
-        return ResponseEntity.ok(participationService.addParticipation(user.getId(), event.getId(), EventRole.SPECTATOR));
+        Participation part = participationService.addParticipation(user.getId(), event.getId(), EventRole.SPECTATOR);
+        return ResponseEntity.ok(new UserParticipationOutputDto(part));
     }
 
     @DeleteMapping("/{eventId}")

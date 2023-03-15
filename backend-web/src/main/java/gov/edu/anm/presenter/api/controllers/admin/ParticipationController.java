@@ -1,8 +1,7 @@
-package gov.edu.anm.presenter.api.admin;
+package gov.edu.anm.presenter.api.controllers.admin;
 
-import gov.edu.anm.presenter.api.common.dtos.participation.ParticipationOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.requests.participations.AddParticipationRequest;
+import gov.edu.anm.presenter.domain.participation.Participation;
 import gov.edu.anm.presenter.domain.participation.ParticipationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +18,17 @@ public class ParticipationController {
     private final ParticipationService participationService;
 
     @GetMapping()
-    public ResponseEntity<ParticipationOutputDto> findById(@RequestParam Long userId, @RequestParam Long eventId) {
+    public ResponseEntity<Participation> findById(@RequestParam Long userId, @RequestParam Long eventId) {
         return ResponseEntity.ok(participationService.findById(userId, eventId));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<ParticipationOutputDto>> findAll() {
+    public ResponseEntity<List<Participation>> findAll() {
         return ResponseEntity.ok(participationService.findAll());
     };
 
     @PutMapping
-    public ResponseEntity<UserParticipationOutputDto> addParticipation(@RequestBody AddParticipationRequest request) {
+    public ResponseEntity<Participation> addParticipation(@RequestBody AddParticipationRequest request) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
         return ResponseEntity.created(uri)
                 .body(participationService.addParticipation(request.getUserId(), request.getEventId(), request.getRole()));
