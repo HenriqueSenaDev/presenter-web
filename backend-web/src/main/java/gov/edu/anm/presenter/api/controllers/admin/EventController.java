@@ -1,11 +1,10 @@
-package gov.edu.anm.presenter.api.admin;
+package gov.edu.anm.presenter.api.controllers.admin;
 
 import gov.edu.anm.presenter.api.common.dtos.event.EventInputDto;
-import gov.edu.anm.presenter.api.common.dtos.event.EventOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.EventParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamInputDto;
 import gov.edu.anm.presenter.domain.event.Event;
 import gov.edu.anm.presenter.domain.event.EventService;
+import gov.edu.anm.presenter.domain.participation.Participation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,22 +20,22 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<EventOutputDto> findEventById(@PathVariable Long id) {
+    public ResponseEntity<Event> findEventById(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventById(id));
     }
 
     @GetMapping(value = "/code/{code}")
-    public ResponseEntity<EventOutputDto> findByJoinCode(@PathVariable String code) {
+    public ResponseEntity<Event> findByJoinCode(@PathVariable String code) {
         return ResponseEntity.ok().body(eventService.findEventByJoinCode(code));
     }
 
     @GetMapping
-    public ResponseEntity<List<EventOutputDto>> findAllEvents() {
+    public ResponseEntity<List<Event>> findAllEvents() {
         return ResponseEntity.ok().body(eventService.findAllEvents());
     }
 
     @GetMapping(value = "/participations/{id}")
-    public ResponseEntity<List<EventParticipationOutputDto>> findEventParticipations(@PathVariable Long id) {
+    public ResponseEntity<List<Participation>> findEventParticipations(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventParticipations(id));
     }
     
@@ -47,7 +46,7 @@ public class EventController {
     }
 
     @PostMapping(value = "/{eventId}/teams")
-    public ResponseEntity<EventOutputDto> createTeamInEvent(@RequestBody TeamInputDto team, @PathVariable Long eventId) {
+    public ResponseEntity<Event> createTeamInEvent(@RequestBody TeamInputDto team, @PathVariable Long eventId) {
         return ResponseEntity.ok().body(eventService.createTeamInEvent(eventId, team));
     }
 

@@ -1,10 +1,9 @@
 package gov.edu.anm.presenter.domain.event;
 
 import gov.edu.anm.presenter.api.common.dtos.event.EventInputDto;
-import gov.edu.anm.presenter.api.common.dtos.event.EventOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.EventParticipationOutputDto;
-import gov.edu.anm.presenter.domain.team.Team;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamInputDto;
+import gov.edu.anm.presenter.domain.participation.Participation;
+import gov.edu.anm.presenter.domain.team.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,29 +18,27 @@ public class EventServiceImpl implements EventService {
 	private final EventRepository eventRepository;
 
 	@Override
-	public EventOutputDto findEventById(Long id) {
-		Event event = eventRepository.findById(id)
+	public Event findEventById(Long id) {
+		return eventRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
-		return new EventOutputDto(event);
 	}
 
 	@Override
-	public EventOutputDto findEventByJoinCode(String code) {
-		Event event = eventRepository.findByJoinCode(code)
+	public Event findEventByJoinCode(String code) {
+		return eventRepository.findByJoinCode(code)
 				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
-		return new EventOutputDto(event);
 	}
 
 	@Override
-	public List<EventOutputDto> findAllEvents() {
-		return eventRepository.findAll().stream().map(EventOutputDto::new).toList();
+	public List<Event> findAllEvents() {
+		return eventRepository.findAll();
 	}
 
 	@Override
-	public List<EventParticipationOutputDto> findEventParticipations(Long id) {
+	public List<Participation> findEventParticipations(Long id) {
 		Event evt = eventRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
-		return evt.getParticipations().stream().map(EventParticipationOutputDto::new).toList();
+		return List.copyOf(evt.getParticipations());
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public EventOutputDto createTeamInEvent(Long eventId, TeamInputDto teamInputDto) {
+	public Event createTeamInEvent(Long eventId, TeamInputDto teamInputDto) {
 		Event event = eventRepository.findById(eventId)
 				.orElseThrow(() -> new EntityNotFoundException("Event not found"));
 
@@ -58,7 +55,7 @@ public class EventServiceImpl implements EventService {
 		team.setEvent(event);
 		event.putTeam(team);
 
-		return new EventOutputDto(eventRepository.save(event));
+		return eventRepository.save(event);
 	}
 
 	@Override
