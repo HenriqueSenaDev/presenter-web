@@ -1,7 +1,5 @@
 package gov.edu.anm.presenter.domain.avaliations;
 
-import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
@@ -28,24 +26,23 @@ public class AvaliationServiceImpl implements AvaliationService {
     private final ParticipationRepository participationRepository;
 
     @Override
-    public AvaliationOutputDto findById(Long userId, Long teamId) {
+    public Avaliation findById(Long userId, Long teamId) {
         AppUser user = appUserRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
-        Avaliation avaliation = avaliationRepository.findById(new AvaliationPK(user, team))
+        return avaliationRepository.findById(new AvaliationPK(user, team))
                 .orElseThrow(() -> new EntityNotFoundException("Avaliation not found"));
-        return new AvaliationOutputDto(avaliation);
     }
 
     @Override
-    public List<AvaliationOutputDto> findAll() {
-        return avaliationRepository.findAll().stream().map(AvaliationOutputDto::new).toList();
+    public List<Avaliation> findAll() {
+        return avaliationRepository.findAll();
     }
 
     @Override
-    public TeamAvaliationOutputDto addAvaliationToTeam(Long userId, Long teamId, Double value) {
+    public Avaliation addAvaliationToTeam(Long userId, Long teamId, Double value) {
         AppUser user = appUserRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(teamId)
@@ -57,7 +54,7 @@ public class AvaliationServiceImpl implements AvaliationService {
             throw new UnauthorizedRoleException("Not an event juror");
 
         AvaliationPK id = new AvaliationPK(user, team);
-        return new TeamAvaliationOutputDto(avaliationRepository.save(new Avaliation(id, value)));
+        return avaliationRepository.save(new Avaliation(id, value));
     }
 
     @Override

@@ -1,8 +1,7 @@
-package gov.edu.anm.presenter.api.admin;
+package gov.edu.anm.presenter.api.controllers.admin;
 
 import gov.edu.anm.presenter.api.common.requests.avaliations.AddAvaliationRequest;
-import gov.edu.anm.presenter.api.common.dtos.avaliation.AvaliationOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.avaliation.TeamAvaliationOutputDto;
+import gov.edu.anm.presenter.domain.avaliations.Avaliation;
 import gov.edu.anm.presenter.domain.avaliations.AvaliationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +16,17 @@ public class AvaliationController {
     private final AvaliationService avaliationService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<AvaliationOutputDto>> findAll() {
+    public ResponseEntity<List<Avaliation>> findAll() {
         return ResponseEntity.ok(avaliationService.findAll());
     }
 
     @GetMapping
-    public ResponseEntity<AvaliationOutputDto> findById(@RequestParam Long userId, @RequestParam Long teamId) {
+    public ResponseEntity<Avaliation> findById(@RequestParam Long userId, @RequestParam Long teamId) {
         return ResponseEntity.ok(avaliationService.findById(userId, teamId));
     }
 
     @PutMapping
-    public ResponseEntity<TeamAvaliationOutputDto> addAvaliationToTeam(@RequestBody AddAvaliationRequest request) {
+    public ResponseEntity<Avaliation> addAvaliationToTeam(@RequestBody AddAvaliationRequest request) {
         return ResponseEntity.ok(avaliationService.addAvaliationToTeam(request.getUserId(), request.getTeamId(), request.getValue()));
     }
 
