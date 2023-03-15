@@ -1,10 +1,11 @@
-package gov.edu.anm.presenter.api.user;
+package gov.edu.anm.presenter.api.controllers.user;
 
 import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
 import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.api.common.utils.ProfileUtilities;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserService;
+import gov.edu.anm.presenter.domain.participation.Participation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,8 @@ public class UserProfileController {
     @GetMapping("/participations")
     public ResponseEntity<List<UserParticipationOutputDto>> getUserParticipations() {
         var user = (AppUser) profileUtilities.getAuthenticatedUser();
-        return ResponseEntity.ok(appUserService.findUserParticipations(user.getId()));
+        List<Participation> parts = appUserService.findUserParticipations(user.getId());
+        return ResponseEntity.ok(parts.stream().map(UserParticipationOutputDto::new).toList());
     }
 
 }

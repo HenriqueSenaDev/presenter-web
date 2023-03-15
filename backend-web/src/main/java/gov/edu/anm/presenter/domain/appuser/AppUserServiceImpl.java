@@ -1,19 +1,15 @@
 package gov.edu.anm.presenter.domain.appuser;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
-import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.domain.exceptions.UnavailableSubjectException;
+import gov.edu.anm.presenter.domain.participation.Participation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,31 +19,27 @@ public class AppUserServiceImpl implements AppUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public AppUserOutputDto findUserById(Long id) {
-        AppUser appUser = appUserRepository.findById(id)
+    public AppUser findUserById(Long id) {
+        return appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return new AppUserOutputDto(appUser);
     }
 
     @Override
-    public AppUserOutputDto findUserByUsername(String username) {
-        AppUser appUser = appUserRepository.findByUsername(username)
+    public AppUser findUserByUsername(String username) {
+        return appUserRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return new AppUserOutputDto(appUser);
     }
 
     @Override
-    public List<AppUserOutputDto> findAllUsers() {
-        return appUserRepository.findAll().stream()
-                .map(AppUserOutputDto::new)
-                .collect(Collectors.toList());
+    public List<AppUser> findAllUsers() {
+        return appUserRepository.findAll();
     }
 
     @Override
-    public List<UserParticipationOutputDto> findUserParticipations(Long id) {
+    public List<Participation> findUserParticipations(Long id) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return user.getParticipations().stream().map(UserParticipationOutputDto::new).toList();
+        return List.copyOf(user.getParticipations());
     }
 
     @Override

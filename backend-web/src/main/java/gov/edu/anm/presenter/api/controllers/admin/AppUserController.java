@@ -1,26 +1,16 @@
-package gov.edu.anm.presenter.api.admin;
-
-import java.net.URI;
-
-import java.util.List;
+package gov.edu.anm.presenter.api.controllers.admin;
 
 import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
-import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserService;
+import gov.edu.anm.presenter.domain.participation.Participation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import lombok.RequiredArgsConstructor;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,22 +19,22 @@ public class AppUserController {
 	private final AppUserService appUserService;
 
 	@GetMapping
-	public ResponseEntity<List<AppUserOutputDto>> findAllUsers() {
+	public ResponseEntity<List<AppUser>> findAllUsers() {
 		return ResponseEntity.ok().body(appUserService.findAllUsers());
 	}
 
 	@GetMapping(value = "/username/{username}")
-	public AppUserOutputDto findUserByUsername(@PathVariable String username) {
+	public AppUser findUserByUsername(@PathVariable String username) {
 		return appUserService.findUserByUsername(username);
 	}
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<AppUserOutputDto> findUserById(@PathVariable Long id) {
+	public ResponseEntity<AppUser> findUserById(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserById(id));
 	}
 
 	@GetMapping(value = "/participations/{id}")
-	public ResponseEntity<List<UserParticipationOutputDto>> findUserParticipations(@PathVariable Long id) {
+	public ResponseEntity<List<Participation>> findUserParticipations(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserParticipations(id));
 	}
 

@@ -1,20 +1,19 @@
 package gov.edu.anm.presenter.domain.appuser;
 
-import java.util.List;
-
 import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
-import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
-import gov.edu.anm.presenter.api.common.dtos.participation.UserParticipationOutputDto;
+import gov.edu.anm.presenter.domain.participation.Participation;
+
+import java.util.List;
 
 public interface AppUserService {
 
-    AppUserOutputDto findUserById(Long id);
+    AppUser findUserById(Long id);
 
-    AppUserOutputDto findUserByUsername(String username);
+    AppUser findUserByUsername(String username);
 
-    List<AppUserOutputDto> findAllUsers();
+    List<AppUser> findAllUsers();
 
-    List<UserParticipationOutputDto> findUserParticipations(Long id);
+    List<Participation> findUserParticipations(Long id);
 
     AppUser saveUser(AppUserInputDto appUser);
 
