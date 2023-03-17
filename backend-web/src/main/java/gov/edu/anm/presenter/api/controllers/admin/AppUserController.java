@@ -1,6 +1,7 @@
 package gov.edu.anm.presenter.api.controllers.admin;
 
 import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
+import gov.edu.anm.presenter.api.common.utils.ApiUtilities;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserService;
 import gov.edu.anm.presenter.domain.participation.Participation;
@@ -26,7 +27,7 @@ public class AppUserController {
 
 	@GetMapping(value = "/username/{username}")
 	public AppUser findUserByUsername(@PathVariable String username) {
-		return appUserService.findUserByUsername(username);
+		return appUserService.findUserByUsername(ApiUtilities.convertStringPath(username));
 	}
 
 	@GetMapping(value = "/{id}")

@@ -2,6 +2,7 @@ package gov.edu.anm.presenter.api.controllers.admin;
 
 import gov.edu.anm.presenter.api.common.dtos.event.EventInputDto;
 import gov.edu.anm.presenter.api.common.dtos.team.TeamInputDto;
+import gov.edu.anm.presenter.api.common.utils.ApiUtilities;
 import gov.edu.anm.presenter.domain.event.Event;
 import gov.edu.anm.presenter.domain.event.EventService;
 import gov.edu.anm.presenter.domain.participation.Participation;
@@ -27,7 +28,7 @@ public class EventController {
 
     @GetMapping(value = "/code/{code}")
     public ResponseEntity<Event> findByJoinCode(@PathVariable String code) {
-        return ResponseEntity.ok().body(eventService.findEventByJoinCode(code));
+        return ResponseEntity.ok().body(eventService.findEventByJoinCode(ApiUtilities.convertStringPath(code)));
     }
 
     @GetMapping
