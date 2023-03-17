@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ParticipationController {
     };
 
     @PutMapping
-    public ResponseEntity<Participation> addParticipation(@RequestBody AddParticipationRequest request) {
+    public ResponseEntity<Participation> addParticipation(@Valid @RequestBody AddParticipationRequest request) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
         return ResponseEntity.created(uri)
                 .body(participationService.addParticipation(request.getUserId(), request.getEventId(), request.getRole()));

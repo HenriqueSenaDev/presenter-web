@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/user/participations")
@@ -26,7 +27,7 @@ public class UserParticipationController {
     private final EventRepository eventRepository;
 
     @PutMapping("/juror")
-    public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@RequestBody AddUserJurorParticipationRequest request) {
+    public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@Valid @RequestBody AddUserJurorParticipationRequest request) {
         var user = (AppUser) profileUtilities.getAuthenticatedUser();
         Event event = eventRepository.findByJoinCode(request.getJoinCode())
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));
@@ -39,7 +40,7 @@ public class UserParticipationController {
     }
 
     @PutMapping("/spectator")
-    public ResponseEntity<UserParticipationOutputDto> addSpectatorParticipation(@RequestBody AddUserSpectatorParticipationRequest request) {
+    public ResponseEntity<UserParticipationOutputDto> addSpectatorParticipation(@Valid @RequestBody AddUserSpectatorParticipationRequest request) {
         var user = (AppUser) profileUtilities.getAuthenticatedUser();
         Event event = eventRepository.findByJoinCode(request.getJoinCode())
                 .orElseThrow(() -> new EntityNotFoundException("Event not found"));

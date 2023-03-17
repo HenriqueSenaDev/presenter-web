@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,7 @@ public class UserAvaliationController {
     private final TeamService teamService;
 
     @PutMapping
-    public ResponseEntity<TeamAvaliationOutputDto> avaliateTeam(@RequestBody AddUserAvaliationRequest request) {
+    public ResponseEntity<TeamAvaliationOutputDto> avaliateTeam(@Valid @RequestBody AddUserAvaliationRequest request) {
         var user = (AppUser) profileUtilities.getAuthenticatedUser();
         Event event = teamService.findTeamEvent(request.getTeamId());
         List<Participation> userParticipations = appUserService.findUserParticipations(user.getId());

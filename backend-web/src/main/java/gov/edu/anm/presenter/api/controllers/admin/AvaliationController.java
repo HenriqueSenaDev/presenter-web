@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class AvaliationController {
     }
 
     @PutMapping
-    public ResponseEntity<Avaliation> addAvaliationToTeam(@RequestBody AddAvaliationRequest request) {
+    public ResponseEntity<Avaliation> addAvaliationToTeam(@Valid @RequestBody AddAvaliationRequest request) {
         return ResponseEntity.ok(avaliationService.addAvaliationToTeam(request.getUserId(), request.getTeamId(), request.getValue()));
     }
 

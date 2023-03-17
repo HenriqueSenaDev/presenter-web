@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class TeamController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody TeamUpdateDto teamUpdateDto) {
+    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @Valid @RequestBody TeamUpdateDto teamUpdateDto) {
         return ResponseEntity.ok().body(teamService.updateTeam(teamUpdateDto, id));
     }
 

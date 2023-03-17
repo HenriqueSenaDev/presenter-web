@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -40,18 +41,18 @@ public class EventController {
     }
     
     @PostMapping
-    public ResponseEntity<Event> saveEvent(@RequestBody EventInputDto event) {
+    public ResponseEntity<Event> saveEvent(@Valid @RequestBody EventInputDto event) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
 
     @PostMapping(value = "/{eventId}/teams")
-    public ResponseEntity<Event> createTeamInEvent(@RequestBody TeamInputDto team, @PathVariable Long eventId) {
+    public ResponseEntity<Event> createTeamInEvent(@Valid @RequestBody TeamInputDto team, @PathVariable Long eventId) {
         return ResponseEntity.ok().body(eventService.createTeamInEvent(eventId, team));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Event> updateEvent(@RequestBody EventInputDto eventInputDto, @PathVariable Long id) {
+    public ResponseEntity<Event> updateEvent(@Valid @RequestBody EventInputDto eventInputDto, @PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.updateEvent(eventInputDto, id));
     }
 

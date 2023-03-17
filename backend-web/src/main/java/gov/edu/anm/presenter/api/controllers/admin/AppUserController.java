@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -39,13 +40,13 @@ public class AppUserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<AppUser> saveUser(@RequestBody AppUserInputDto appUserInputDto) {
+	public ResponseEntity<AppUser> saveUser(@Valid @RequestBody AppUserInputDto appUserInputDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/users").toUriString());
 		return ResponseEntity.created(uri).body(appUserService.saveUser(appUserInputDto));
 	}
 
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<AppUser> updateUser(@RequestBody AppUserInputDto appUserInputDto, @PathVariable Long id) {
+	public ResponseEntity<AppUser> updateUser(@Valid @RequestBody AppUserInputDto appUserInputDto, @PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.updateUser(appUserInputDto, id));
 	}
 
