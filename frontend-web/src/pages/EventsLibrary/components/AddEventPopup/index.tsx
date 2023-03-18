@@ -26,10 +26,14 @@ const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
    }
 
    async function addParticipation() {
-      setLoading(true);
-      await addJurorParticipation(user!.id, joinCode, jurorCode);
-      await handleParticipations();
-      setIsAddPopupOpen(false);
+      try {
+         setLoading(true);
+         await addJurorParticipation(user!.id, joinCode, jurorCode);
+         await handleParticipations();
+      }
+      finally {
+         setIsAddPopupOpen(false);
+      }
    }
 
    return (
