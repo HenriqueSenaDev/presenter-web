@@ -1,12 +1,11 @@
-import { ReactComponent as PeopleIcon } from "assets/images/people-Icon.svg";
-import { ReactComponent as TimerIcon } from "assets/images/timer-Icon.svg";
-import { ReactComponent as ComputerIcon } from "assets/images/computer-Icon.svg";
-import { ReactComponent as RankingIcon } from "assets/images/leaderboard-Icon.svg";
 import { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
-import Navbar from "components/Navbar";
 import Loading from "pages/Loading";
+import Footer from "components/Footer";
+import DualButton from "components/DualButton";
+import peopleImg from "../../assets/images/people.svg";
+import managementImg from "../../assets/images/management.svg";
 import "./styles.css";
 
 const Landing = () => {
@@ -27,57 +26,29 @@ const Landing = () => {
    if (loading) return <Loading />;
 
    return (
-      <>
-         <div className="landing--wrapper">
-            <Navbar />
-
-            <div className="landing--content">
-               <div className="landing--card">
-                  <div className="landing--card--content">
+      <div className="landing-container">
+         <div className="landing-card-container">
+            <div className="landing-card">
+               <div className="landing-card-header-container">
+                  <div className="landing-card-header">
                      <h1>Presenter</h1>
 
                      <p>Gerenciamento de competições baseadas em equipes com jurados e tabelas de ranking.</p>
-
-                     <div className="landing--content--images">
-                        <PeopleIcon />
-                        <TimerIcon />
-                        <ComputerIcon />
-                        <RankingIcon />
-                     </div>
                   </div>
 
-                  <hr />
+                  <img src={peopleImg} alt="people-image" />
+               </div>
 
-                  <div className="landing--card--form">
-                     <h1>Entrar</h1>
+               <div className="landing-card-cta-container">
+                  <DualButton text='Entrar' onClick={() => { }} />
 
-                     <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        minLength={5}
-                        onChange={(evt) => setUsername(evt.target.value)}
-                     />
-
-                     <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        minLength={5}
-                        onChange={(evt) => setPassword(evt.target.value)}
-                        onKeyUp={(event) => {
-                           if (event.key === "Enter") signIn();
-                        }}
-                     />
-
-                     <button onClick={() => signIn()}>
-                        Login
-                     </button>
-                  </div>
+                  <img className="management-image" src={managementImg} alt="people-managing" />
                </div>
             </div>
          </div>
-      </>
+
+         <Footer />
+      </div>
    )
 }
 
