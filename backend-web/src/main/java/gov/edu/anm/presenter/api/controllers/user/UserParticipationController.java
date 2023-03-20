@@ -5,6 +5,7 @@ import gov.edu.anm.presenter.api.common.requests.participations.AddUserJurorPart
 import gov.edu.anm.presenter.api.common.requests.participations.AddUserSpectatorParticipationRequest;
 import gov.edu.anm.presenter.api.common.utils.ProfileUtilities;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
+import gov.edu.anm.presenter.domain.appuser.AppUserService;
 import gov.edu.anm.presenter.domain.event.Event;
 import gov.edu.anm.presenter.domain.event.EventRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
@@ -17,14 +18,23 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/user/participations")
 @RequiredArgsConstructor
 public class UserParticipationController {
     private final ProfileUtilities profileUtilities;
+    private final AppUserService appUserService;
     private final ParticipationService participationService;
     private final EventRepository eventRepository;
+
+    @GetMapping
+    public ResponseEntity<List<UserParticipationOutputDto>> findUserParticipations() {
+        var user = (AppUser) profileUtilities.getAuthenticatedUser();
+        List<Participation> parts = appUserService.findUserParticipations(user.getId());
+        return ResponseEntity.ok(parts.stream().map(UserParticipationOutputDto::new).toList());
+    }
 
     @PutMapping("/juror")
     public ResponseEntity<UserParticipationOutputDto> addJurorParticipation(@Valid @RequestBody AddUserJurorParticipationRequest request) {
