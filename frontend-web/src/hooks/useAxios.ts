@@ -45,6 +45,7 @@ export const useAxios = () => {
             }
         }
 
+        alert(error.response.data.message);
         return Promise.reject(error);
     });
 
