@@ -2,10 +2,11 @@ import "./styles.css";
 
 interface IProps {
     label: string,
+    type: 'text' | 'password',
     setState: Function
 }
 
-function FormField({ label, setState }: IProps) {
+function FormField({ label, type, setState }: IProps) {
     return (
         <div className="form-field-container">
             <div>
@@ -13,7 +14,7 @@ function FormField({ label, setState }: IProps) {
             </div>
 
             <input 
-                type="text" 
+                type={type} 
                 name={label} 
                 id={label} 
                 onChange={(e) => setState(e.target.value)}
