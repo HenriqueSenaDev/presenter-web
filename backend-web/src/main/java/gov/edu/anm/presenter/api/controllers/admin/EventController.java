@@ -36,7 +36,7 @@ public class EventController {
         return ResponseEntity.ok().body(eventService.findAllEvents());
     }
 
-    @GetMapping(value = "/participations/{id}")
+    @GetMapping(value = "/{id}/participations")
     public ResponseEntity<List<Participation>> findEventParticipations(@PathVariable Long id) {
         return ResponseEntity.ok().body(eventService.findEventParticipations(id));
     }

@@ -19,16 +19,12 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthResponse> authenticate(
-            @RequestBody AuthRequest request
-    ) {
+    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshResponse> refreshToken(
-            @RequestBody RefreshRequest request
-    ) {
+    public ResponseEntity<RefreshResponse> refreshToken(@RequestBody RefreshRequest request) {
         return ResponseEntity.ok(authenticationService.refresh(request));
     }
 

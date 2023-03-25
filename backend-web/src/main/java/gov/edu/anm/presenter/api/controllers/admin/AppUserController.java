@@ -35,7 +35,7 @@ public class AppUserController {
 		return ResponseEntity.ok().body(appUserService.findUserById(id));
 	}
 
-	@GetMapping(value = "/participations/{id}")
+	@GetMapping(value = "/{id}/participations")
 	public ResponseEntity<List<Participation>> findUserParticipations(@PathVariable Long id) {
 		return ResponseEntity.ok().body(appUserService.findUserParticipations(id));
 	}
