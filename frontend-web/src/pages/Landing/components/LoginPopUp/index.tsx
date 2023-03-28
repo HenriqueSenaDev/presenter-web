@@ -41,9 +41,18 @@ function LoginPopUp({ setIsPopupOpen }: IProps) {
 
                 <form className="login-form">
                     <div className="login-form-fields-area">
-                        <FormField label="Usuário" type="text" setState={setUsername} />
+                        <FormField 
+                            label="Usuário" 
+                            type="text" 
+                            setState={setUsername} 
+                        />
 
-                        <FormField label="Senha"  type="password" setState={setPassword} />
+                        <FormField 
+                            label="Senha"  
+                            type="password" 
+                            setState={setPassword} 
+                            onEnter={signIn}
+                        />
                     </div>
 
                     <Button text="Login" onClick={signIn} />

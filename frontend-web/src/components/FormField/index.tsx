@@ -3,10 +3,11 @@ import "./styles.css";
 interface IProps {
     label: string,
     type: 'text' | 'password',
-    setState: Function
+    setState: Function,
+    onEnter?: Function
 }
 
-function FormField({ label, type, setState }: IProps) {
+function FormField({ label, type, setState, onEnter }: IProps) {
     return (
         <div className="form-field-container">
             <div>
@@ -18,6 +19,9 @@ function FormField({ label, type, setState }: IProps) {
                 name={label} 
                 id={label} 
                 onChange={(e) => setState(e.target.value)}
+                onKeyUp={(e) => {
+                    if (e.code === 'Enter' && onEnter) onEnter();
+                }}
             />
         </div>
     );
