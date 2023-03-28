@@ -1,7 +1,7 @@
-import { ReactComponent as DeleteEvent } from "assets/images/close-Icon.svg";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { PresenterContext } from "context/PresenterContext";
+import closeIcon from "../../../../assets/images/close.svg";
 import "./styles.css"
 
 interface IProps {
@@ -29,33 +29,25 @@ const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
     }
 
     return (
-        <>
+        <div
+            className="event-card-container"
+            onClick={selectEvent}
+        >
             <div
-                className="event--card--container"
-                onClick={selectEvent}
+                className="delete-event"
+                onClick={removeEvent}
             >
-                <div
-                    className="delete-event"
-                    onClick={removeEvent}
-                >
-                    <DeleteEvent />
-                </div>
-
-                <div className="event--card--header">
-                    <h1>{event.name}</h1>
-
-                    <hr />
-                </div>
-
-                <span>
-                    {
-                        event.description.length < 65
-                            ? event.description
-                            : event.description.substring(0, 60) + '...'
-                    }
-                </span>
+                <img src={closeIcon} alt="close-icon" />
             </div>
-        </>
+
+            <div className="event-card-header">
+                <h1>{event.name}</h1>
+
+                <hr />
+            </div>
+
+            <p>{event.description}</p>
+        </div>
     )
 }
 

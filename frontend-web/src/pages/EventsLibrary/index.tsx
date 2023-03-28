@@ -1,15 +1,19 @@
-import { ReactComponent as AddIcon } from "assets/images/add-Icon.svg";
 import { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
-import Navbar from "../../components/Navbar";
 import EventCard from "./components/EventCard";
 import AddEventPopup from "./components/AddEventPopup";
 import RemoveEventPopUp from "./components/RemoveEventPopUp";
+import DualButton from "components/DualButton";
+import Menu from "components/Menu";
+import eventsLibraryImg from "../../assets/images/events-library.svg";
+import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
 
 const EventsLibrary = () => {
+   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+   const [isDesktop, setIsDesktop] = useState<boolean>(document.body.clientWidth > 992);
    const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
    const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
 
@@ -24,53 +28,64 @@ const EventsLibrary = () => {
       return <Navigate replace to="/" />
    }
 
+   window.addEventListener('resize', () => {
+      if (document.body.clientWidth > 992) return setIsDesktop(true);
+      return setIsDesktop(false);
+   });
+
+   const menuConditional = isMenuOpen || isDesktop;
+
    return (
-      <div>
-         {
-            isAddPopupOpen &&
-            <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
-         }
+      <div className="library-wrapper">
+         {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
 
-         {
-            eventToRemoveId &&
-            <RemoveEventPopUp
-               eventToRemoveId={eventToRemoveId}
-               setEventToRemoveId={setEventToRemoveId}
-            />
-         }
+         <div className="library-container">
+            {
+               isAddPopupOpen &&
+               <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
+            }
 
-         <Navbar />
+            {
+               eventToRemoveId &&
+               <RemoveEventPopUp
+                  eventToRemoveId={eventToRemoveId}
+                  setEventToRemoveId={setEventToRemoveId}
+               />
+            }
 
-         <div className="join--event--wrapper">
-            <div className="join--event--container">
+            <div className="library-card">
+               <div 
+                  className="library-toogle-menu"
+                  onClick={() => setIsMenuOpen(true)}
+               >
+                  <img src={menuIcon} alt="hamburguer-menu-icon" />
+               </div>
+
                <h1>Biblioteca de Eventos</h1>
 
-               <div className="events--manager--container">
-                  <div className="events--container">
-                     {
-                        participations.length ? (
-                           participations.map(part => {
-                              return (
-                                 <EventCard
-                                    event={part.event}
-                                    key={part.event.id}
-                                    setEventToRemoveId={setEventToRemoveId}
-                                 />
-                              );
-                           })
-                        ) : (
-                           <span>Adicione um evento para participar.</span>
-                        )
-                     }
-                  </div>
+               <img 
+                  className="events-library-img" 
+                  src={eventsLibraryImg} 
+                  alt="girl-looking-to-scheduled-events" 
+               />
 
-                  <div
-                     className="addEventButton"
-                     onClick={() => setIsAddPopupOpen(true)}
-                  >
-                     <AddIcon className="addIcon" />
-                  </div>
-               </div>
+               <DualButton text="Adicionar evento" onClick={() => { }} />
+            </div>
+
+            <div className="events-container">
+               {participations.length ? (
+                  participations.map(part => {
+                        return (
+                           <EventCard
+                              event={part.event}
+                              key={part.event.id}
+                              setEventToRemoveId={setEventToRemoveId}
+                           />
+                        );
+                     })
+                  ) : (
+                  <span>Adicione um evento para participar.</span>
+               )}
             </div>
          </div>
       </div>

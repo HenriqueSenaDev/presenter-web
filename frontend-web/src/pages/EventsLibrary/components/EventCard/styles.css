@@ -1,54 +1,109 @@
-.event--card--container {
+.event-card-container {
     position: relative;
     background-color: #ADD3FA;
     cursor: pointer;
     font-size: 14px;
-    max-width: 230px;
-    padding: 20px 20px;
-    border-radius: 20px;
-    height: 140px;
+    padding: 14px;
+    border-radius: 9px;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-direction: column;
-    border: rgba(255, 255, 255, 0.7) solid 1px;
+    text-align: center;
+    gap: 8px;
+    border: solid 5px #92C7EF;
+    max-height: 112px;
 }
 
-.event--card--container h1 {
-    font-size: 20px;
+.event-card-container h1 {
+    font-size: 12px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.event--card--container hr {
-    border: #FFF solid 1px;
-    margin: 3px 0;
+.event-card-container hr {
+    border: rgba(255, 255, 255, 0.8) solid 0.5px;
+    margin-top: 7px;
     width: 100%;
 }
 
+.event-card-container p {    
+    --max-lines: 3;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+    font-size: 10px;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
 .delete-event {
+    width: 16px;
+    height: 16px;
     position: absolute;
-    top: 7px;
-    right: 7px;
-    background-color: #92C7EF;
-    padding: 5px;
+    top: 2px;
+    right: 2px;
+    background-color: rgba(108, 99, 255, 0.8);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.event--card--container svg {
-    height: 12px;
-    width: 12px;
+.delete-event img {
+    height: 10px;
+    width: 10px;
 }
 
-.event--card--header {
+.event-card-header {
     width: 100%;
-    text-align: center;
     font-size: 20px;
 }
 
-@media(min-width: 576px) {
-    .event--card--container {
-        min-width: 230px;
+@media(min-width: 768px) {
+    .event-card-container {
+        padding: 18px 14px;
+    }
+
+    .event-card-container h1 {
+        font-size: 14px;
+    }
+
+    .event-card-container p { 
+        font-size: 12px;
+        --max-lines: 2;
+    }
+}
+
+@media(min-width: 992px) {
+    .event-card-container {
+        max-height: 150px;
+        border-radius: 16px;
+        border: solid 6px #92C7EF;
+    }
+
+    .event-card-container h1 {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .event-card-container p { 
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0px;
+    }
+
+    .delete-event {
+        width: 24px;
+        height: 24px;
+    }
+
+    .delete-event img {
+        height: 16px;
+        width: 16px;
+        transform: translateX(0.5px);
     }
 }
