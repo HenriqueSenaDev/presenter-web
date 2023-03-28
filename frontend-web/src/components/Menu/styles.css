@@ -1,0 +1,120 @@
+.menu-wrapper {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: 1;
+    background-color: rgba(109, 99, 255, 0.9);
+}
+
+.menu-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 28px 120px 26px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-close-img {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.profile-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.profile-area img {
+    width: 47px;
+    height: 47px;
+}
+
+.profile-area span {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.nav-area span {
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+
+.nav-area span:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.log-out-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.log-out-area span {
+    font-size: 21px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.log-out-area span:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@media(min-width: 992px) {
+    .menu-wrapper {
+        position: fixed;
+        width: 18%;
+        max-width: 250px;
+    }
+
+    .menu-container {
+        padding: 19px 19px 28px 19px;
+        justify-content: unset;
+        align-items: unset;
+        gap: 38px;
+    }
+    
+    .profile-area {
+        width: 100%;
+        justify-content: unset;
+        border-bottom: solid 2px #FFF;
+        padding-bottom: 12px;
+    }
+
+    .menu-close-img {
+        display: none;
+    }
+
+    .nav-area span {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .nav-area {
+        flex: 1;
+        align-self: flex-start;
+    }
+
+    .log-out-area {
+        gap: 8px;
+    }
+
+    .log-out-area span {
+        font-size: 20px;
+    }
+}
