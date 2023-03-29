@@ -12,26 +12,30 @@ export function usePresenter() {
             });
             return res.data;
         },
-        findUserParticipations: async (userId: number) => {
-            return (await axios.get<IParticipation[]>(`/users/participations/${userId}`)).data;
+        findUserParticipations: async () => {
+            return (await axios.get<IParticipation[]>(`/user/participations`)).data;
         },
-        addJurorParticipation: async (userId: number, joinCode: string, jurorCode: string) => {
-            const res = await axios.post<IParticipation>(`/participations/juror`, {
-                userId, joinCode, jurorCode
+        addJurorParticipation: async (joinCode: string, jurorCode: string) => {
+            const res = await axios.post<IParticipation>(`/user/participations/juror`, {
+                joinCode, jurorCode
             });
             return res.data;
         },
-        removeParticipation: async (userId: number, eventId: number) => {
-            await axios.delete('/participations', {
-                params: { userId, eventId }
+        addSpectatorParticipation: async (joinCode: string) => {
+            const res = await axios.post<IParticipation>(`/user/participations/spectator`, {
+                joinCode
             });
+            return res.data;
+        },
+        removeParticipation: async (eventId: number) => {
+            await axios.delete(`/user/participations/${eventId}`);
         },
         findEvent: async (eventId: number) => {
-            return (await axios.get<IEvent>(`/events/${eventId}`)).data;
+            return (await axios.get<IEvent>(`/user/events/${eventId}`)).data;
         },
-        addAvaliationToTeam: async (userId: number, teamId: number, value: number) => {
+        addAvaliationToTeam: async (teamId: number, value: number) => {
             const res = await axios.put<IAvaliation>('/avaliations', {
-                userId, teamId, value
+                teamId, value
             });
             return res.data;
         }
