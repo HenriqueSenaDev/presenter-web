@@ -1,32 +1,32 @@
-import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
-import { ProfileContext } from 'context/ProfileContext';
 import { PresenterContext } from "context/PresenterContext";
 import { usePresenter } from 'hooks/usePresenter';
+import { IEventToRemoveInfo } from "pages/EventsLibrary/common/@types";
+import Button from "components/Button";
+import loadingGif from "assets/images/loading.gif";
+import quitEventImg from '../../../../assets/images/quit-event.svg';
 import './styles.css';
 
 interface Props {
-    eventToRemoveId: number | null,
-    setEventToRemoveId: Function
+    eventToRemoveInfo: IEventToRemoveInfo | null,
+    setEventToRemoveInfo: Function
 }
 
-const RemoveEventPopUp = ({ eventToRemoveId, setEventToRemoveId }: Props) => {
+const RemoveEventPopUp = ({ eventToRemoveInfo, setEventToRemoveInfo }: Props) => {
     const [loading, setLoading] = useState<boolean>(false);
 
-    const { user } = useContext(ProfileContext);
     const { handleParticipations } = useContext(PresenterContext);
-
     const { removeParticipation } = usePresenter();
 
     async function removeUserParticipation() {
         setLoading(true);
-        await removeParticipation(user!.id, eventToRemoveId as number);
+        await removeParticipation(eventToRemoveInfo!.id);
         await handleParticipations();
-        setEventToRemoveId(null);
+        setEventToRemoveInfo(null);
     }
 
     function closePopUp() {
-        setEventToRemoveId(null);
+        setEventToRemoveInfo(null);
     }
 
     function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {
@@ -41,27 +41,23 @@ const RemoveEventPopUp = ({ eventToRemoveId, setEventToRemoveId }: Props) => {
             onClick={checkOutClick}
         >
             <div className="remove-card-container">
-                {loading ? (
-                    <div className="loading--add">
-                        <h1>Presenter</h1>
+                <img src={quitEventImg} alt="man-leaving-from-door" />
+                
+                <div className="remove-event-area">
+                    <h1>{eventToRemoveInfo!.name}</h1>
 
+                    <span>Remover evento?</span>
+
+                    {loading ? (
                         <img src={loadingGif} alt="loading-gif" />
-                    </div>
-                ) : (
-                    <>
-                        <h1>Remover evento?</h1>
-
+                    ) : (
                         <div className="remove-event-buttons">
-                            <button onClick={removeUserParticipation}>
-                                Sim
-                            </button>
+                            <Button text="Confirmar" onClick={removeUserParticipation} />
 
-                            <button onClick={closePopUp}>
-                                Cancelar
-                            </button>
+                            <Button text="Cancelar" onClick={closePopUp} type='cancel' />
                         </div>
-                    </>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );

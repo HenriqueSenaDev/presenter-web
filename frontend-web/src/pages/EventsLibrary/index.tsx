@@ -10,12 +10,13 @@ import Menu from "components/Menu";
 import eventsLibraryImg from "../../assets/images/events-library.svg";
 import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
+import { IEventToRemoveInfo } from "./common/@types";
 
 const EventsLibrary = () => {
    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
    const [isDesktop, setIsDesktop] = useState<boolean>(document.body.clientWidth > 992);
    const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
-   const [eventToRemoveId, setEventToRemoveId] = useState<number | null>(null);
+   const [eventToRemoveInfo, setEventToRemoveInfo] = useState<IEventToRemoveInfo | null>(null);
 
    const { authenticated } = useContext(ProfileContext);
    const { participations, handleParticipations } = useContext(PresenterContext);
@@ -39,18 +40,18 @@ const EventsLibrary = () => {
       <div className="library-wrapper">
          {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
 
+         {
+            eventToRemoveInfo &&
+            <RemoveEventPopUp
+               eventToRemoveInfo={eventToRemoveInfo}
+               setEventToRemoveInfo={setEventToRemoveInfo}
+            />
+         }
+
          <div className="library-container">
             {
                isAddPopupOpen &&
                <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
-            }
-
-            {
-               eventToRemoveId &&
-               <RemoveEventPopUp
-                  eventToRemoveId={eventToRemoveId}
-                  setEventToRemoveId={setEventToRemoveId}
-               />
             }
 
             <div className="library-card">
@@ -79,7 +80,7 @@ const EventsLibrary = () => {
                            <EventCard
                               event={part.event}
                               key={part.event.id}
-                              setEventToRemoveId={setEventToRemoveId}
+                              setEventToRemoveInfo={setEventToRemoveInfo}
                            />
                         );
                      })

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { PresenterContext } from "context/PresenterContext";
+import { IEventToRemoveInfo } from "pages/EventsLibrary/common/@types";
 import closeIcon from "../../../../assets/images/close.svg";
 import "./styles.css"
 
@@ -10,10 +11,10 @@ interface IProps {
         name: string,
         description: string
     },
-    setEventToRemoveId: Function
+    setEventToRemoveInfo: Function
 }
 
-const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
+const EventCard = ({ event, setEventToRemoveInfo }: IProps,) => {
     const { handleEvent } = useContext(PresenterContext);
 
     const navigate = useNavigate();
@@ -25,7 +26,10 @@ const EventCard = ({ event, setEventToRemoveId }: IProps,) => {
 
     async function removeEvent(mouseEvt: React.MouseEvent<HTMLElement>) {
         mouseEvt.stopPropagation();
-        setEventToRemoveId(event.id);
+        setEventToRemoveInfo({
+            id: event.id,
+            name: event.name
+        } as IEventToRemoveInfo);
     }
 
     return (
