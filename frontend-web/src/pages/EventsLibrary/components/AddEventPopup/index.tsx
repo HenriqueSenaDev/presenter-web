@@ -1,8 +1,10 @@
-import loadingGif from "assets/images/loading.gif";
 import { useContext, useState } from 'react';
-import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
 import { usePresenter } from 'hooks/usePresenter';
+import FormField from "components/FormField";
+import Button from 'components/Button';
+import joinEventImg from "../../../../assets/images/join-event.svg";
+import loadingGif from "assets/images/loading.gif";
 import "./styles.css";
 
 interface IProps {
@@ -10,25 +12,34 @@ interface IProps {
 }
 
 const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
+   const [activeTab, setActiveTab] = useState<'juror' | 'spectator'>('juror');
    const [joinCode, setJoinCode] = useState<string>("");
    const [jurorCode, setJurorCode] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
 
-   const { user } = useContext(ProfileContext);
    const { handleParticipations } = useContext(PresenterContext);
 
-   const { addJurorParticipation } = usePresenter();
+   const { addJurorParticipation, addSpectatorParticipation } = usePresenter();
 
    function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {
-      if (document.querySelector('.join--event--main') === target) {
+      if (document.querySelector('.join-event-wrapper') === target) {
          setIsAddPopupOpen(false);
       }
    }
 
+   function getTabColor(tabName: 'juror' | 'spectator') {
+      return activeTab === tabName ? '#FFF' : 'rgba(255, 255, 255, 0.5)';
+   }
+   
    async function addParticipation() {
+      if (activeTab === 'juror') await addJurorParticipation(joinCode, jurorCode);
+      if (activeTab === 'spectator') await addSpectatorParticipation(joinCode);
+   }
+
+   async function joinEvent() {
       try {
          setLoading(true);
-         await addJurorParticipation(user!.id, joinCode, jurorCode);
+         await addParticipation();
          await handleParticipations();
       }
       finally {
@@ -38,49 +49,46 @@ const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
 
    return (
       <div
-         className="join--event--main"
+         className="join-event-wrapper"
          onClick={checkOutClick}
       >
-         <div className="join--card--container">
-            {loading ?
-               <div className="loading--add">
-                  <h1>Presenter</h1>
+         <div className="join-card-container">
+            <img className='join-event-img' src={joinEventImg} alt="man-and-screen-with-up-arrow" />
 
-                  <img src={loadingGif} alt="loading-gif" ></img>
+            <div className="event-code-area">
+               <div className="code-tabs-headers">
+                  <h1 
+                     onClick={() => setActiveTab('juror')} 
+                     style={{ borderColor: getTabColor('juror'), color: getTabColor('juror')}}
+                  >
+                     Jurado
+                  </h1>
+
+                  <h1 
+                     onClick={() => setActiveTab('spectator')}
+                     style={{ borderColor: getTabColor('spectator'), color: getTabColor('spectator')}}
+                  >
+                     Espectador
+                  </h1>
                </div>
-               :
-               <>
-                  <div className="form--container">
-                     <h1>Digite o código do evento:</h1>
 
-                     <input
-                        type="text"
-                        value={joinCode}
-                        onChange={(event) => setJoinCode(event.target.value)}
-                     />
-                  </div>
+               <div className="event-code-inputs">
+                  <FormField label="Código de entrada" type="text" setState={setJoinCode} />
 
-                  <div className="form--container">
-                     <h1>É jurado?<br />Digite a senha de jurado:</h1>
+                  {(activeTab === 'juror') &&
+                     <FormField label="Código de jurado" type="text" setState={setJurorCode} />
+                  }
 
-                     <input type="text"
-                        value={jurorCode}
-                        onChange={(event) => setJurorCode(event.target.value)}
-                        onKeyUp={async ({ key }) => {
-                           if (key === 'Enter') {
-                              await addParticipation();
-                           }
-                        }}
-                     />
-                  </div>
+                  {loading ? (
+                     <img className='add-loading-gif' src={loadingGif} alt="loading-gif" />
+                  ) : (
+                     <Button text='Confirmar' onClick={joinEvent} />
+                  )}
+               </div>
+            </div>
 
-                  <button onClick={addParticipation}>
-                     Entrar
-                  </button>
-               </>
-            }
-         </div>
-      </div >
+         </div> 
+      </div>
    );
 }
 

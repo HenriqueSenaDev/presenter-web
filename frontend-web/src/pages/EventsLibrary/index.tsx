@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
+import { IEventToRemoveInfo } from "./common/@types";
 import EventCard from "./components/EventCard";
 import AddEventPopup from "./components/AddEventPopup";
 import RemoveEventPopUp from "./components/RemoveEventPopUp";
@@ -10,7 +11,6 @@ import Menu from "components/Menu";
 import eventsLibraryImg from "../../assets/images/events-library.svg";
 import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
-import { IEventToRemoveInfo } from "./common/@types";
 
 const EventsLibrary = () => {
    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -40,20 +40,18 @@ const EventsLibrary = () => {
       <div className="library-wrapper">
          {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
 
-         {
-            eventToRemoveInfo &&
+         {eventToRemoveInfo &&
             <RemoveEventPopUp
                eventToRemoveInfo={eventToRemoveInfo}
                setEventToRemoveInfo={setEventToRemoveInfo}
             />
          }
 
-         <div className="library-container">
-            {
-               isAddPopupOpen &&
-               <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
-            }
+         {isAddPopupOpen &&
+            <AddEventPopup setIsAddPopupOpen={setIsAddPopupOpen} />
+         }
 
+         <div className="library-container">
             <div className="library-card">
                <div 
                   className="library-toogle-menu"
@@ -70,7 +68,7 @@ const EventsLibrary = () => {
                   alt="girl-looking-to-scheduled-events" 
                />
 
-               <DualButton text="Adicionar evento" onClick={() => { }} />
+               <DualButton text="Adicionar evento" onClick={() => setIsAddPopupOpen(true)} />
             </div>
 
             <div className="events-container">
