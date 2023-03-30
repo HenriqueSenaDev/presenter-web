@@ -32,17 +32,17 @@
 @media(min-width: 992px) {
     .form-field-container {
         max-width: 218px;
-        gap: 24px;
+        gap: 18px;
     }
 
     .form-field-container span {
-        font-size: 20px;
+        font-size: 15px;
         border-bottom: 2px solid #FFF;
-        padding-bottom: 2.5px;
+        padding-bottom: 3px;
     }
 
     .form-field-container input {
-        height: 32px;
-        font-size: 17px;
+        height: 28px;
+        font-size: 16px;
     }
 }

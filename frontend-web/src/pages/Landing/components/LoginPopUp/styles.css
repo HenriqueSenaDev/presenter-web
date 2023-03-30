@@ -63,7 +63,7 @@
     }
 
     .login-img {
-        width: 316px;
+        width: 216px;
     }
     
     .loading-gif {
@@ -73,7 +73,7 @@
     }
 
     .login-form {
-        gap: 48px;
+        gap: 38px;
     }
 
     .login-form-fields-area {
