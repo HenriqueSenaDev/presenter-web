@@ -104,6 +104,7 @@
 
     .events-container {
         transform: translateX(-45%);
+        max-width: 442px;
     }
 
     .library-toogle-menu {
