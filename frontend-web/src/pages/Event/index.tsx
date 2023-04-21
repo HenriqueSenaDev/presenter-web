@@ -1,62 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Navbar from "components/Navbar";
 import RatePopUp from "./components/RatePopUp";
+import Menu from "components/Menu";
+import medalIcon from "../../assets/images/medal.svg";
+import roleCard from "../../assets/images/role-card.svg";
+import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
-
-const columns: GridColDef[] = [
-    {
-        field: 'id',
-        headerName: 'Id',
-        type: 'number',
-        width: 50
-    },
-    {
-        field: 'equipe',
-        headerName: 'Equipe',
-        type: 'string',
-        width: 220
-    },
-    {
-        field: 'projeto',
-        headerName: 'Projeto',
-        type: 'string',
-        sortable: false,
-        width: 220
-    },
-    {
-        field: 'turma',
-        headerName: 'Turma',
-        type: "string",
-        sortable: false,
-        width: 170
-    },
-    {
-        field: 'avaliacoes',
-        headerName: 'Avaliações',
-        type: 'number',
-        sortable: false,
-        width: 115,
-    },
-    {
-        field: 'media',
-        headerName: 'Média Geral',
-        type: "number",
-        width: 160,
-    },
-];
-
-interface IRow {
-    id: number,
-    equipe: string,
-    projeto: string,
-    turma: string,
-    avaliacoes: number,
-    media: string
-}
 
 interface ITeamInfo {
     id: number,
@@ -64,69 +15,117 @@ interface ITeamInfo {
 }
 
 const Event = () => {
-    const [rows, setRows] = useState<IRow[] | []>([]);
     const [team, setTeam] = useState<ITeamInfo | null>(null);
+    const [isDesktop, setIsDesktop] = useState<boolean>(document.body.clientWidth > 992);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-    const { authenticated } = useContext(ProfileContext);
+    const { authenticated, user } = useContext(ProfileContext);
+    const { participations } = useContext(PresenterContext);
     const { event } = useContext(PresenterContext);
 
-    useEffect(() => {
-        const newRows: IRow[] = event!.teams.map(team => (
-            {
-                id: team.id,
-                equipe: team.name,
-                projeto: team.project,
-                turma: team.classroom,
-                avaliacoes: team.avaliationsQuantity,
-                media: team.average.toFixed(2)
-            }
-        ));
-        setRows(newRows);
-    }, [event]);
-
-    if (!authenticated) {
+    if (!authenticated || !event) {
         return <Navigate replace to="/" />
     }
 
+    function getUserEventRole() {
+        const part = participations.find(part => part.event.id === event!.id);
+        const eventRole = part!.eventRole;
+
+        if (eventRole === 'JUROR') return 'Jurado';
+        if (eventRole === 'Spectator') return 'Espectador';
+    }
+
+    const role = getUserEventRole();
+
+    window.addEventListener('resize', () => {
+        if (document.body.clientWidth > 992) return setIsDesktop(true);
+        return setIsDesktop(false);
+    });
+
+    const menuConditional = isMenuOpen || isDesktop;
+
     return (
-        <div className="event--container">
-            {team &&
-                <RatePopUp
-                    team={team}
-                    setTeam={setTeam}
-                />
-            }
+        <div className="event-wrapper">
+            {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
 
-            <Navbar />
+            <div className="event-container">
+                <div
+                    className="event-toogle-menu"
+                    onClick={() => setIsMenuOpen(true)}
+                >
+                    <img src={menuIcon} alt="hamburguer-menu-icon" />
+                </div>
 
-            <div className="event--info--container">
-                <h1>Clique na equipe para adicionar avaliação.</h1>
-
-                <div className="event--tab--card">
-                    <DataGrid
-                        sx={{
-                            fontSize: "18px",
-                            width: 700,
-                            color: '#FFFFFF',
-                            cursor: 'pointer'
-                        }}
-                        initialState={{
-                            sorting: {
-                                sortModel: [{ field: 'media', sort: 'desc' }],
-                            },
-                        }}
-                        hideFooter={true}
-                        rows={rows}
-                        columns={columns}
-                        pageSize={100}
-                        rowsPerPageOptions={[100]}
-                        onRowClick={(props) => {
-                            setTeam({
-                                id: Number(props.id),
-                                name: props.row.equipe
-                            });
-                        }}
+                {team &&
+                    <RatePopUp
+                        team={team}
+                        setTeam={setTeam}
                     />
+                }
+
+                <div className="event-header">
+                    <img src={medalIcon} alt="medal-icon" />
+
+                    <h1>{event!.name}</h1>
+                </div>
+
+                <div className="event-table-slider">
+                    <table className="event-table">
+                        <thead>
+                            <tr>
+                                <div className="table-header">
+                                    <th>Equipe</th>
+                                    <hr />
+                                </div>
+
+                                <div className="table-header">
+                                    <th>Projeto</th>
+                                    <hr />
+                                </div>
+
+                                <div className="table-header">
+                                    <th>Turma</th>
+                                    <hr />
+                                </div>
+
+                                <div className="table-header">
+                                    <th>Avaliações</th>
+                                    <hr />
+                                </div>
+
+                                <div className="table-header">
+                                    <th>Média</th>
+                                    <hr />
+                                </div>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {event!.teams.map(team => (
+                                <tr key={team.id}>
+                                    <td>{team.name}</td>
+
+                                    <td>{team.project}</td>
+
+                                    <td>{team.classroom}</td>
+
+                                    <td>{team.avaliationsQuantity}</td>
+
+                                    <td>{team.average}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div className="event-role-container">
+                    <div className="role-info">
+                        <img src={roleCard} alt="role-card" />
+
+                        <span>{user!.username}: {role}</span>
+                    </div>
+
+                    {role === 'Jurado' && <p>Clique na equipe para avaliá-la!</p>}
                 </div>
             </div>
         </div>

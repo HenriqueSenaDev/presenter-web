@@ -19,3 +19,23 @@ a {
     text-decoration: none;
     color: inherit
 }
+
+@media(min-width: 992px) {
+    ::-webkit-scrollbar {
+        width: 11px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(112, 112, 235, 0.416);
+        border-radius: 20px;
+        border: 6px solid transparent;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(68, 63, 128, 0.416);
+    }
+}
