@@ -73,10 +73,19 @@ const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
                </div>
 
                <div className="event-code-inputs">
-                  <FormField label="Código de entrada" type="text" setState={setJoinCode} />
+                  <FormField 
+                     label="Código de entrada" 
+                     type="text" 
+                     setState={setJoinCode} 
+                  />
 
                   {(activeTab === 'juror') &&
-                     <FormField label="Código de jurado" type="text" setState={setJurorCode} />
+                     <FormField 
+                        label="Código de jurado" 
+                        type="text" 
+                        setState={setJurorCode} 
+                        onEnter={joinEvent}
+                     />
                   }
 
                   {loading ? (

@@ -87,7 +87,7 @@
         flex-direction: row-reverse;
         flex: 1;
         gap: 70px;
-        margin-left: 18%;
+        margin-left: 20%;
         align-items: unset;
         padding: calc(((100vh - 450px) / 2)) 30px;
         min-height: unset;
@@ -122,6 +122,6 @@
     }
 
     .events-container {
-        transform: translateX(-55%);
+        transform: translateX(-50%);
     }
 }
