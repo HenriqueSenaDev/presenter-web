@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import { PresenterContext } from "context/PresenterContext";
+import { ITeamInfo } from "./common/@types";
 import RatePopUp from "./components/RatePopUp";
 import Menu from "components/Menu";
 import medalIcon from "../../assets/images/medal.svg";
@@ -9,40 +10,33 @@ import roleCard from "../../assets/images/role-card.svg";
 import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
 
-interface ITeamInfo {
-    id: number,
-    name: string
-}
-
 const Event = () => {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(document.body.clientWidth > 992);
     const [teamToRateInfo, setTeamToRateInfo] = useState<ITeamInfo | null>(null);
     const [userEventRole, setUserEventRole] = useState<'Jurado' | 'Espectador'>('Espectador');
 
     const { authenticated, user } = useContext(ProfileContext);
-    const { participations } = useContext(PresenterContext);
-    const { event } = useContext(PresenterContext);
-
-    if (!authenticated || !event) {
-        return <Navigate replace to="/" />
-    }
+    const { participations, event } = useContext(PresenterContext);
 
     function getUserEventRole() {
         const part = participations.find(part => part.event.id === event!.id);
         const eventRole = part!.eventRole;
 
         if (eventRole === 'JUROR') return 'Jurado';
-        if (eventRole === 'Spectator') return 'Espectador';
+        else return 'Espectador';
     }
 
-    const role = getUserEventRole();
+    function getSortedTeams() {
+        return event!.teams.sort((a, b) => b.average - a.average);
+    }
 
-    window.addEventListener('resize', () => {
-        if (document.body.clientWidth > 992) return setIsDesktop(true);
-        return setIsDesktop(false);
-    });
+    useEffect(() => {
+        setUserEventRole(getUserEventRole());
+    }, []);
 
-    const menuConditional = isMenuOpen || isDesktop;
+    if (!authenticated || !event) {
+        return <Navigate replace to="/" />
+    }
 
     return (
         <div className="event-wrapper">
@@ -57,13 +51,6 @@ const Event = () => {
                 >
                     <img src={menuIcon} alt="hamburguer-menu-icon" />
                 </div>
-
-                {team &&
-                    <RatePopUp
-                        team={team}
-                        setTeam={setTeam}
-                    />
-                }
 
                 <div className="event-header">
                     <img src={medalIcon} alt="medal-icon" />
@@ -103,19 +90,28 @@ const Event = () => {
                         </thead>
 
                         <tbody>
-                            {event!.teams.map(team => (
-                                <tr key={team.id}>
-                                    <td>{team.name}</td>
+                            {getSortedTeams().map(team => {
+                                const { id, name, average, avaliationsQuantity, classroom, project } = team;
 
-                                    <td>{team.project}</td>
+                                return (
+                                    <tr
+                                        key={id}
+                                        onClick={() => {
+                                            if (userEventRole === 'Jurado') setTeamToRateInfo({ id, name });
+                                        }}
+                                    >
+                                        <td>{name}</td>
 
-                                    <td>{team.classroom}</td>
+                                        <td>{project}</td>
 
-                                    <td>{team.avaliationsQuantity}</td>
+                                        <td>{classroom}</td>
 
-                                    <td>{team.average}</td>
-                                </tr>
-                            ))}
+                                        <td>{avaliationsQuantity}</td>
+
+                                        <td>{average}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -124,10 +120,10 @@ const Event = () => {
                     <div className="role-info">
                         <img src={roleCard} alt="role-card" />
 
-                        <span>{user!.username}: {role}</span>
+                        <span>{user!.username}: {userEventRole}</span>
                     </div>
 
-                    {role === 'Jurado' && <p>Clique na equipe para avaliá-la!</p>}
+                    {userEventRole === 'Jurado' && <p>Clique na equipe para avaliá-la!</p>}
                 </div>
             </div>
         </div>
