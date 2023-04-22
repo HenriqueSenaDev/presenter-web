@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProfileContext } from "context/ProfileContext";
 import profileIcon from "../../assets/images/profile.svg";
@@ -11,8 +11,12 @@ interface IProps {
 }
 
 function Menu({ setIsMenuOpen }: IProps) {
-    const { user, handleLogout } = useContext(ProfileContext);
+    const { user, handleLogout } = useContext(ProfileContext);    
     const navigate = useNavigate();
+
+    window.addEventListener('resize', () => {
+        if (document.body.clientWidth > 992) return setIsMenuOpen(true);
+    });
 
     return (
         <aside className="menu-wrapper">

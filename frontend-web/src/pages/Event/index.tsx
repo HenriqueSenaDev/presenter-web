@@ -15,9 +15,9 @@ interface ITeamInfo {
 }
 
 const Event = () => {
-    const [team, setTeam] = useState<ITeamInfo | null>(null);
-    const [isDesktop, setIsDesktop] = useState<boolean>(document.body.clientWidth > 992);
-    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(document.body.clientWidth > 992);
+    const [teamToRateInfo, setTeamToRateInfo] = useState<ITeamInfo | null>(null);
+    const [userEventRole, setUserEventRole] = useState<'Jurado' | 'Espectador'>('Espectador');
 
     const { authenticated, user } = useContext(ProfileContext);
     const { participations } = useContext(PresenterContext);
@@ -46,7 +46,9 @@ const Event = () => {
 
     return (
         <div className="event-wrapper">
-            {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
+            {isMenuOpen && <Menu setIsMenuOpen={setIsMenuOpen} />}
+
+            {teamToRateInfo && <RatePopUp teamInfo={teamToRateInfo} setTeamInfo={setTeamToRateInfo} />}
 
             <div className="event-container">
                 <div

@@ -13,8 +13,7 @@ import menuIcon from "../../assets/images/menu.svg";
 import "./styles.css";
 
 const EventsLibrary = () => {
-   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-   const [isDesktop, setIsDesktop] = useState<boolean>(document.body.clientWidth > 992);
+   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(document.body.clientWidth > 992);
    const [isAddPopupOpen, setIsAddPopupOpen] = useState<boolean>(false);
    const [eventToRemoveInfo, setEventToRemoveInfo] = useState<IEventToRemoveInfo | null>(null);
 
@@ -29,16 +28,9 @@ const EventsLibrary = () => {
       return <Navigate replace to="/" />
    }
 
-   window.addEventListener('resize', () => {
-      if (document.body.clientWidth > 992) return setIsDesktop(true);
-      return setIsDesktop(false);
-   });
-
-   const menuConditional = isMenuOpen || isDesktop;
-
    return (
       <div className="library-wrapper">
-         {(menuConditional) && <Menu setIsMenuOpen={setIsMenuOpen} />}
+         {isMenuOpen && <Menu setIsMenuOpen={setIsMenuOpen} />}
 
          {eventToRemoveInfo &&
             <RemoveEventPopUp
