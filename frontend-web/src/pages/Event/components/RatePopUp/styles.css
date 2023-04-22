@@ -1,4 +1,4 @@
-.rate--popup--container {
+.rate-popup-container {
     width: 100%;
     height: 100vh;
     z-index: 1;
@@ -9,109 +9,117 @@
     display: flex;
 }
 
-.rate--popup--card {
+.rate-popup-card {
     text-align: center;
-    width: 240px;
-    background-color: #ADD3FA;
+    background-color: #92C7EF;
     border-radius: 20px;
-    padding: 25px 20px;
+    padding: 32px 34px 28px 34px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     gap: 25px;
+    position: relative;
 }
 
-.rate--popup--card h1 {
-    font-weight: 600;
-    font-size: 18px;
-    max-width: 90%;
+.rate-loading-gif {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    top: 14px;
+    right: 14px;
 }
 
-.rate--popup-user-container {
-    width: 100%;
-    padding: 8px 0;
-    background-color: #92C7EF;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.rate--popup-user-container h1 {
-    font-size: 16px;
-}
-
-.rate--popup-user-container svg {
-    width: 32px;
-}
-
-.equipe--area {
-    width: 100%;
+.rate-event-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 25px;
 }
 
-.equipe--area input {
-    width: 90px;
-    text-align: center;
-    background-color: #92C7EF;
-    border-radius: 5px;
-    padding: 5px 8px;
-    height: 30px;
+.rate-event-area h1 {
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.rate-input-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.rate-input-area h1 {
+    font-weight: 500;
+}
+
+.rate-input-area input {
+    width: 46px;
+    height: 28px;
+    padding: 4px;
+    background-color: #ADD3FA;
+    border-radius: 6px;
     border: none;
+    outline: none;
     color: #FFF;
     font-size: 18px;
-    font-weight: 600;
+    text-align: center;
+}
+
+.rate-input-area input:focus {
     outline: none;
 }
 
-
-.rate--popup--card button {
-    width: 150px;
-    height: 35px;
-    background-color: #92C7EF;
-    color: #fff;
-    font-size: 18px;
+.rate-event-area button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
     font-weight: 500;
-    border: none;
-    border-radius: 10px;
+    padding: 7px 12px;
+    background-color: #6C63FF;
+    border-radius: 12px;
+    letter-spacing: 0.8px;
     cursor: pointer;
+    transition: all ease 0.2s;
+    border: none;
+    color: #FFF;
+    gap: 6px;
 }
 
-/* Media */
-@media (min-width: 576px) {
-    .rate--popup--card {
-        width: 280px;
-    }
-
-    .rate--popup--card h1 {
-        font-size: 20px;
-    }
-
-    .rate--popup-user-container h1 {
-        font-size: 18px;
-    }
-
-    .rate--popup--card button {
-        font-size: 18px;
-    }
+.rate-event-area button:hover {
+    background-color: #7972f6;
 }
 
-
-@media (min-width: 768px) {
-    .rate--popup--card {
-        width: 260px;
+@media(min-width: 992px) {
+    .rate-popup-card {
+        flex-direction: row-reverse;
+        padding: 36px 34px 38px 34px;
+        gap: 44px;
     }
-}
 
-@media (min-width: 992px) {
-    .equipe--area h1 {
-        font-size: 22px;
-        text-decoration: underline;
-        text-underline-offset: 4px;
+    .rate-loading-gif {
+        top: 16px;
+        right: 18px;
+    }
+
+    .rate-image {
+        width: 170px;
+        height: 170px;
+    }
+
+    .rate-event-area {
+        gap: 30px;
+    }
+
+    .rate-event-area button img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .rate-input-area input {
+        width: 48px;
+        height: 30px;
     }
 }

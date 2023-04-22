@@ -20,6 +20,11 @@ a {
     color: inherit
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 @media(min-width: 992px) {
     ::-webkit-scrollbar {
         width: 11px;
