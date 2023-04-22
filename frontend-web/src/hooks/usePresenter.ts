@@ -16,13 +16,13 @@ export function usePresenter() {
             return (await axios.get<IParticipation[]>(`/user/participations`)).data;
         },
         addJurorParticipation: async (joinCode: string, jurorCode: string) => {
-            const res = await axios.post<IParticipation>(`/user/participations/juror`, {
+            const res = await axios.put<IParticipation>(`/user/participations/juror`, {
                 joinCode, jurorCode
             });
             return res.data;
         },
         addSpectatorParticipation: async (joinCode: string) => {
-            const res = await axios.post<IParticipation>(`/user/participations/spectator`, {
+            const res = await axios.put<IParticipation>(`/user/participations/spectator`, {
                 joinCode
             });
             return res.data;
@@ -34,7 +34,7 @@ export function usePresenter() {
             return (await axios.get<IEvent>(`/user/events/${eventId}`)).data;
         },
         addAvaliationToTeam: async (teamId: number, value: number) => {
-            const res = await axios.put<IAvaliation>('/avaliations', {
+            const res = await axios.put<IAvaliation>('/user/avaliations', {
                 teamId, value
             });
             return res.data;
