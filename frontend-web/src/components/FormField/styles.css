@@ -22,7 +22,7 @@
     height: 27px;
     color: #FFF;
     padding: 0 8px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .form-field-container input:focus {
@@ -42,7 +42,7 @@
     }
 
     .form-field-container input {
-        height: 28px;
-        font-size: 16px;
+        height: 30px;
+        font-size: 18px;
     }
 }
