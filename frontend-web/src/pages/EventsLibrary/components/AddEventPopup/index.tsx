@@ -77,6 +77,9 @@ const AddEventPopup = ({ setIsAddPopupOpen }: IProps) => {
                      label="Código de entrada" 
                      type="text" 
                      setState={setJoinCode} 
+                     onEnter={() => {
+                        if(activeTab === 'spectator') joinEvent();
+                     }}
                   />
 
                   {(activeTab === 'juror') &&
