@@ -14,19 +14,34 @@
     display: inline;
 }
 
-.form-field-container input {
+.form-input-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
     background-color: #ADD3FA;
     border-radius: 6px;
+    padding: 0 8px;
+}
+
+.form-input-area input {
+    width: 100%;
+    background-color: transparent;
     border: none;
     outline: none;
-    height: 27px;
+    height: 29px;
     color: #FFF;
-    padding: 0 8px;
     font-size: 16px;
 }
 
-.form-field-container input:focus {
+.form-input-area input:focus {
     outline: none;
+}
+
+.form-input-area img {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
 }
 
 @media(min-width: 992px) {
@@ -41,7 +56,7 @@
         padding-bottom: 3px;
     }
 
-    .form-field-container input {
+    .form-input-area input {
         height: 30px;
         font-size: 18px;
     }
