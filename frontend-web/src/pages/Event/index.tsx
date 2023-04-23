@@ -62,30 +62,30 @@ const Event = () => {
                     <table className="event-table">
                         <thead>
                             <tr>
-                                <div className="table-header">
-                                    <th>Equipe</th>
+                                <th className="table-header">
+                                    <span>Equipe</span>
                                     <hr />
-                                </div>
+                                </th>
 
-                                <div className="table-header">
-                                    <th>Projeto</th>
+                                <th className="table-header">
+                                    <span>Projeto</span>
                                     <hr />
-                                </div>
+                                </th>
 
-                                <div className="table-header">
-                                    <th>Turma</th>
+                                <th className="table-header">
+                                    <span>Turma</span>
                                     <hr />
-                                </div>
+                                </th>
 
-                                <div className="table-header">
-                                    <th>Avaliações</th>
+                                <th className="table-header">
+                                    <span>Avaliações</span>
                                     <hr />
-                                </div>
+                                </th>
 
-                                <div className="table-header">
-                                    <th>Média</th>
+                                <th className="table-header">
+                                    <span>Média</span>
                                     <hr />
-                                </div>
+                                </th>
                             </tr>
                         </thead>
 
@@ -108,7 +108,7 @@ const Event = () => {
 
                                         <td>{avaliationsQuantity}</td>
 
-                                        <td>{average}</td>
+                                        <td>{average.toFixed(2)}</td>
                                     </tr>
                                 );
                             })}
