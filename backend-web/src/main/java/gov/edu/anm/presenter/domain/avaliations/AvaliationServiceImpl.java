@@ -4,6 +4,7 @@ import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
 import gov.edu.anm.presenter.domain.event.EventRole;
 import gov.edu.anm.presenter.domain.exceptions.UnauthorizedRoleException;
+import gov.edu.anm.presenter.domain.exceptions.InvalidAvaliationException;
 import gov.edu.anm.presenter.domain.participation.Participation;
 import gov.edu.anm.presenter.domain.participation.ParticipationPK;
 import gov.edu.anm.presenter.domain.participation.ParticipationRepository;
@@ -47,6 +48,8 @@ public class AvaliationServiceImpl implements AvaliationService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
+
+        if (!team.getPresented()) throw new InvalidAvaliationException("Team did not presented");
 
         Participation part = participationRepository.findById(new ParticipationPK(team.getEvent(), user))
                 .orElseThrow(() -> new EntityNotFoundException("Participation not found"));
