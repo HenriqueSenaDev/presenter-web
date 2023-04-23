@@ -18,9 +18,13 @@ function LoginPopUp({ setIsPopupOpen }: IProps) {
     const { handleLogin } = useContext(ProfileContext);
 
     async function signIn() {
-        setIsLoading(true);
-        await handleLogin(username.trim(), password.trim());
-        setIsLoading(false);
+        try {
+            setIsLoading(true);
+            await handleLogin(username.trim(), password.trim());
+        }
+        finally {
+            setIsLoading(false);
+        }
     }
 
     function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {

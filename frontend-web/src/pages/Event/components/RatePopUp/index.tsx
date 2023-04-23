@@ -34,10 +34,14 @@ const RatePopUp = ({ teamInfo, setTeamInfo }: IProps) => {
         if (!avaliationValue) return alert("Insira um valor para avaliar.");
         if (avaliationValue > 10 || avaliationValue < 0) return alert("Insira um valor de 0 a 10.");
 
-        setIsLoading(true);
-        await addAvaliationToTeam(teamInfo!.id, avaliationValue);
-        await handleEvent(event!.id);
-        closePopUp();
+        try {
+            setIsLoading(true);
+            await addAvaliationToTeam(teamInfo!.id, avaliationValue);
+            await handleEvent(event!.id);
+        }
+        finally {
+            closePopUp();
+        }
     }
 
     return (

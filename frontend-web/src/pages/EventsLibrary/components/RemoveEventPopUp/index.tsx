@@ -19,10 +19,15 @@ const RemoveEventPopUp = ({ eventToRemoveInfo, setEventToRemoveInfo }: Props) =>
     const { removeParticipation } = usePresenter();
 
     async function removeUserParticipation() {
-        setLoading(true);
-        await removeParticipation(eventToRemoveInfo!.id);
-        await handleParticipations();
-        setEventToRemoveInfo(null);
+        try {
+            setLoading(true);
+            await removeParticipation(eventToRemoveInfo!.id);
+            await handleParticipations();
+
+        }
+        finally {
+            closePopUp();
+        }
     }
 
     function closePopUp() {
