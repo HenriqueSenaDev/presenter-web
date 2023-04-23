@@ -18,6 +18,10 @@ const Event = () => {
     const { authenticated, user } = useContext(ProfileContext);
     const { participations, event } = useContext(PresenterContext);
 
+    window.addEventListener('resize', () => {
+        if (document.body.clientWidth > 992) return setIsMenuOpen(true);
+    });
+
     function getUserEventRole() {
         const part = participations.find(part => part.event.id === event!.id);
         const eventRole = part!.eventRole;

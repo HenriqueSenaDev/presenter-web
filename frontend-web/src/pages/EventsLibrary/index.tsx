@@ -20,6 +20,10 @@ const EventsLibrary = () => {
    const { authenticated } = useContext(ProfileContext);
    const { participations, handleParticipations } = useContext(PresenterContext);
 
+   window.addEventListener('resize', () => {
+      if (document.body.clientWidth > 992) return setIsMenuOpen(true);
+   });
+
    useEffect(() => {
       handleParticipations();
    }, []);
@@ -45,7 +49,7 @@ const EventsLibrary = () => {
 
          <div className="library-container">
             <div className="library-card">
-               <div 
+               <div
                   className="library-toogle-menu"
                   onClick={() => setIsMenuOpen(true)}
                >
@@ -54,10 +58,10 @@ const EventsLibrary = () => {
 
                <h1>Biblioteca de Eventos</h1>
 
-               <img 
-                  className="events-library-img" 
-                  src={eventsLibraryImg} 
-                  alt="girl-looking-to-scheduled-events" 
+               <img
+                  className="events-library-img"
+                  src={eventsLibraryImg}
+                  alt="girl-looking-to-scheduled-events"
                />
 
                <DualButton text="Adicionar evento" onClick={() => setIsAddPopupOpen(true)} />
@@ -66,15 +70,15 @@ const EventsLibrary = () => {
             <div className="events-container">
                {participations.length ? (
                   participations.map(part => {
-                        return (
-                           <EventCard
-                              event={part.event}
-                              key={part.event.id}
-                              setEventToRemoveInfo={setEventToRemoveInfo}
-                           />
-                        );
-                     })
-                  ) : (
+                     return (
+                        <EventCard
+                           event={part.event}
+                           key={part.event.id}
+                           setEventToRemoveInfo={setEventToRemoveInfo}
+                        />
+                     );
+                  })
+               ) : (
                   <span>Adicione um evento para participar.</span>
                )}
             </div>

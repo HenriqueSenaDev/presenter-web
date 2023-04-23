@@ -14,10 +14,6 @@ function Menu({ setIsMenuOpen }: IProps) {
     const { user, handleLogout } = useContext(ProfileContext);    
     const navigate = useNavigate();
 
-    window.addEventListener('resize', () => {
-        if (document.body.clientWidth > 992) return setIsMenuOpen(true);
-    });
-
     return (
         <aside className="menu-wrapper">
             <div className="menu-container">
