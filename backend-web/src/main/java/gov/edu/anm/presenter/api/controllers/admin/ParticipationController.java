@@ -30,7 +30,7 @@ public class ParticipationController {
 
     @PutMapping
     public ResponseEntity<Participation> addParticipation(@Valid @RequestBody AddParticipationRequest request) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/participations").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
         return ResponseEntity.created(uri)
                 .body(participationService.addParticipation(request.getUserId(), request.getEventId(), request.getRole()));
     }

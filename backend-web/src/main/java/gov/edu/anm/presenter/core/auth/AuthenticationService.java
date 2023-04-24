@@ -1,18 +1,15 @@
 package gov.edu.anm.presenter.core.auth;
 
-import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
+import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
+import gov.edu.anm.presenter.core.auth.requests.AuthRequest;
+import gov.edu.anm.presenter.core.auth.requests.RefreshRequest;
 import gov.edu.anm.presenter.core.auth.requests.RegisterRequest;
+import gov.edu.anm.presenter.core.auth.responses.AuthResponse;
+import gov.edu.anm.presenter.core.auth.responses.RefreshResponse;
 import gov.edu.anm.presenter.domain.appuser.AppRole;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
-
-import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserOutputDto;
-import gov.edu.anm.presenter.core.auth.requests.AuthRequest;
-import gov.edu.anm.presenter.core.auth.responses.AuthResponse;
-import gov.edu.anm.presenter.core.auth.requests.RefreshRequest;
-import gov.edu.anm.presenter.core.auth.responses.RefreshResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -43,13 +43,14 @@ public class EventController {
     
     @PostMapping
     public ResponseEntity<Event> saveEvent(@Valid @RequestBody EventInputDto event) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
         return ResponseEntity.created(uri).body(eventService.saveEvent(event));
     }
 
     @PostMapping(value = "/{eventId}/teams")
     public ResponseEntity<Event> createTeamInEvent(@Valid @RequestBody TeamInputDto team, @PathVariable Long eventId) {
-        return ResponseEntity.ok().body(eventService.createTeamInEvent(eventId, team));
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
+        return ResponseEntity.created(uri).body(eventService.createTeamInEvent(eventId, team));
     }
 
     @PutMapping(value = "/{id}")
