@@ -1,4 +1,4 @@
-.login-popup-wrapper {
+.register-popup-wrapper {
     width: 100%;
     height: 100%;
     display: flex;
@@ -9,7 +9,7 @@
     z-index: 1;
 }
 
-.login-popup-card {
+.register-popup-card {
     background-color: #92C7EF;
     padding: 36px 42px 32px 42px;
     border-radius: 20px;
@@ -17,12 +17,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: 28px;
     position: relative;
 }
 
-.login-img {
-    width: 172px;
+.register-img {
+    width: 160px;
     height: auto;
 }
 
@@ -33,33 +33,7 @@
     width: 28px;
 }
 
-.login-content-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 26px;
-}
-
-.register-link {
-    font-size: 12px;
-    font-weight: 500;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-
-.register-link p:nth-child(2) {
-    border-bottom: solid 1px #FFF;
-    display: inline;
-    cursor: pointer;
-}
-
-.register-link p:nth-child(2):hover {
-    color: rgba(255, 255, 255, 0.5);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.login-form {
+.register-form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,7 +41,7 @@
     gap: 32px;
 }
 
-.login-form-fields-area {
+.register-form-fields-area {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,20 +50,20 @@
 }
 
 @media(min-width: 768px) {
-    .login-popup-card {
+    .register-popup-card {
         padding: 36px 48px 32px 48px;
     }
 }
 
 @media(min-width: 992px) {
-    .login-popup-card {
+    .register-popup-card {
         flex-direction: row;
         padding: 42px 48px 42px 42px;
         gap: 48px;
     }
 
-    .login-img {
-        width: 256px;
+    .register-img {
+        width: 216px;
     }
     
     .loading-gif {
@@ -98,15 +72,11 @@
         width: 32px;
     }
 
-    .register-link {
-        font-size: 14px;
+    .register-form {
+        gap: 32px;
     }
 
-    .login-form {
-        gap: 38px;
-    }
-
-    .login-form-fields-area {
-        gap: 22px;
+    .register-form-fields-area {
+        gap: 18px;
     }
 }

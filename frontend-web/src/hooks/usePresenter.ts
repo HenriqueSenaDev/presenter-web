@@ -1,11 +1,17 @@
 import { IAvaliation, IEvent, IParticipation } from "common/@types/presenter.types";
-import { IUserCredentials } from "common/@types/profile.types";
+import { IUserProfile, IUserCredentials } from "common/@types/profile.types";
 import { useAxios } from "hooks/useAxios";
 
 export function usePresenter() {
     const axios = useAxios();
 
     return {
+        register: async (username: string, password: string) => {
+            const res = await axios.post<IUserProfile>('/auth/register', {
+                username, password
+            });
+            return res.data;
+        },
         signIn: async (username: string, password: string) => {
             const res = await axios.post<IUserCredentials>('/auth/authenticate', {
                 username, password

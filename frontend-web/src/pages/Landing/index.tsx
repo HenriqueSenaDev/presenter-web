@@ -4,12 +4,14 @@ import { ProfileContext } from "context/ProfileContext";
 import Footer from "components/Footer";
 import DualButton from "components/DualButton";
 import LoginPopUp from "./components/LoginPopUp";
+import RegisterPopUp from "./components/RegisterPopUp";
 import peopleImg from "../../assets/images/people.svg";
 import managementImg from "../../assets/images/management.svg";
 import "./styles.css";
 
 const Landing = () => {
-   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState<boolean>(false);
+   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState<boolean>(false);
 
    const { authenticated } = useContext(ProfileContext);
 
@@ -17,7 +19,17 @@ const Landing = () => {
 
    return (
       <div className="landing-container">
-         {isPopupOpen && <LoginPopUp setIsPopupOpen={setIsPopupOpen} />}
+         {isLoginPopupOpen && 
+            <LoginPopUp 
+               setIsPopupOpen={setIsLoginPopupOpen}
+               setIsRegisterPopupOpen={setIsRegisterPopupOpen}
+         />}
+
+         {isRegisterPopupOpen && 
+            <RegisterPopUp 
+               setIsPopupOpen={setIsRegisterPopupOpen} 
+               setIsLoginPopupOpen={setIsLoginPopupOpen} 
+         />}
 
          <div className="landing-card-container">
             <div className="landing-card">
@@ -34,7 +46,7 @@ const Landing = () => {
                </div>
 
                <div className="landing-card-cta-container">
-                  <DualButton text='Entrar' onClick={() => setIsPopupOpen(true)} />
+                  <DualButton text='Entrar' onClick={() => setIsLoginPopupOpen(true)} />
 
                   <img className="management-image" src={managementImg} alt="people-managing" />
                </div>

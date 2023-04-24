@@ -7,10 +7,11 @@ import loadingGif from "../../../../assets/images/loading.gif";
 import "./styles.css";
 
 interface IProps {
-    setIsPopupOpen: Function
+    setIsPopupOpen: Function,
+    setIsRegisterPopupOpen: Function
 }
 
-function LoginPopUp({ setIsPopupOpen }: IProps) {
+function LoginPopUp({ setIsPopupOpen, setIsRegisterPopupOpen }: IProps) {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -25,6 +26,11 @@ function LoginPopUp({ setIsPopupOpen }: IProps) {
         finally {
             setIsLoading(false);
         }
+    }
+
+    function openRegisterPopup() {
+        setIsPopupOpen(false);
+        setIsRegisterPopupOpen(true);
     }
 
     function checkOutClick({ target }: React.MouseEvent<HTMLElement>) {
@@ -43,24 +49,34 @@ function LoginPopUp({ setIsPopupOpen }: IProps) {
 
                 <img className='login-img' src={loginImg} alt="girl-looking-to-form" />
 
-                <form className="login-form">
-                    <div className="login-form-fields-area">
-                        <FormField 
-                            label="Usuário" 
-                            type="text" 
-                            setState={setUsername} 
-                        />
+                <div className="login-content-area">
+                    <div className="register-link">
+                        <p>Ainda não tem uma conta?</p>
 
-                        <FormField 
-                            label="Senha"  
-                            type="password" 
-                            setState={setPassword} 
-                            onEnter={signIn}
-                        />
+                        <p onClick={openRegisterPopup}>
+                            Cadastre-se aqui
+                        </p>
                     </div>
 
-                    <Button text="Login" onClick={signIn} />
-                </form>
+                    <form className="login-form">
+                        <div className="login-form-fields-area">
+                            <FormField 
+                                label="Usuário" 
+                                type="text" 
+                                setState={setUsername} 
+                            />
+
+                            <FormField 
+                                label="Senha"  
+                                type="password" 
+                                setState={setPassword} 
+                                onEnter={signIn}
+                            />
+                        </div>
+
+                        <Button text="Login" onClick={signIn} />
+                    </form>
+                </div>
             </div>
         </div>
     );
