@@ -31,7 +31,8 @@ const Event = () => {
     }
 
     function getSortedTeams() {
-        return event!.teams.sort((a, b) => b.average - a.average);
+        const presentedTeams = event!.teams.filter(team => team.presented);
+        return presentedTeams.sort((a, b) => b.average - a.average);
     }
 
     useEffect(() => {
