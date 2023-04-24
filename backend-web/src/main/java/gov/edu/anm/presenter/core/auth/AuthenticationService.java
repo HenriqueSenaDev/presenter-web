@@ -1,5 +1,8 @@
 package gov.edu.anm.presenter.core.auth;
 
+import gov.edu.anm.presenter.api.common.dtos.appuser.AppUserInputDto;
+import gov.edu.anm.presenter.core.auth.requests.RegisterRequest;
+import gov.edu.anm.presenter.domain.appuser.AppRole;
 import gov.edu.anm.presenter.domain.appuser.AppUser;
 import gov.edu.anm.presenter.domain.appuser.AppUserRepository;
 
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -23,6 +27,7 @@ public class AuthenticationService {
     private final AppUserRepository appUserRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -55,5 +60,12 @@ public class AuthenticationService {
                 .access_token(newAccessToken)
                 .refresh_token(refreshToken)
                 .build();
+    }
+
+    public AppUserOutputDto register(RegisterRequest request) {
+        String encodedPass = passwordEncoder.encode(request.getPassword());
+        AppUser user = new AppUser(request.getUsername(), encodedPass, AppRole.USER);
+
+        return new AppUserOutputDto(appUserRepository.save(user));
     }
 }

@@ -48,6 +48,12 @@ public class AppUser implements UserDetails {
         will be set up by lombok because they have same
         name in AppUser. */
 
+    public AppUser(String username, String password, AppRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     public AppUser(AppUserInputDto appUserInputDto) {
         this.username = appUserInputDto.getUsername();
         this.password = appUserInputDto.getPassword();
