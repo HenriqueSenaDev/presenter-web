@@ -36,7 +36,7 @@ const Event = () => {
     }
 
     useEffect(() => {
-        setUserEventRole(getUserEventRole());
+        if(event) setUserEventRole(getUserEventRole());
     }, []);
 
     if (!authenticated || !event) {
