@@ -26,7 +26,7 @@
     height: auto;
 }
 
-.loading-gif {
+.login-loading-gif {
     position: absolute;
     top: 18px;
     right: 18px;
@@ -92,10 +92,10 @@
         width: 256px;
     }
     
-    .loading-gif {
-        top: 24px;
-        right: 28px;
-        width: 32px;
+    .login-loading-gif {
+        top: 16px;
+        right: 16px;
+        width: 28px;
     }
 
     .register-link {
