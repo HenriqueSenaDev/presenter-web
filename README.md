@@ -13,6 +13,6 @@ Consiste em um mono repo com os subprojetos:
 * Frontend, o qual é feito em ReactJS com Typescript
 * Backend, constuído em Java com Spring Boot.
 
-Cada subprojeto tem seu próprio README.md.
+Cada subprojeto tem também seu próprio README.md.
 
 O projeto [presenter-admin](https://github.com/HenriqueSenaDev/presenter-admin) é uma aplicação desktop, feita também em Java, a partir da biblioteca de renderização gráfica Swing.

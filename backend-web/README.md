@@ -29,6 +29,7 @@ Eventos são entidades que possuem equipes, as quais, depois de se apresentar, p
 - configuração de segurança
 - filtros de segurança customizados
 - autenticação e autorização com Json Web Token (JWT)
+- documentação da api com a biblioteca springdoc-openapi
 
 ## Tecnologias utilizadas
 - Maven
