@@ -3,20 +3,25 @@
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-O frontend web do ecossistema presenter foi construído a partir do React com Typescript.
+Construído a partir do React com Typescript, sua função é realizar o login e registro de usuários jurados e espectadores, além de interações com o evento e suas equipes.
 
-Sua função é realizar o login e registro de usuários, em especial, jurados e espectadores, além de realizar interações com o evento e suas equipes.
-
-Contem três páginas principais:
+Contem três páginas principais como também diversos modals e demais componentes customizados.
 - Landing
 - EventsLibrary
 - Event
 
-como também diversos modals e demais componentes customizados.
+Após o usuário realizar seu cadastro ou login, ele pode participar de eventos a partir de códigos de participação.
 
-Após o usuário realizar seu cadastro/login, ele pode participar de eventos a partir de códigos de participação; eventos são listados na biblioteca de eventos.
+Um usuário pode participar de um evento como espectador ou jurado, através do código de avaliação.
 
-Um usuário pode participar de um evento como apenas espectador, ou como jurado, através do código de jurado; cada evento tem sua tabela com as equipes disponíveis para avaliação, sendo estas as quais já se apresentaram.
+Eventos são listados na biblioteca de eventos, e cada um tem sua tabela com as equipes disponíveis para avaliação, as quais já se apresentaram.
+
+## Tecnologias
+- ViteJS
+- ReactJS
+- TypeScript
+- Axios
+- React Router Dom
 
 ## Layout
 ![Landing](https://github.com/HenriqueSenaDev/assets/blob/main/presenter-web/landing.png)
@@ -25,28 +30,15 @@ Um usuário pode participar de um evento como apenas espectador, ou como jurado,
 
 ![Event](https://github.com/HenriqueSenaDev/assets/blob/main/presenter-web/event.png)
 
-## Tecnologias utilizadas
-- Vite
-- ReactJS
-- TypeScript
-- Axios
-- React Router Dom
 
-## Executando o projeto
+## Execute o projeto
 Pré-requisitos: 
-- npm / yarn
-- variável de ambiente VITE_API_URL contendo o host da api backend
+- NPM ou Yarn (package manager)
+- Variável de ambiente: VITE_API_URL com o link do host da [api](https://github.com/HenriqueSenaDev/presenter-web/tree/main/backend-web)
 
 ```bash
-# clonar repositório
 git clone https://github.com/HenriqueSenaDev/presenter-web.git
-
-# entrar na pasta do projeto frontend web
 cd frontend-web
-
-# instalar dependências
 yarn install
-
-# executar o projeto
-yarn start
+yarn run dev
 ```
