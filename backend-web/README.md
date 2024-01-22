@@ -49,6 +49,7 @@ Pré-requisitos:
   - DB_URL: URL do banco de dados
   - JWT_AUTH_SECRET: hex 256bit secret para geração de JWT
 - Realizar o restore do banco através do arquivo **resources/presenter-dump-jan-2024.dump** na root do mono-repo
+  - Usuário administrador padrão com nome e senha iguais a "admin"
 
 ```bash
 git clone https://github.com/HenriqueSenaDev/presenter-web.git
