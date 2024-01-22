@@ -52,5 +52,6 @@ Pré-requisitos:
 ```bash
 git clone https://github.com/HenriqueSenaDev/presenter-web.git
 cd backend-web
-./mvnw spring-boot:run
+mvn package
+java -jar target/presenter-0.0.1-SNAPSHOT.jar
 ```
