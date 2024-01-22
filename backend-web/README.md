@@ -15,44 +15,42 @@ O domínio contém usuários padrão e administradores, com suas determinadas fu
 
 Um usuário pode participar de um evento como espectador ou como jurado; para participar, necessita do(s) código(s), de acordo com sua função.
 
-Eventos são entidades que possuem equipes, as quais, depois de se apresentar, poderão ser avaliadas.
+Eventos possuem equipes que poderão ser avaliadas depois de se apresentar.
 
 ![Diagrama UML](https://github.com/HenriqueSenaDev/assets/blob/main/presenter-web/PresenterWebDiagramaUML.PNG)
 
 ## Técnicas utilizadas
-- estrutura de pastas vertical
-- conexão e persistência no banco de dados PostgreSQL
+- Estrutura de pastas vertical
+- Conexão e persistência no banco de dados PostgreSQL
 - ORM com Data JPA e Hibernate
-- fluxo controller-service-repository
-- exception handling a nível de controller
-- configuração de injeção de dependência
-- configuração de segurança
-- filtros de segurança customizados
-- autenticação e autorização com Json Web Token (JWT)
-- documentação da api com a biblioteca springdoc-openapi
+- N-Tier Architecture controller-service-repository
+- Exception Handling com ControllerAdvice
+- Configuração de injeção de dependência (Beans)
+- Configuração de Segurança (SecutiryFilterChain)
+- Filtros de segurança customizados
+- Autenticação e autorização com Json Web Token (JWT)
+- Documentação da api com Swagger
 
-## Tecnologias utilizadas
-- Maven
-- Java
-- Spring
-- JWT
+## Tecnologias
+- Java +17
+- Apache Maven
+- Spring Boot
 - PostgreSQL
+- JWT
+- Swagger
 
-## Executando o projeto
+## Execute o projeto
 Pré-requisitos: 
 - Java +17
-- variável de ambiente DB_PASSWORD: senha do usuário do banco de dados
-- variável de ambiente DB_USERNAME: nome do usuário do banco de dados
-- variável de ambiente DB_URL: URL do banco de dados
-- variável de ambiente JWT_AUTH_SECRET: segredo para geração do tokens JWT
+- Apache Maven
+- Variáveis de ambiente:
+  - DB_PASSWORD: senha do usuário do banco de dados
+  - DB_USERNAME: nome do usuário do banco de dados
+  - DB_URL: URL do banco de dados
+  - JWT_AUTH_SECRET: hex 256bit secret para geração de JWT
 
 ```bash
-# clonar repositório
 git clone https://github.com/HenriqueSenaDev/presenter-web.git
-
-# entrar na pasta do projeto backend
 cd backend-web
-
-# executar o projeto
 ./mvnw spring-boot:run
 ```
