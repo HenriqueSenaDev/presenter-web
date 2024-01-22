@@ -10,9 +10,7 @@ Contem três páginas principais como também diversos modals e demais component
 - EventsLibrary
 - Event
 
-Após o usuário realizar seu cadastro ou login, ele pode participar de eventos a partir de códigos de participação.
-
-Um usuário pode participar de um evento como espectador ou jurado, através do código de avaliação.
+Após o usuário realizar seu cadastro ou login, ele pode participar de eventos a partir de códigos de participação e avaliação, como jurado ou apenas espectador.
 
 Eventos são listados na biblioteca de eventos, e cada um tem sua tabela com as equipes disponíveis para avaliação, as quais já se apresentaram.
 
